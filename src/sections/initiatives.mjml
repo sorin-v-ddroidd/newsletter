@@ -48,7 +48,7 @@
 	<mj-column>
 		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
 			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
-				Codecamp Day  
+				Internal Newsletter Feedback
 			</h3>
 			<p
 				style="
@@ -66,16 +66,43 @@
 					color: #ffffff;
 				"
 			>
-				Our colleague Maria Teodorescu recently attended <a href="https://codecamp.ro/codecamps/bucharest-2026/" target="_blank" style="text-decoration: underline; color: #ffffff;">Codecamp Day</a>, a tech-focused event that brought together industry professionals for a full day of technical insights, discussions on software architecture, AI, leadership, and emerging trends in the IT industry.  
+				We're always looking for ways to improve how we share news, updates, and opportunities across the company. Take a moment to tell us what's working, what isn't, and what you'd like to see more of.
 				<br /><br />
-				After the event, she also hosted an internal knowledge-sharing session for the team, where she shared some of the most interesting ideas and key takeaways from the conference.  For those who couldn’t join or would like to revisit the discussion, you can find the presentation and session recap,<a href="https://teams.microsoft.com/l/meetingrecap?driveId=b%21MHvUcSFwW0uQvKkhoJvOxAZqk6zHMVlPlUHKZyBX_6DXClDWF8TYR7uwocjzuCec&driveItemId=0175FOAS6PYX4CWEORRBHKYDB2T74E2WGH&sitePath=https%3A%2F%2Fddroidd-my.sharepoint.com%2F%3Av%3A%2Fp%2Fovidiu_hretcanu%2FIQDPxfgrEdGITqwMOp_4TVjHAQA1P4YKnkZFDFH7M0mKTHA&fileUrl=https%3A%2F%2Fddroidd-my.sharepoint.com%2F%3Av%3A%2Fp%2Fovidiu_hretcanu%2FIQDPxfgrEdGITqwMOp_4TVjHAQA1P4YKnkZFDFH7M0mKTHA&iCalUid=040000008200E00074C5B7101A82E00807EA05133D4283E2B8D0DC010000000000000000100000002EEDEB979985B84D83758FD829CD1C62&masterICalUid=040000008200E00074C5B7101A82E008000000003D4283E2B8D0DC010000000000000000100000002EEDEB979985B84D83758FD829CD1C62&threadId=19%3Ameeting_ZmZmMGRkOGItMGU2ZS00NDY4LWJiY2YtNWRiMGYyNmEzZjlm%40thread.v2&organizerId=f75b7063-e31d-4be0-b82c-c445320e4045&tenantId=6077bcee-1104-4119-bc98-539870c66eef&callId=78d71533-9cca-4377-a246-a4d06add620e&threadType=Meeting&meetingType=Recurring&subType=RecapSharingLink_RecapChiclet" target="_blank" style="text-decoration: underline; color: #ffffff;"> here</a> 
+				The survey is anonymous and should take less than 2 minutes.
 				<br /><br />
-				We are happy to see colleagues engaging with external tech events and bringing back fresh insights to share with the team. If there are conferences or industry events you believe could bring value to the team, we encourage you to discuss them with your Discipline Leads and explore together whether they could be a good fit. 
+				Share your feedback, <a href="#" target="_blank" style="text-decoration: underline; color: #ffffff;">here</a>.
+			</p>
+		</mj-text>
+		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
+			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
+				Techsylvania 2026
+			</h3>
+			<p
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 16px;
+					line-height: 24px;
+					color: #ffffff;
+				"
+			>
+				Cosmin Cristea and Andrei Marginean recently attended Techsylvania 2026, one of the leading technology and innovation events in the region.
+				<br /><br />
+				The event brought together founders, technology leaders, innovators, and industry experts to explore the trends shaping the future of business and technology. It was a valuable opportunity to exchange ideas, gain new insights into AI and digital transformation, and strengthen connections within the tech community.
+				<br /><br />
+				We're excited to bring these learnings back to ddroidd and continue driving innovation for our clients and partners.
 			</p>
 		</mj-text>
 		<mj-image
-			
-			src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a16895a7d388bd010fff015_Codecamp.png"
+			src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a3d306df5a3efd2ba26c1b3_Untitled%20(600%20x%20756%20px)%20(3).png"
 		/>
+		
 	</mj-column>
 </mj-section>
