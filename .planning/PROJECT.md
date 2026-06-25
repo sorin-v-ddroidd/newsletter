@@ -74,6 +74,7 @@ A non-developer can build and export a complete, on-brand, client-safe newslette
 | Internal team tool, simple auth, no public signup | Audience is DDROIDD staff; avoids multi-tenant complexity | — Pending |
 | Export HTML only; no ESP / Outlook coupling this milestone | Keeps scope on authoring; sending stays external/manual | — Pending |
 | Image upload + curated asset library | Non-devs need to add images without dev help, but keep branded assets handy | — Pending |
+| **ORM: Drizzle** (switched from Prisma) | TypeScript-native, SQL-first, lighter; types inferred from the schema, no codegen step or generated client to keep in sync; migrations via `drizzle-kit`. Driver stays `pg` (`drizzle-orm/node-postgres`). | ✅ Decided 2026-06-25 |
 
 ## Evolution
 

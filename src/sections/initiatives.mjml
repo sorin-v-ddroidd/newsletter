@@ -48,6 +48,33 @@
 	<mj-column>
 		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
 			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
+				Internal Newsletter Feedback
+			</h3>
+			<p
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 16px;
+					line-height: 24px;
+					color: #ffffff;
+				"
+			>
+				We're always looking for ways to improve how we share news, updates, and opportunities across the company. Take a moment to tell us what's working, what isn't, and what you'd like to see more of.
+				<br /><br />
+				The survey is anonymous and should take less than 2 minutes.
+				<br /><br />
+				Share your feedback, <a href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=7rx3YAQRGUG8mFOYcMZu72KI3py4jFtKpFtY952CYzdUMTdCVk8zWDEyMExTWTRDREdHRlBJM0FOUC4u" target="_blank" style="text-decoration: underline; color: #ffffff;">here</a>.
+			</p>
+		</mj-text>
+		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
+			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
 				Techsylvania 2026
 			</h3>
 			<p
@@ -76,32 +103,6 @@
 		<mj-image
 			src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a16895a7d388bd010fff015_Codecamp.png"
 		/>
-		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
-			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
-				Internal Newsletter Feedback
-			</h3>
-			<p
-				style="
-					font-family:
-						Calibri,
-						Roboto,
-						Lato,
-						Avenir Next,
-						Verdana,
-						Helvetica,
-						Arial,
-						sans-serif;
-					font-size: 16px;
-					line-height: 24px;
-					color: #ffffff;
-				"
-			>
-				We're always looking for ways to improve how we share news, updates, and opportunities across the company. Take a moment to tell us what's working, what isn't, and what you'd like to see more of.
-				<br /><br />
-				The survey is anonymous and should take less than 2 minutes.
-				<br /><br />
-				Share your feedback, <a href="#" target="_blank" style="text-decoration: underline; color: #ffffff;">here</a>.
-			</p>
-		</mj-text>
+		
 	</mj-column>
 </mj-section>

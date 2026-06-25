@@ -231,8 +231,9 @@ export function NewsletterEditor() {
 | `react` | `19.2.7` | UI framework | Latest stable; supported by @grapesjs/react peerDep |
 | `react-dom` | `19.2.7` | DOM rendering | Matches React version |
 | `express` | `5.2.1` | HTTP server | v5 stable as of June 2026; async error handling built-in; no need for express-async-errors wrapper |
-| `prisma` | `7.8.0` | ORM + migrations | Type-safe queries, migration tooling, works with PostgreSQL; faster to set up than raw SQL for an internal tool |
-| `pg` | `8.22.0` | PostgreSQL driver | Prisma peer dep |
+| `drizzle-orm` | `0.45.2` | ORM + queries | TypeScript-native, SQL-first; types inferred from the schema, no codegen/generated client; PostgreSQL JSONB support. **(User switched from Prisma — see Alternatives.)** |
+| `drizzle-kit` | `0.31.10` | Migration generation + CLI | `drizzle-kit generate` / `migrate` |
+| `pg` | `8.22.0` | PostgreSQL driver | `drizzle-orm/node-postgres` driver; satisfies drizzle-orm peer `pg >=8` |
 | `vite` | `8.1.0` | Frontend build tool | Fastest HMR; native ESM; first-class React support |
 | `@vitejs/plugin-react` | `6.0.3` | Vite React plugin | Fast Refresh; Babel transform |
 
@@ -292,7 +293,7 @@ Add S3-compatible storage (via `@aws-sdk/client-s3` + `multer-s3`) only if the t
 | `nodemon` | latest | Restart server on file changes | Dev only |
 | `eslint` + `typescript-eslint` | latest | Linting | Enforce type safety |
 | TypeScript | `5.x` | Type safety end-to-end | Use strict mode |
-| `prisma` CLI | `7.8.0` | Migration tooling | Commit generated types |
+| `drizzle-kit` | `0.31.10` | Migration tooling | Generates SQL migrations from the TS schema; commit the migration files |
 
 ---
 
@@ -303,10 +304,10 @@ Add S3-compatible storage (via `@aws-sdk/client-s3` + `multer-s3`) only if the t
 npm install grapesjs@0.22.16 grapesjs-mjml@1.0.8 @grapesjs/react@2.0.0 react@19.2.7 react-dom@19.2.7
 
 # Backend
-npm install express@5.2.1 mjml@4.18.0 prisma@7.8.0 pg@8.22.0 jsonwebtoken@9.0.3 bcrypt@6.0.0 multer@2.2.0 sharp@0.35.2 cors@2.8.6 helmet@8.2.0 zod@4.4.3 dotenv@17.4.2
+npm install express@5.2.1 mjml@4.18.0 drizzle-orm@0.45.2 pg@8.22.0 jsonwebtoken@9.0.3 bcrypt@6.0.0 multer@2.2.0 sharp@0.35.2 cors@2.8.6 helmet@8.2.0 zod@4.4.3 dotenv@17.4.2
 
 # Dev
-npm install -D vite@8.1.0 @vitejs/plugin-react@6.0.3 typescript tsx@4.22.4 nodemon @types/express @types/node @types/jsonwebtoken @types/bcrypt @types/multer prisma@7.8.0
+npm install -D vite@8.1.0 @vitejs/plugin-react@6.0.3 typescript tsx@4.22.4 nodemon @types/express @types/node @types/jsonwebtoken @types/bcrypt @types/multer @types/pg drizzle-kit@0.31.10
 ```
 
 ---
@@ -318,8 +319,8 @@ npm install -D vite@8.1.0 @vitejs/plugin-react@6.0.3 typescript tsx@4.22.4 nodem
 | Editor | grapesjs-mjml | Unlayer, Stripo, Beefree | All proprietary SaaS with per-seat pricing and no self-hosting; grapesjs-mjml is the only OSS drag-drop MJML editor |
 | Editor | grapesjs-mjml | Build custom editor from scratch | 6-12 months of work minimum; grapesjs-mjml gives drag-drop, component model, and browser preview in days |
 | React wrapper | @grapesjs/react | Direct grapesjs.init() in useEffect | Direct mount works but requires manual lifecycle management; @grapesjs/react is the official solution and handles strict mode correctly; if grapesjs@0.22.x proves incompatible, fall back to direct mount with grapesjs@0.21.2 |
-| ORM | Prisma | Drizzle | Drizzle has less migration tooling; Prisma's type generation and migrate CLI are better for an internal tool |
-| ORM | Prisma | Raw pg/SQL | Viable but no migration tooling |
+| ORM | Drizzle | Prisma | Prisma adds a codegen step, a separate schema DSL, and a generated client to keep in sync; Drizzle is TypeScript-native, SQL-first, lighter, types inferred from the schema, migrations via `drizzle-kit`. (User decision — switched from Prisma.) |
+| ORM | Drizzle | Raw pg/SQL | Raw SQL works but no type inference or migration tooling; Drizzle stays close to SQL while adding both |
 | DB | PostgreSQL | SQLite | No concurrent writes; no JSONB; not appropriate for multi-user web app |
 | Server | Express v5 | Fastify | Fastify is faster; Express is the standard for existing GrapesJS/MJML tutorials; performance irrelevant at internal-tool scale |
 | Compiler | mjml@4.18.0 | mjml@5.x | v5 has breaking changes (skeleton, minification, include security); grapesjs-mjml bundles mjml-browser@^4.18.0 — mismatching major versions causes preview/export divergence |
@@ -353,7 +354,7 @@ npm install -D vite@8.1.0 @vitejs/plugin-react@6.0.3 typescript tsx@4.22.4 nodem
 | `mjml@4.18.0` (server) | `mjml-browser@4.18.0` (client preview) | ✓ same major/minor | Recommended parity; prevents preview/export divergence |
 | `react@19.x` | `@grapesjs/react@2.0.0` peerDep `^18\|\|^19` | ✓ semver satisfies | Confirmed |
 | `express@5.2.1` | Node.js LTS 20+ | ✓ | Confirmed |
-| `prisma@7.8.0` | `pg@8.22.0` | ✓ compatible | Standard |
+| `drizzle-orm@0.45.2` (node-postgres) | `pg@8.22.0` | ✓ peer `pg >=8` satisfied | Verified June 2026 |
 
 ---
 
@@ -368,13 +369,13 @@ npm install -D vite@8.1.0 @vitejs/plugin-react@6.0.3 typescript tsx@4.22.4 nodem
 | pluginsOpts string-key requirement | HIGH | gjs.market guide explicit warning; issue #223 describes exact broken behavior |
 | grapesjs@0.22.x + grapesjs-mjml runtime compatibility | MEDIUM | No peerDep conflict (confirmed); no reported issues in tracker; API stability likely but unverified at runtime — Phase-1 spike is required |
 | Maintenance/abandonment risk | HIGH | npm publish history; maintained by GrapesJS org author |
-| Backend stack | HIGH | Standard Node.js ecosystem; Express v5 stable, Prisma well-established |
+| Backend stack | HIGH | Standard Node.js ecosystem; Express v5 stable; Drizzle pinned `drizzle-orm@0.45.2` / `drizzle-kit@0.31.10` (npm registry, verified June 2026) |
 
 ---
 
 ## Sources
 
-- npm registry (verified June 2026): `grapesjs`, `grapesjs-mjml`, `@grapesjs/react`, `mjml`, `mjml-browser`, `express`, `prisma`, `pg`, `jsonwebtoken`, `bcrypt`, `multer`, `cors`, `helmet`, `zod`, `dotenv`, `tsx` — version metadata, publish dates, peer/dep ranges
+- npm registry (verified June 2026): `grapesjs`, `grapesjs-mjml`, `@grapesjs/react`, `mjml`, `mjml-browser`, `express`, `pg`, `jsonwebtoken`, `bcrypt`, `multer`, `cors`, `helmet`, `zod`, `dotenv`, `tsx`, `drizzle-orm@0.45.2`, `drizzle-kit@0.31.10` — version metadata, publish dates, peer/dep ranges. (`drizzle-orm`/`drizzle-kit` replaced `prisma`; drizzle-orm peer `pg >=8` satisfied by `pg@8.22.0`.)
 - GitHub GrapesJS/mjml README (via unpkg app.unpkg.com): supported component list, plugin options, `customComponents` API
 - GitHub GrapesJS/mjml issue #35: `mj-head`/`mj-attributes` import corruption — confirmed broken
 - GitHub GrapesJS/mjml issue #194: round-trip save/load failure with `setComponents(html)` — confirmed broken

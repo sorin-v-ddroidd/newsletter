@@ -148,8 +148,9 @@ This replaces the current workflow where a developer hand-edits `src/sections/*.
 | `react` | `19.2.7` | UI framework | Latest stable; supported by @grapesjs/react peerDep |
 | `react-dom` | `19.2.7` | DOM rendering | Matches React version |
 | `express` | `5.2.1` | HTTP server | v5 stable as of June 2026; async error handling built-in; no need for express-async-errors wrapper |
-| `prisma` | `7.8.0` | ORM + migrations | Type-safe queries, migration tooling, works with PostgreSQL; faster to set up than raw SQL for an internal tool |
-| `pg` | `8.22.0` | PostgreSQL driver | Prisma peer dep |
+| `drizzle-orm` | `0.45.2` | ORM + queries | TypeScript-native, SQL-first; types inferred directly from the schema, no codegen step and no generated client to commit; works with PostgreSQL JSONB |
+| `drizzle-kit` | `0.31.10` | Migration generation + CLI | `drizzle-kit generate` / `migrate`; dev dependency |
+| `pg` | `8.22.0` | PostgreSQL driver | `drizzle-orm/node-postgres` driver; satisfies drizzle-orm peer `pg >=8` |
 | `vite` | `8.1.0` | Frontend build tool | Fastest HMR; native ESM; first-class React support |
 | `@vitejs/plugin-react` | `6.0.3` | Vite React plugin | Fast Refresh; Babel transform |
 ### Database
@@ -179,7 +180,7 @@ This replaces the current workflow where a developer hand-edits `src/sections/*.
 | `nodemon` | latest | Restart server on file changes | Dev only |
 | `eslint` + `typescript-eslint` | latest | Linting | Enforce type safety |
 | TypeScript | `5.x` | Type safety end-to-end | Use strict mode |
-| `prisma` CLI | `7.8.0` | Migration tooling | Commit generated types |
+| `drizzle-kit` | `0.31.10` | Migration tooling | Generates SQL migrations from the TS schema; commit the migration files |
 ## Installation
 # Frontend (in /client or monorepo root)
 # Backend
@@ -190,8 +191,8 @@ This replaces the current workflow where a developer hand-edits `src/sections/*.
 | Editor | grapesjs-mjml | Unlayer, Stripo, Beefree | All proprietary SaaS with per-seat pricing and no self-hosting; grapesjs-mjml is the only OSS drag-drop MJML editor |
 | Editor | grapesjs-mjml | Build custom editor from scratch | 6-12 months of work minimum; grapesjs-mjml gives drag-drop, component model, and browser preview in days |
 | React wrapper | @grapesjs/react | Direct grapesjs.init() in useEffect | Direct mount works but requires manual lifecycle management; @grapesjs/react is the official solution and handles strict mode correctly; if grapesjs@0.22.x proves incompatible, fall back to direct mount with grapesjs@0.21.2 |
-| ORM | Prisma | Drizzle | Drizzle has less migration tooling; Prisma's type generation and migrate CLI are better for an internal tool |
-| ORM | Prisma | Raw pg/SQL | Viable but no migration tooling |
+| ORM | Drizzle | Prisma | Prisma adds a codegen step, a separate schema DSL, and a generated client to commit/keep in sync; Drizzle is TypeScript-native, SQL-first, lighter, with types inferred directly from the schema and migrations via `drizzle-kit`. (User decision — switched from Prisma.) |
+| ORM | Drizzle | Raw pg/SQL | Raw SQL is viable but has no type inference or migration tooling; Drizzle stays close to SQL while adding both |
 | DB | PostgreSQL | SQLite | No concurrent writes; no JSONB; not appropriate for multi-user web app |
 | Server | Express v5 | Fastify | Fastify is faster; Express is the standard for existing GrapesJS/MJML tutorials; performance irrelevant at internal-tool scale |
 | Compiler | mjml@4.18.0 | mjml@5.x | v5 has breaking changes (skeleton, minification, include security); grapesjs-mjml bundles mjml-browser@^4.18.0 — mismatching major versions causes preview/export divergence |
@@ -217,7 +218,7 @@ This replaces the current workflow where a developer hand-edits `src/sections/*.
 | `mjml@4.18.0` (server) | `mjml-browser@4.18.0` (client preview) | ✓ same major/minor | Recommended parity; prevents preview/export divergence |
 | `react@19.x` | `@grapesjs/react@2.0.0` peerDep `^18\|\|^19` | ✓ semver satisfies | Confirmed |
 | `express@5.2.1` | Node.js LTS 20+ | ✓ | Confirmed |
-| `prisma@7.8.0` | `pg@8.22.0` | ✓ compatible | Standard |
+| `drizzle-orm@0.45.2` (node-postgres) | `pg@8.22.0` | ✓ peer `pg >=8` satisfied | Verified June 2026 |
 ## Confidence Assessment
 | Area | Confidence | Basis |
 |------|------------|-------|
@@ -228,9 +229,9 @@ This replaces the current workflow where a developer hand-edits `src/sections/*.
 | pluginsOpts string-key requirement | HIGH | gjs.market guide explicit warning; issue #223 describes exact broken behavior |
 | grapesjs@0.22.x + grapesjs-mjml runtime compatibility | MEDIUM | No peerDep conflict (confirmed); no reported issues in tracker; API stability likely but unverified at runtime — Phase-1 spike is required |
 | Maintenance/abandonment risk | HIGH | npm publish history; maintained by GrapesJS org author |
-| Backend stack | HIGH | Standard Node.js ecosystem; Express v5 stable, Prisma well-established |
+| Backend stack | HIGH | Standard Node.js ecosystem; Express v5 stable; Drizzle pinned `drizzle-orm@0.45.2` / `drizzle-kit@0.31.10` (npm registry, verified June 2026) |
 ## Sources
-- npm registry (verified June 2026): `grapesjs`, `grapesjs-mjml`, `@grapesjs/react`, `mjml`, `mjml-browser`, `express`, `prisma`, `pg`, `jsonwebtoken`, `bcrypt`, `multer`, `cors`, `helmet`, `zod`, `dotenv`, `tsx` — version metadata, publish dates, peer/dep ranges
+- npm registry (verified June 2026): `grapesjs`, `grapesjs-mjml`, `@grapesjs/react`, `mjml`, `mjml-browser`, `express`, `pg`, `jsonwebtoken`, `bcrypt`, `multer`, `cors`, `helmet`, `zod`, `dotenv`, `tsx`, `drizzle-orm@0.45.2`, `drizzle-kit@0.31.10` — version metadata, publish dates, peer/dep ranges. (`drizzle-orm`/`drizzle-kit` replaced `prisma`; drizzle-orm peer `pg >=8` satisfied by `pg@8.22.0`.)
 - GitHub GrapesJS/mjml README (via unpkg app.unpkg.com): supported component list, plugin options, `customComponents` API
 - GitHub GrapesJS/mjml issue #35: `mj-head`/`mj-attributes` import corruption — confirmed broken
 - GitHub GrapesJS/mjml issue #194: round-trip save/load failure with `setComponents(html)` — confirmed broken

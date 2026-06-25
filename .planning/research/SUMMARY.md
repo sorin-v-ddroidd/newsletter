@@ -25,7 +25,7 @@ The full stack is Node/Express on the backend with React + Vite on the frontend,
 - `@grapesjs/react@2.0.0`: Official React wrapper — handles editor lifecycle, React StrictMode, declarative UI; use `pluginsOpts: { 'grapesjs-mjml': {...} }` with a hardcoded string key (NOT a computed key `[grapesjsMjml]`) or blocks will silently fail to drop (issue #223)
 - `mjml@4.18.0` (server): Server-side compile — must be v4 to match bundled `mjml-browser@4.18.0`; v5 has breaking changes that cause preview/export divergence
 - `express@5.2.1`: HTTP server — v5 stable, built-in async error handling
-- `prisma@7.8.0` + `pg@8.22.0`: ORM + PostgreSQL — JSONB column for project data, migration tooling; SQLite excluded (no concurrent writes, no JSONB)
+- `drizzle-orm` + `drizzle-kit` + `pg@8.22.0`: ORM + PostgreSQL — JSONB column for project data, migrations via drizzle-kit; SQLite excluded (no concurrent writes, no JSONB). (User switched from Prisma → Drizzle: TS-native, SQL-first, no codegen/generated client.)
 - `multer@2.2.0`: Image upload handling — local disk for Phase 1; storage service abstracted for S3 migration later
 - `jsonwebtoken@9.0.3` + `bcrypt@6.0.0`: Auth — JWT in httpOnly cookie; pre-seeded users table sufficient; no OAuth/SAML needed
 - `vite@8.1.0` + `@vitejs/plugin-react@6.0.3`: Frontend build
@@ -69,7 +69,7 @@ GrapesJS project JSON is the canonical persisted state; the MJML compile service
 3. **Block Definitions Module** (`blocks/branded/` + `blocks/generic.ts`) — framework-agnostic TypeScript modules; one file per branded section mirroring `src/sections/*.mjml`
 4. **API Server** (Express) — REST routes for newsletters CRUD, compile, image upload, asset library, auth
 5. **MJML Compile Service** — stateless `mjml(string, options)` wrapper; injects fixed `mj-head` before compile; called on preview/export only, never on save
-6. **DB Layer** (Prisma + PostgreSQL) — `newsletters.project_data JSONB` authoritative; `mjml_source` and `compiled_html` regenerable cache columns
+6. **DB Layer** (Drizzle + PostgreSQL) — `newsletters.project_data JSONB` authoritative; `mjml_source` and `compiled_html` regenerable cache columns
 7. **Image Upload / Storage Service** — always returns absolute public HTTPS URL; upload POST authenticated, asset GET publicly reachable
 8. **Auth** — JWT in httpOnly cookie; bcrypt; `requireAuth` middleware on all non-public routes
 

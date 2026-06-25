@@ -67,7 +67,7 @@ All nine components explicitly mapped:
 | **Block Definitions Module** | Declares all branded and generic blocks as MJML-string definitions and categories; exported as static data, has no GrapesJS import | Framework-agnostic; consumed at init by the integration layer; separating it here lets block definitions be unit-tested and ported independently |
 | **API Server** | Express routes for newsletters (CRUD), MJML compile endpoint, image upload, asset library listing, auth | Single Express app; plain REST; no GraphQL needed at this scale |
 | **MJML Compile Service** | Thin stateless function: `mjml(mjmlString, options) → html`; invoked by API routes for preview and export | Uses `mjml` npm lib (already in project); never called from the client; never called on save (see Data Flow) |
-| **DB Layer** | ORM models and queries for users, newsletters, assets | Recommended: Prisma (type-safe, migration-driven); SQLite for local dev → Postgres for production |
+| **DB Layer** | ORM models and queries for users, newsletters, assets | Drizzle (TypeScript-native, SQL-first, migration-driven via drizzle-kit); PostgreSQL for both dev and prod (no SQLite — needs concurrent writes + JSONB) |
 | **Auth** | Session or JWT-based login; internal users only; no public signup; middleware applied to all non-public routes | Recommended: express-session + bcrypt for simplicity, or jsonwebtoken for stateless JWT; no OAuth needed |
 | **Image Upload / Storage Service** | Accepts multipart upload, writes to disk or S3, returns a permanent public URL; validates file type and size | Images need absolute, publicly-reachable URLs — email clients fetch them at send time, not serve-time; app-relative paths will break |
 | **Asset Library** | Curated set of brand images (logos, team photos, signature); persisted in `assets` table; browsable in editor via panel; picks return an absolute URL | Backed by the same storage service; seed script populates from existing `assets/` directory |
@@ -103,8 +103,9 @@ newsletter/                     # repo root (existing)
 │       │   │   ├── mjmlCompile.ts      # thin wrapper around mjml npm lib
 │       │   │   └── storage.ts          # disk or S3 upload
 │       │   ├── db/
-│       │   │   ├── schema.prisma
-│       │   │   └── client.ts
+│       │   │   ├── schema.ts            # Drizzle table definitions
+│       │   │   ├── migrations/          # drizzle-kit output
+│       │   │   └── client.ts            # drizzle client over pg
 │       │   └── middleware/
 │       │       └── auth.ts
 │       └── package.json
@@ -407,7 +408,7 @@ Branded blocks appear under "DDROIDD Branded" in the editor panel; generic block
 
 **Depends on:** Phase 1 spike passing.
 
-What gets built: Prisma schema (users, newsletters, assets), Express app skeleton, auth routes (login/logout/session), newsletter CRUD endpoints, integration of GrapesJS save/load with real API (manual save pattern, auth header).
+What gets built: Drizzle schema (users, newsletters, assets) + initial migration, Express app skeleton, auth routes (login/logout/session), newsletter CRUD endpoints, integration of GrapesJS save/load with real API (manual save pattern, auth via httpOnly cookie).
 
 ### Phase 3 — Remaining Branded Blocks + Asset Library
 
@@ -463,7 +464,7 @@ npm -w packages/client run dev  # Vite → React on :5173, proxies /api to :3001
 | Integration Layer ↔ Block Definitions Module | Import at module init; pass to `BlockManager.add` | Block definitions have no GrapesJS dependency — pure data |
 | Client ↔ API Server | REST over HTTP; `Authorization: Bearer <token>` header on all newsletter/asset routes | Use a typed API client module (thin fetch wrapper) to avoid scattered raw fetch calls |
 | API Server ↔ MJML Compile Service | Direct function call (same process); not a separate microservice | Microservice split is premature for internal team scale |
-| API Server ↔ DB Layer | Prisma client (type-safe queries) | Never raw SQL from routes; always through the service/query layer |
+| API Server ↔ DB Layer | Drizzle client (type-safe queries) | Never raw SQL from routes; always through the service/query layer |
 | API Server ↔ Storage Service | Module call returning public URL | Abstracts disk vs S3; swap without touching routes |
 
 ### External Services
