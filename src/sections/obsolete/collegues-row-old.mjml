@@ -1,0 +1,29 @@
+<mj-section background-color='#0B1624'>
+  <mj-column>
+    <mj-image width="160px"
+      src="https://a.storyblok.com/f/198446/320x264/6ca2c537ee/img-team-placeholder-01.png" />
+    <mj-text align="center">
+      <p
+        style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-style: oblique; font-size: 12px; line-height: 18px;  color: #ffffff;">
+        I have sincerely felt the absence of the ddroidd community. Within the organisation, there exists a familial
+        dynamic wherein mutual support is extended to facilitate the achievement of clients' objectives</p>
+    </mj-text>
+  </mj-column>
+  <mj-column>
+    <mj-image width="100px"
+      src="https://a.storyblok.com/f/198446/198x264/ea467a92e2/img-team-placeholder-02.png" />
+    <mj-text align="center">
+      <p
+        style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-style: oblique; font-size: 12px; line-height: 18px;  color: #ffffff;">
+        A company is its people, and I always said that ddroidd are "my people". Here is where I grew professionally, faced challenges, cherished joyful moments. So, I am back….to "my people". See you at the office and on Teams</p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-section background-color='#0B1624' padding-bottom="0" padding-top="0">
+  <mj-column>
+    <mj-text align="left" padding-top="0" padding-bottom="0" padding-top="0">
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff; padding-top: 0; padding-bottom: 0;"><b>We would like to say a huge welcome to our new colleagues who have recently joined....</b></p>
+    </mj-text>
+  </mj-column>
+</mj-section>

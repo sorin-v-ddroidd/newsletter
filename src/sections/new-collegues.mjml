@@ -1,0 +1,74 @@
+<mj-section background-color='#0B1624' padding-top="50px">
+  <mj-column>
+    <mj-image align="left" width="200px" fluid-on-mobile='true' src="https://a.storyblok.com/f/198446/406x24/243dcda045/img-signature.png" alt="Signature" />
+    <mj-text color="#F45E43" padding-bottom="0">
+      <h2 style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 30px;  color: #ffffff; margin-bottom: 20px; text-transform: uppercase">
+        New Collegues
+      </h2>
+    </mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-section background-color='#0B1624'>
+  <mj-column padding="0 15px">
+    <mj-text align="left" padding="0">
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff; margin: 0; padding: 0 10px;">
+        We are delighted to welcome back to the team Dan Mororanu as UX/UI Designer. We couldn`t be happier to have him back into the ddroidd family.
+    </mj-text>
+    <mj-image width="86px" src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a1842751fdaacf23f49cced_img-dan-modoran.png" />
+    <mj-text align="center" padding="0">
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; line-height: 18px;  color: #ffffff; margin: 0; padding: 0;">
+        Dan Modoranu
+      </p>
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 18px;  color: #ffffffff; margin: 0; padding: 0;">
+        UX/UI Designer
+      </p>
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 18px;  color: #ffffffff; margin: 0; padding: 0; text-align: center">
+        <em>Happy to be rejoining a company whose people, culture, and mission I’ve always appreciated.</em>
+      </p>
+    </mj-text>
+    <mj-text color="#F45E43" padding="0">
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff; padding-top: 0; padding-bottom: 0; padding-left: 10px; padding-right: 10px;">
+        We would like to say a huge team welcome to our new colleagues who joined us in May: 
+      </p>
+    </mj-text>
+  </mj-column>
+  
+</mj-section>
+
+<mj-section background-color='#0B1624'>
+  <mj-column>
+    <mj-image width="86px" src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a16897fba226e3beaaf3404_img-mihai-bold.png" />
+    <mj-text align="center" padding="0">
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; line-height: 18px;  color: #ffffff; margin: 0; padding: 0;">
+        Mihai Bold
+      </p>
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 18px;  color: #ffffffff; margin: 0; padding: 0;">
+        React Native Developer
+      </p>
+    </mj-text>
+  </mj-column>
+  <mj-column>
+      <mj-image width="86px" src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a168978a165e032d964c244_img-rares-golea.png" />
+      <mj-text align="center" padding="0">
+        <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; line-height: 18px;  color: #ffffff; margin: 0; padding: 0;">
+          Rares Golea
+        </p>
+        <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 18px;  color: #ffffffff; margin: 0; padding: 0;">
+          Fullstack Developer
+        </p>
+      </mj-text>
+    </mj-column>
+  <mj-column>
+    <mj-image width="86px" src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a16897f08431a21a799492f_img-florin-hangan.png" />
+    <mj-text align="center" padding="0">
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: bold; line-height: 18px;  color: #ffffff; margin: 0; padding: 0;">
+        Florin Hangan
+      </p>
+      <p style="font-family:Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 18px;  color: #ffffffff; margin: 0; padding: 0;">
+        Front End Developer
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+

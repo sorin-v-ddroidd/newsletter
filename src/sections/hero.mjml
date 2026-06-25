@@ -1,0 +1,46 @@
+<mj-section background-color="#0B1624">
+	<mj-column>
+		<mj-image
+			fluid-on-mobile="true"
+			src="https://a.storyblok.com/f/198446/1020x473/616abdc5e0/img-hero.png"
+		/>
+		<mj-text font-family="Helvetica" color="#F45E43">
+			<p
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 16px;
+					line-height: 20px;
+					color: #ffffff;
+				"
+			>
+				May at ddroidd felt like a month of steady progress, with important projects moving forward while we continued to invest in how we learn and grow together. We started the month with our Company Updates session, sharing the new organizational structure, creating space for open questions, and aligning on the next steps and priorities ahead.  
+				<br /><br />
+				The highlights and updates that shaped our May are gathered in this edition of the ddroidd Digest. Enjoy the read! 
+			</p>
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section background-color="#0B1624">
+	<mj-column>
+		<mj-divider border-width="1px" border-style="dashed" border-color="white" />
+		  <!-- 
+    TRACKING PIXEL - Place at the end of email body
+    Replace the URL with your actual server URL
+    Update the parameters with actual recipient data
+  -->
+
+		  <mj-image src="https://tracking-newsletter.onrender.com/track?email=user@ddroidd.com&user=John%20Doe&newsletter=oct-2025" alt="Tracking Pixel" css-class="tracking-pixel" width="1px" height="1px" />
+	</mj-column>
+</mj-section>
+
+
+

@@ -1,0 +1,26 @@
+<mj-section background-color='#0B1624'>
+  <mj-column>
+    <mj-divider border-width="1px" border-style="dashed" border-color="white" />
+  </mj-column>
+</mj-section>
+
+<mj-section background-color='#0B1624'>
+  <mj-column>
+    <mj-image align="left" width="200px" fluid-on-mobile='true' src="https://a.storyblok.com/f/198446/406x24/243dcda045/img-signature.png" alt="Signature" />
+    <mj-text align="left"  font-family="Helvetica" color="#F45E43" padding-bottom="0">
+      <h2 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 30px;  color: #ffffff; text-transform: uppercase; margin: 0;">
+        Benefits
+      </h2>
+    </mj-text>
+    <mj-text font-family="Helvetica" color="#F45E43">
+      <p style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; color: #ffffff;">
+       Supporting your wellbeing is a top priority for us at ddroidd because we think it's crucial to maintain a healthy work-life balance.<br /><br />
+ 
+Starting on June 1st, we will be increasing the sports subscription reimbursement from 100 RON to 150 RON per month in an effort to promote an active lifestyle and assist you in unwinding outside of work. <br /><br />
+ 
+If you have any questions, feel free to reach out to the HR team.
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+

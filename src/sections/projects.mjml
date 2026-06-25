@@ -1,0 +1,144 @@
+<mj-section background-color="#0B1624">
+	<mj-column>
+		<mj-divider border-width="1px" border-style="dashed" border-color="white" />
+	</mj-column>
+</mj-section>
+
+<mj-section background-color="#0B1624">
+	<mj-column>
+		<mj-image
+			align="left"
+			width="200px"
+			fluid-on-mobile="true"
+			src="https://a.storyblok.com/f/198446/406x24/243dcda045/img-signature.png"
+			alt="Signature"
+		/>
+		<mj-text
+			align="left"
+			font-family="Helvetica"
+			color="#F45E43"
+			padding-bottom="0"
+		>
+			<h2
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 20px;
+					line-height: 30px;
+					color: #ffffff;
+					text-transform: uppercase;
+					margin: 0;
+				"
+			>
+				Projects
+			</h2>
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+<mj-section background-color="#0B1624" padding-top="0" padding-bottom="0">
+	<mj-column width="100%">
+		<mj-image
+			width="200px" align="left"
+			src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a168e993fb8fee9858486ad_mig-logo-miss-group.png"
+		/>
+		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
+			<p
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 16px;
+					line-height: 24px;
+					color: #ffffff;
+				"
+			>
+				We’re happy to share an important milestone in our relationship with Miss Group: the first major expansion of our collaboration after two successful years together  Throughout this partnership, we’ve received consistently positive feedback, and special recognition goes to Cristi Nicolae, who has been involved since the very beginning and played an important role in building this relationship. 
+				<br /><br />
+				As the collaboration continues to evolve, we are now entering a new delivery stream and further strengthening our engagement with the client. As part of this collaboration, ddroidd will support the migration and integration of newly acquired and existing hosting companies.  
+				<br /><br />
+				We’re looking forward to growing the team further and building a strong partnership together. 
+			</p>
+		</mj-text>
+		<mj-image
+			width="200px" align="left"
+			src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a168f42866a4d006bf40782_img-logo-relx.png"
+		/>
+		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
+			<br />
+			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
+				RELX Finance Innovation AI Project
+			</h3>
+			<p
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 16px;
+					line-height: 24px;
+					color: #ffffff;
+				"
+			>
+				We are excited to announce a new engagement with RELX focused on exploring how AI can create value within their Finance organization. The initiative started with a 2-week Technical Discovery phase aimed at understanding the existing Finance data architecture and infrastructure, while working closely with Finance SMEs to identify real-world challenges that could be effectively addressed or improved through AI. At the end of this phase, we will collaboratively prioritize one or more use cases for MVP delivery. 
+				<br /><br />
+				The engagement will  continue with a 6-week fail-fast delivery approach, during which we will rapidly test and validate potential AI solutions to determine the best path forward and deliver an MVP for the selected use case(s). Alongside the technical work, the collaboration will also help raise awareness within the RELX Finance team around the art of the possible with AI and support early discussions around a potential future Target Operating Model (TOM). 
+			</p>
+
+		</mj-text>
+
+		<mj-image
+			width="200px" align="left"
+			src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a168dad075d1f81c6a48107_img-logo-lexiscor-white.png"
+		/>
+		<mj-text font-family="Helvetica" color="#F45E43" padding-top="0">
+			<br />
+			<h3 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 24px;  color: #ffffff; margin: 0;">
+				Gama: AI-Enabled LexiScor Platform
+			</h3>
+			<p
+				style="
+					font-family:
+						Calibri,
+						Roboto,
+						Lato,
+						Avenir Next,
+						Verdana,
+						Helvetica,
+						Arial,
+						sans-serif;
+					font-size: 16px;
+					line-height: 24px;
+					color: #ffffff;
+				"
+			>
+				We are partnering with Gama Publisher to transform their LexiScor educational system, designed to assess reading competencies and recommend texts tailored to each child’s comprehension level, from a validated educational concept into a modern, accessible, and scalable digital platform. 
+				<br /><br />
+				Through this collaboration, we are developing the digital foundation that will enable reading level assessment, personalized book recommendations, and progress tracking as children develop their reading skills. 
+				<br /><br />
+				The project will be developed as a fully AI-enabled platform, leveraging intelligent technologies to deliver personalized learning experiences, scalable assessment capabilities, and data-driven educational insights 
+			</p>
+
+		</mj-text>
+	</mj-column>
+</mj-section>
+
+

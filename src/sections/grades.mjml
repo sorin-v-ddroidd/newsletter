@@ -1,0 +1,29 @@
+<mj-section background-color='#0B1624'>
+  <mj-column>
+    <mj-divider border-width="1px" border-style="dashed" border-color="white" />
+  </mj-column>
+</mj-section>
+
+<mj-section background-color='#0B1624'>
+  <mj-column>
+    <mj-image align="left" width="200px" fluid-on-mobile='true' src="https://a.storyblok.com/f/198446/406x24/243dcda045/img-signature.png" alt="Signature" />
+    <mj-text align="left"  font-family="Helvetica" color="#F45E43" padding-bottom="0">
+      <h2 style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 30px;  color: #ffffff; text-transform: uppercase; margin: 0;">
+        A New ddroidd Baby in the Family! 
+      </h2>
+    </mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-section background-color='#0B1624' padding-top="0" padding-bottom="0">
+  <mj-column width="40%" padding-right="0" padding-top="10px">
+      <mj-image align="left" width="200px" fluid-on-mobile='true' src="https://a.storyblok.com/f/198446/800x800/c1336f8336/img-ai-child.jpg" alt="Signature"  />
+    </mj-column>
+  <mj-column width="60%" padding-left="0">
+    <mj-text font-family="Helvetica" color="#F45E43" padding-top="0" padding-left="0">
+      <p style="font-family:Calibri,Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;">
+        We’re excited to share that our ddroidd family has grown! George is currently on paternity leave, welcoming his newest addition, and we couldn’t be happier for him. During this period, for any tasks or questions you would normally direct to him, please feel free to reach out to <strong>Oana or Andrei</strong>. They’ll be available to offer support while he is away. We wish him all the best as he enjoys this special time with his family. 
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>

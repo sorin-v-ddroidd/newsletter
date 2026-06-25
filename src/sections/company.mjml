@@ -1,0 +1,42 @@
+    <mj-section background-color='#0B1624'>
+     <mj-column>
+        <mj-divider border-width="1px" border-style="dashed" border-color="white" />
+      </mj-column>
+    </mj-section>
+    
+    <mj-section background-color='#0B1624'>
+      <mj-column>
+        <mj-image align="center" fluid-on-mobile='true' src="https://a.storyblok.com/f/198446/766x382/412697a793/img-placeholder-03.png" alt="Success" />
+        <mj-image align="left" width="200px" fluid-on-mobile='true' src="https://a.storyblok.com/f/198446/406x24/243dcda045/img-signature.png" alt="Signature" />
+        <mj-text align="left"  font-family="Helvetica" color="#F45E43">
+          <h2 style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 20px; line-height: 30px;  color: #ffffff; text-transform: uppercase; margin: 0;">
+            COMPANY
+          </h2>
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;"><strong>A match made in heaven  </strong></p>
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;">
+            We met in 2021 and the relationship has flourished ever since. <a href="https://havasmedianetwork.com/" target="_blank" style="text-decoration: none; font-weight: bold; color: #FCD400">Havas Media Network</a> is one of the world's largest global communications groups.
+           Operating in more than 140 countries, it helps brands to better engage with their communities using creativity, media, and entertainment.
+          </p>
+
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;">
+            As Havas’ dedicated technical delivery partner, we provide consultation, software development and application management, enabling them to offer industry-leading solutions to clients.  
+          </p>
+
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;">
+            Managing a number of applications for Havas, our work genuinely makes a difference to their business’ success.  
+          </p>
+
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;">
+            Havas is a long-standing partner that we have continued to grow with. The relationship is built on mutual trust and respect, and they really value our technical expertise.  
+          </p>
+          
+        </mj-text>
+        <mj-spacer height="50px" />
+        <mj-divider border-width="1px" border-style="dashed" border-color="white" />
+        <mj-spacer height="50px" />
+         <mj-text align="left"  font-family="Helvetica" color="#F45E43">
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;"><strong>Want to know more or have a story to share?</strong></p>
+          <p style="font-family: Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;  color: #ffffff;">This monthly newsletter is designed to keep you informed on what is happening within ddroidd. It will evolve as we go along, but we need your feedback to make this happen. Is there something else you would like to see within these updates, or do you have a successful story to share? Then please do let us know, email <ra href="mailti:leanne.wilkinson@ddroidd.com" style="tex-decoration: none; color: #ffffff">leanne.wilkinson@ddroidd.com</ra> with your stories and feedback. Until next month…  </p>
+         </mj-text>
+      </mj-column>
+    </mj-section>

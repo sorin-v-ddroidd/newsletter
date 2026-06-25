@@ -1,0 +1,12 @@
+<mjml>
+  <mj-include path="../components/head.mjml" />
+  <mj-body>
+    <mj-include path="../sections/hero.mjml" />
+    <mj-include path="../sections/new-collegues.mjml" />
+    <mj-include path="../sections/projects.mjml" />
+    <mj-include path="../sections/initiatives.mjml" />
+    <mj-include path="../sections/hiring.mjml" />
+    <mj-include path="../sections/want-to-know-more.mjml" />
+    <mj-include path="../sections/disclaimer.mjml" />
+  </mj-body>
+</mjml>

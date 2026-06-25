@@ -1,0 +1,14 @@
+<mj-head>
+  <mj-title>DDROIDD Digest</mj-title>
+   <mj-font name="Roboto"
+      href="https://fonts.googleapis.com/css?family=Roboto:wght@400;700" />
+  <mj-attributes>
+    <mj-text color="#ffffff" line-height="24px" font-size="16px" />
+    <mj-all font-family="Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif" />
+    <mj-style>
+      .tracking-pixel {
+        display: none;
+      }
+    </mj-style>
+  </mj-attributes>
+</mj-head>
