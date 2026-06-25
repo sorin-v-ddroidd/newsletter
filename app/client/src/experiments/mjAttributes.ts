@@ -80,9 +80,7 @@ export const PART_B_HERO_FRAGMENT = `<mj-section
  * runMjAttributesExperiment();
  */
 export async function runMjAttributesExperiment(): Promise<void> {
-  const API_BASE = (import.meta as Record<string, unknown>).env
-    ? ((import.meta as { env: { VITE_API_URL?: string } }).env.VITE_API_URL ?? '')
-    : '';
+  const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
   // --- Part A ---
   console.group('[criterion-5] Part A: mj-attributes compile test');
