@@ -57,7 +57,7 @@ Phase 1 is a hard technical gate: prove that `grapesjs@0.22.16` + `grapesjs-mjml
 
 The primary risk is **runtime compatibility** between grapesjs@0.22.16 and grapesjs-mjml@1.0.8. `grapesjs-mjml` declares no `peerDependencies`, so npm installs without conflict, but the plugin's own test/dev history targets 0.21.x. The README says "requires v0.15.9 or higher" with no upper bound, and there are no reports of 0.22.x breakage in the issue tracker — but this is absence of evidence, not evidence of absence. The spike is the test; do not code past it as if it has passed.
 
-A secondary, concrete surprise: **the dev machine has "new Outlook for Windows" (Microsoft Store app), which does NOT support COM automation**. The existing `QuickEmailTest.ps1` and `EmailTester.ps1` depend on `New-Object -ComObject Outlook.Application`, which will fail. D-05's client-render verification requires either a machine with classic Outlook (Office 365 / MSI install), or an alternative approach. The planner must surface this to the user before the email-render verification task.
+A secondary, concrete surprise: **both `QuickEmailTest.ps1` and `EmailTester.ps1` use `New-Object -ComObject Outlook.Application` (confirmed by reading both files)**. The dev machine has "new Outlook for Windows" (Microsoft Store app, `Microsoft.OutlookForWindows`), which does NOT support COM automation. This means **the entire D-05 client-render verification gate is blocked on the dev machine** — not just the Outlook-preview half. Both scripts fail immediately at the COM object creation line. The planner must surface this to the user before the email-render verification task; a machine with classic Outlook (Office 365 MSI / Office 2019/2021) is required.
 
 **Primary recommendation:** Scaffold the `app/` monorepo and wire the thinnest possible vertical slice: mount editor → add one branded block → save to localStorage → reload → POST MJML to server → write HTML → attempt PowerShell verify. Each step surfaces a distinct failure mode; stop and document rather than work around.
 
@@ -154,7 +154,7 @@ Browser (Vite dev server :5173)
        |
        +-- GjsEditor (@grapesjs/react)
             |  plugins: [grapesjsMjml]
-            |  pluginsOpts: { 'grapesjs-mjml': { ... } }  ← hardcoded string key
+            |  pluginsOpts: { 'grapesjs-mjml': { ... } }  <- hardcoded string key
             |
             +-- Block Panel (generic + branded blocks)
             |    [drag to canvas]
@@ -166,18 +166,20 @@ Browser (Vite dev server :5173)
                  +-- editor.Blocks.add('ddroidd-hero', { content: '<mj-section>...</mj-section>' })
                  +-- editor.Blocks.add('ddroidd-projects', { ... })
                  |
-                 +-- [save] editor.getProjectData() → localStorage
+                 +-- [save] editor.getProjectData() -> localStorage
                  +-- [load] editor.loadProjectData(JSON.parse(localStorage))
                  |
-                 +-- [compile] editor.getHtml()  → MJML body fragment
-                              → POST /api/compile { mjml: '<mj-section>...</mj-section>' }
+                 +-- [compile] editor.getHtml()
+                              -> return shape uncertain (fragment vs full doc -- verify in-spike)
+                              -> conditional wrap server-side if <mjml root absent
+                              -> POST /api/compile { mjml: '<content>' }
                               |
                               v
 Express server (:3000)
   POST /api/compile
     |
-    +-- Wrap: '<mjml><mj-body>' + req.body.mjml + '</mj-body></mjml>'
-    +-- mjml(wrapped, { minify: false })
+    +-- Conditional wrap: if !/<mjml/i.test(s) -> '<mjml><mj-body>' + s + '</mj-body></mjml>'
+    +-- mjml(fullMjml, { minify: false })
     +-- return { html: result.html, errors: result.errors }
     |
     v
@@ -185,8 +187,8 @@ Client writes HTML to file
     |
     v
 PowerShell (D-05 gate)
-  QuickEmailTest.ps1 -HtmlFilePath <file> -PreviewOnly  → Outlook preview
-  EmailTester.ps1 -HtmlFilePath <file> -TestEmails <gmail>  → Gmail inbox
+  BLOCKED on dev machine (both scripts require Outlook COM -- new Outlook Store app has no COM)
+  Requires machine with classic Outlook (Office 365 MSI / Office 2019/2021)
 ```
 
 ### Recommended Project Structure
@@ -253,7 +255,7 @@ export default function App() {
         storageManager: false,   // Phase 1: manual localStorage, no auto-save
         plugins: [grapesjsMjml],
         pluginsOpts: {
-          'grapesjs-mjml': {     // ← hardcoded string key, NOT [grapesjsMjml]
+          'grapesjs-mjml': {     // <- hardcoded string key, NOT [grapesjsMjml]
             resetBlocks: false,  // keep generic blocks; we add branded ones in onEditor
           }
         }
@@ -272,9 +274,9 @@ export default function App() {
 **Verified from bundle:** The plugin's own generic blocks use this exact format — e.g., mj-1-column content is `"<mj-section>\n        <mj-column><mj-text>Content 1</mj-text></mj-column>\n      </mj-section>"`. Branded blocks follow the same pattern.
 
 ```typescript
-// Source: grapesjs-mjml@1.0.8 dist/index.js bundle — verified block content format
+// Source: grapesjs-mjml@1.0.8 dist/index.js bundle -- verified block content format
 
-// BLOCK_DEFAULTS.ts — single source of truth for inline brand values
+// BLOCK_DEFAULTS.ts -- single source of truth for inline brand values
 export const BLOCK_DEFAULTS = {
   backgroundColor: '#0B1624',
   fontFamily: 'Calibri, Roboto, Lato, Avenir Next, Verdana, Helvetica, Arial, sans-serif',
@@ -284,16 +286,20 @@ export const BLOCK_DEFAULTS = {
   accentColor: '#F45E43',
 } as const;
 
-// hero.ts — derived from src/sections/hero.mjml
-// NOTE: mj-attributes is NOT used — all values inlined
+// hero.ts -- derived from src/sections/hero.mjml
+// NOTE: mj-attributes is NOT used -- all values inlined
 // NOTE: fluid-on-mobile IS a supported mj-image attribute (verify in canvas)
-// NOTE: background-url on mj-section is NOT a default panel trait (canvas may ignore it;
-//       use background-color only for the spike, document in experiment)
+// NOTE: background-url IS included to exercise D-04's risk-coverage rationale;
+//       verify in experiment whether it survives round-trip and appears in compiled output.
+//       The panel may not expose it as a trait, but it is in the content string.
 export const heroBlock = {
   id: 'ddroidd-hero',
   label: 'DDROIDD Hero',
   category: 'DDROIDD',
-  content: `<mj-section background-color="${BLOCK_DEFAULTS.backgroundColor}">
+  content: `<mj-section
+  background-color="${BLOCK_DEFAULTS.backgroundColor}"
+  background-url="https://a.storyblok.com/f/198446/1020x473/616abdc5e0/img-hero.png"
+>
   <mj-column>
     <mj-image
       src="https://a.storyblok.com/f/198446/1020x473/616abdc5e0/img-hero.png"
@@ -316,25 +322,27 @@ export const heroBlock = {
 
 **Key authoring rules (from CLAUDE.md + verified):**
 - Do NOT include `mj-attributes`, `mj-include`, or `mj-style` inside content strings
-- Background images (`background-url` on `mj-section`) are not a default panel trait — use `background-color` for the spike; document whether `background-url` survives round-trip as a manual attribute
+- `background-url` on `mj-section` is included in the hero block to exercise the risk; document whether it survives `getProjectData()`/`loadProjectData()` round-trip and appears in compiled HTML (it is NOT a default panel trait so the panel won't show it, but the attribute may still pass through)
 - `fluid-on-mobile` on `mj-image` is not a panel trait but IS valid MJML; include it and document whether it appears in compiled output
 - `css-class` attribute passes through compilation but is not panel-editable; omit it from branded blocks
 
 ### Pattern 3: MJML Extraction and Server Compile
 
-**What:** `editor.getHtml()` returns a bare MJML body fragment — the sections/columns content only. It does NOT return a complete `<mjml><mj-body>...</mj-body></mjml>` document. You must wrap it before passing to `mjml()` server-side.
+**What:** `editor.getHtml()` returns MJML from the canvas. Its exact shape — bare body fragment vs. full `<mjml><mj-body>` document — is uncertain and MUST be verified as the literal first step of the spike (see Criterion 4 procedure). Use a conditional wrap on the server to be robust against either case.
 
-**Verified from bundle source:**
+**Evidence from bundle source:**
 ```javascript
-// From grapesjs-mjml@1.0.8 dist/index.js — the 'mjml-code' command:
+// From grapesjs-mjml@1.0.8 dist/index.js -- the 'mjml-code' command:
 n.add('mjml-code', function() {
   return preMjml + editor.getHtml().trim() + postMjml
   // preMjml default: ''  postMjml default: ''
 })
-// The 'mjml-code-to-html' command calls mjmlParser on the result of 'mjml-code'
+// The 'mjml-code-to-html' command feeds the result of 'mjml-code' directly into mjmlParser
 ```
 
-So `editor.getHtml()` returns the body fragment. To compile server-side:
+The plugin's own export feeds `editor.getHtml()` directly (with empty wrappers) into the MJML parser, which requires a complete `<mjml>` root. This implies `editor.getHtml()` may already return mjml-rooted MJML. However, the community describes it as returning MJML "source" without explicitly confirming whether it includes the root wrapper. **Do not assume either way — confirm via `console.log(editor.getHtml())` before writing the endpoint.**
+
+**Conditional wrap (robust to either shape):**
 
 ```typescript
 // server/src/routes/compile.ts
@@ -344,15 +352,15 @@ import mjml2html from 'mjml';
 const router = express.Router();
 
 router.post('/compile', async (req, res) => {
-  const { mjml: bodyFragment } = req.body as { mjml: string };
+  const { mjml: editorOutput } = req.body as { mjml: string };
+  const trimmed = editorOutput.trim();
 
-  // Wrap body fragment in full MJML document
-  // mj-head is intentionally minimal in Phase 1 (full injection deferred to Phase 4)
-  const fullMjml = `<mjml>
-  <mj-body>
-    ${bodyFragment.trim()}
-  </mj-body>
-</mjml>`;
+  // Conditional wrap: only add root if getHtml() returned a bare fragment.
+  // Verify the actual shape in the spike (console.log(editor.getHtml())).
+  // If getHtml() already returns '<mjml>...', the conditional prevents double-wrapping.
+  const fullMjml = /<mjml/i.test(trimmed)
+    ? trimmed
+    : `<mjml>\n  <mj-body>\n    ${trimmed}\n  </mj-body>\n</mjml>`;
 
   const result = mjml2html(fullMjml, {
     validationLevel: 'soft',  // don't throw on warnings
@@ -370,7 +378,7 @@ router.post('/compile', async (req, res) => {
 export default router;
 ```
 
-**Note on preMjml/postMjml options:** If needed, the `preMjml` / `postMjml` plugin options can wrap the fragment before the plugin's own export command. For server compile, wrapping server-side is cleaner and more controllable.
+**Note on preMjml/postMjml options:** If the Phase 4 mj-head injection is needed earlier, `preMjml` and `postMjml` plugin options can wrap the fragment before the plugin's own export command. For server compile, conditional wrapping server-side is cleaner and more controllable.
 
 ### Pattern 4: localStorage Round-Trip
 
@@ -413,6 +421,7 @@ const assertRoundTrip = (editor: any) => {
 - **`mj-include` in block content strings:** Compile-time directive; editor operates on flat MJML; includes have no runtime representation.
 - **`grapesjs@0.23.2`:** Latest on npm but outside `@grapesjs/react@2.0.0` peerDep range `^0.22.5`. Do not upgrade.
 - **`mjml@5.x`:** Latest on npm but breaking changes vs mjml-browser@4 bundled in grapesjs-mjml. Do not use.
+- **Unconditional wrap of `editor.getHtml()` output:** If getHtml() already returns a full `<mjml>` document, wrapping again produces invalid double-nested MJML. Always use conditional wrap.
 
 ---
 
@@ -467,7 +476,7 @@ The experiment is two-part: negative confirmation and positive validation.
 3. Assert canvas state is identical (deep-equal JSON).
 4. Run `editor.getHtml()` → POST to `/api/compile` with NO mj-head in the server wrapper.
 5. Open compiled HTML in a browser. Verify: text is white (`#ffffff`), font stack is `Calibri/...`, background is `#0B1624`.
-6. Save HTML to file. Run `QuickEmailTest.ps1` (if Outlook COM available).
+6. Save HTML to file. Attempt D-05 PowerShell scripts (requires classic Outlook — see Environment Availability).
 7. **Expected:** Correct rendering entirely from inlined defaults. No `mj-attributes` in the chain.
 8. **Document:** "BLOCK_DEFAULTS mitigation validated. Inlined defaults survive round-trip and compile without mj-head."
 
@@ -475,9 +484,10 @@ The experiment is two-part: negative confirmation and positive validation.
 
 - [ ] Does `fluid-on-mobile` on `mj-image` survive `getProjectData()`/`loadProjectData()`?
 - [ ] Does `fluid-on-mobile` appear in compiled HTML output?
-- [ ] Does `background-url` on `mj-section` survive as a manually-set attribute?
+- [ ] Does `background-url` on `mj-section` survive as an attribute in block content through round-trip?
 - [ ] Does `background-url` appear in compiled HTML output?
-- [ ] Are there any MJML compile warnings or errors from the body fragment?
+- [ ] Are there any MJML compile warnings or errors from the MJML output?
+- [ ] What does `console.log(editor.getHtml())` show — bare fragment or full `<mjml>` document?
 
 ---
 
@@ -493,15 +503,15 @@ pluginsOpts: { 'grapesjs-mjml': { ... } }
 ```
 **Warning signs:** Blocks visible in panel; drag-drop over canvas doesn't place the block.
 
-### Pitfall 2: getHtml() Returns a Fragment, Not a Full MJML Document
+### Pitfall 2: Unknown getHtml() Return Shape
 
-**What goes wrong:** Passing `editor.getHtml()` directly to `mjml()` on the server throws a parse error ("Root component 'mjml' not found").
-**Why it happens:** `editor.getHtml()` returns only the `mj-section`/`mj-column` body content, no `<mjml><mj-body>` wrapper. This is confirmed from the bundle source: `preMjml` and `postMjml` both default to `''`.
-**How to avoid:** Always wrap server-side before calling `mjml()`:
-```typescript
-const full = `<mjml><mj-body>${fragment}</mj-body></mjml>`;
-```
-**Warning signs:** `mjml()` throws or returns empty HTML.
+**What goes wrong:** Either the server endpoint double-wraps (if getHtml() returns full `<mjml>` document) or the MJML parser throws "Root component 'mjml' not found" (if getHtml() returns a bare fragment). Either way, compiled output is wrong or absent.
+**Why it happens:** The bundle confirms the plugin feeds `preMjml + editor.getHtml().trim() + postMjml` (both empty by default) directly into the MJML parser. This implies getHtml() may already return mjml-rooted MJML — but this is not definitively confirmed by bundle inspection alone. Community references describe it as returning MJML "source."
+**How to avoid:**
+- FIRST action in the compile spike: `console.log(editor.getHtml())` and inspect whether it starts with `<mjml`.
+- Use conditional wrap on the server regardless: `/<mjml/i.test(trimmed) ? trimmed : wrapIt`.
+- This is robust whether getHtml() is a fragment or a full document.
+**Warning signs:** `mjml()` throws a parse error (fragment assumed, was full doc) or produces malformed HTML with double-nested mjml tags (full doc assumed, was fragment).
 
 ### Pitfall 3: Undo History Lost After loadProjectData
 
@@ -517,12 +527,12 @@ const full = `<mjml><mj-body>${fragment}</mj-body></mjml>`;
 **How to avoid:** Never rely on `mj-attributes`. Inline all values in BLOCK_DEFAULTS and reference them in each block content string.
 **Warning signs:** White background text rendered black; font appears as generic sans-serif instead of Calibri/Roboto stack.
 
-### Pitfall 5: Outlook COM Not Available (New Outlook)
+### Pitfall 5: Both PowerShell Scripts Require Outlook COM (Entire D-05 Gate Blocked)
 
-**What goes wrong:** `QuickEmailTest.ps1 -PreviewOnly` fails with `Could not connect to Outlook`.
-**Why it happens:** The dev machine has "new Outlook for Windows" (Microsoft Store app, `Microsoft.OutlookForWindows`), which does NOT support COM automation. COM requires classic Outlook (Office 365 MSI / Office 2019/2021 volume).
-**How to avoid:** Surface this blocker to the user before the email-render verification task. Fallback options: (a) use a Windows machine with classic Outlook; (b) send via EmailTester.ps1 to Gmail only (does not require Outlook); (c) use a hosted email testing service (Litmus / Email on Acid — out of scope but worth noting as fallback).
-**Warning signs:** `New-Object -ComObject Outlook.Application` throws immediately.
+**What goes wrong:** Both `QuickEmailTest.ps1 -PreviewOnly` AND `EmailTester.ps1 -TestEmails` fail immediately.
+**Why it happens:** BOTH scripts use `New-Object -ComObject Outlook.Application` (confirmed by reading both files — QuickEmailTest.ps1 line 7; EmailTester.ps1 lines 43 and 153). The dev machine has "new Outlook for Windows" (Microsoft Store app, `Microsoft.OutlookForWindows`), which does NOT support COM automation. There is NO COM-free email send path available through these scripts.
+**How to avoid:** Surface this blocker to the user before the email-render verification task. There is no fallback script on this machine. Options: (a) use a machine with classic Outlook (Office 365 MSI / Office 2019/2021); (b) manually send compiled HTML via Outlook Web App (copy-paste HTML body); (c) use a hosted testing service such as Litmus (out of scope but viable if neither (a) nor (b) is available). **Criterion #4 is fully blocked on the dev machine — both Outlook and Gmail paths.**
+**Warning signs:** `New-Object -ComObject Outlook.Application` throws immediately on both scripts.
 
 ### Pitfall 6: grapesjs@0.22.16 Runtime Incompatibility with grapesjs-mjml@1.0.8
 
@@ -535,10 +545,10 @@ const full = `<mjml><mj-body>${fragment}</mj-body></mjml>`;
 
 ## Code Examples
 
-### Express Compile Endpoint (Minimal)
+### Express Compile Endpoint (Conditional Wrap)
 
 ```typescript
-// Source: mjml npm package API + verified getHtml() output format from grapesjs-mjml@1.0.8 bundle
+// Source: mjml npm package API + conditional wrap for uncertain getHtml() return shape
 
 import express from 'express';
 import cors from 'cors';
@@ -549,8 +559,16 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json({ limit: '1mb' }));
 
 app.post('/api/compile', (req, res) => {
-  const { mjml: bodyFragment } = req.body;
-  const fullMjml = `<mjml><mj-body>${bodyFragment.trim()}</mj-body></mjml>`;
+  const { mjml: editorOutput } = req.body;
+  const trimmed = editorOutput.trim();
+
+  // Conditional wrap: editor.getHtml() return shape is verify-in-spike.
+  // If it returns full <mjml> doc, skip wrapping (prevents double-nesting).
+  // If it returns a bare fragment, wrap to form a valid MJML document.
+  const fullMjml = /<mjml/i.test(trimmed)
+    ? trimmed
+    : `<mjml><mj-body>${trimmed}</mj-body></mjml>`;
+
   const result = mjml2html(fullMjml, { validationLevel: 'soft', minify: false });
   res.json({ html: result.html, errors: result.errors });
 });
@@ -572,16 +590,27 @@ console.log('Round-trip identical:', before === after);
 // If false: log the diff to identify what changed
 ```
 
-### Compile and Write to File (Browser → Server → File)
+### Verify getHtml() Shape (Spike First Step)
+
+```typescript
+// Run in browser console once the editor has at least one block on canvas.
+// This MUST be done before writing the compile endpoint logic.
+const output = editor.getHtml();
+console.log('getHtml() starts with <mjml>:', /<mjml/i.test(output));
+console.log('getHtml() output:', output.slice(0, 500));
+// Document the result in criterion #5 checklist.
+```
+
+### Compile and Write to File (Browser -> Server -> File)
 
 ```typescript
 // Client side: extract MJML and send to server
 const compileDraft = async (editor: any) => {
-  const mjmlFragment = editor.getHtml();
+  const mjmlOutput = editor.getHtml();
   const res = await fetch('http://localhost:3000/api/compile', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mjml: mjmlFragment }),
+    body: JSON.stringify({ mjml: mjmlOutput }),
   });
   const { html, errors } = await res.json();
   console.log('Compile errors:', errors);
@@ -612,15 +641,11 @@ const compileDraft = async (editor: any) => {
 |------------|------------|-----------|---------|----------|
 | Node.js | All (Vite, Express, mjml) | YES | v24.16.0 | — |
 | npm | Package install | YES | 11.13.0 | — |
-| Outlook COM | D-05 QuickEmailTest.ps1 | NO | new Outlook (Store app — no COM) | EmailTester.ps1 (Gmail only) or machine with classic Outlook |
-| Gmail inbox | D-05 EmailTester.ps1 | [ASSUMED] — not probed | — | — |
-| PowerShell | D-05 scripts | YES (Windows 11) | Built-in | — |
+| Outlook COM | D-05 QuickEmailTest.ps1 AND EmailTester.ps1 | NO | New Outlook (Store app — no COM) | None on dev machine; requires machine with classic Outlook (Office 365 MSI) |
+| PowerShell | D-05 scripts (if COM available) | YES (Windows 11) | Built-in | — |
 
 **Missing dependencies with no fallback:**
-- Classic Outlook COM — required for `QuickEmailTest.ps1 -PreviewOnly`. The dev machine has new Outlook (Store app) which does NOT support `New-Object -ComObject Outlook.Application`. This BLOCKS criterion #4 for the Outlook half. **Planner must surface to user before scheduling the Outlook verification task.**
-
-**Missing dependencies with fallback:**
-- Outlook COM → fallback to Gmail-only verification via `EmailTester.ps1`. Partial pass for criterion #4 (Gmail only, not both clients).
+- Classic Outlook COM — required for BOTH `QuickEmailTest.ps1 -PreviewOnly` (Outlook preview) AND `EmailTester.ps1 -TestEmails` (email send). Both scripts create `New-Object -ComObject Outlook.Application` before any email logic. The dev machine has new Outlook (Store app) which does NOT support COM. **This BLOCKS criterion #4 entirely.** There is no COM-free path through the existing PowerShell scripts on this machine. Planner must add a human checkpoint requiring the user to confirm access to a machine with classic Outlook before scheduling the D-05 verification task.
 
 ---
 
@@ -638,7 +663,7 @@ const compileDraft = async (editor: any) => {
 
 **Rationale:** Phase 1 is explicitly a feasibility spike. The "tests" are the 5 exit criteria themselves — manual, observable checkpoints. A formal test suite (Jest/Vitest) is not set up in this phase; if one is desired, it belongs in Wave 0 setup. Given the spike nature, the validation architecture is a defined procedure, not an automated suite.
 
-### Phase Requirements → Validation Map
+### Phase Requirements -> Validation Map
 
 | Req ID | Behavior | Validation Type | Observable Signal |
 |--------|----------|----------------|-------------------|
@@ -650,47 +675,49 @@ const compileDraft = async (editor: any) => {
 
 ### Exit Criteria Verification Procedure
 
-**Criterion 1 — Mount without console errors:**
+**Criterion 1 -- Mount without console errors:**
 - Open browser DevTools console before loading the app
 - Mount succeeds when: no red errors, GjsEditor renders canvas, blocks panel appears
 - FAIL signal: `TypeError`, `Cannot read property`, or blank canvas
 
-**Criterion 2 — Drag/drop + reorder (≥2 branded + 5 generic):**
+**Criterion 2 -- Drag/drop + reorder (>=2 branded + 5 generic):**
 - Drop each of: mj-text, mj-image, mj-button, mj-1-column (or 2-col/3-col), mj-divider, mj-spacer
 - Drop ddroidd-hero, ddroidd-projects
 - Reorder two blocks by drag
 - PASS: all blocks drop; reorder works
 
-**Criterion 3 — localStorage round-trip (byte-identical):**
+**Criterion 3 -- localStorage round-trip (byte-identical):**
 - Add hero block; edit its text inline
 - Run console assertion: `JSON.stringify(getProjectData())` before and after save/load cycle
 - PASS: `before === after` logs `true`
 - Verify: undo/redo functional for new edit after reload
 
-**Criterion 4 — Server compile → Outlook + Gmail:**
-- Call `editor.getHtml()` → POST `/api/compile` → write HTML to `dist/spike-output.html`
-- Outlook: `.\QuickEmailTest.ps1 -HtmlFilePath dist\spike-output.html -PreviewOnly`
-  - BLOCKED on dev machine: new Outlook (no COM). Must use a machine with classic Outlook or skip Outlook half.
-- Gmail: `.\EmailTester.ps1 -HtmlFilePath dist\spike-output.html -TestEmails sorin.vieriu@ddroidd.com`
-- PASS: no broken fonts, no dark-on-dark text, no spacing failures
+**Criterion 4 -- Server compile -> client render:**
+- PREREQUISITE: Confirm getHtml() shape via `console.log(editor.getHtml())` BEFORE running the endpoint. Document whether it starts with `<mjml` or is a bare fragment. Update compile endpoint if conditional wrap logic needs adjustment.
+- Call `editor.getHtml()` -> POST `/api/compile` -> write HTML to `dist/spike-output.html`
+- Client render verification requires a machine with classic Outlook (Office 365 MSI / Office 2019/2021):
+  - Outlook: `.\QuickEmailTest.ps1 -HtmlFilePath dist\spike-output.html -PreviewOnly`
+  - Email send: `.\EmailTester.ps1 -HtmlFilePath dist\spike-output.html -TestEmails sorin.vieriu@ddroidd.com`
+  - BOTH scripts require COM -- BLOCKED on dev machine (new Outlook Store app). Human checkpoint required.
+- PASS: no broken fonts, no dark-on-dark text, no spacing failures in both clients
 
-**Criterion 5 — mj-attributes experiment documented:**
+**Criterion 5 -- mj-attributes experiment documented:**
 - Run Part A (negative): confirm mj-attributes dropped
 - Run Part B (positive): confirm inlined defaults survive round-trip + compile without mj-head
-- Document fluid-on-mobile and background-url observations
+- Document fluid-on-mobile, background-url, and getHtml() shape observations (see checklist in mj-attributes section)
 - PASS: written documentation exists; BLOCK_DEFAULTS mitigation validated
 
 ### Wave 0 Gaps
-- [ ] `app/client/` directory and `package.json` — create before any code tasks
-- [ ] `app/server/` directory and `package.json` — create before server tasks
+- [ ] `app/client/` directory and `package.json` -- create before any code tasks
+- [ ] `app/server/` directory and `package.json` -- create before server tasks
 - [ ] TypeScript config (`tsconfig.json`) in both client and server
-- [ ] `vite.config.ts` with proxy config (`/api` → `http://localhost:3000`)
+- [ ] `vite.config.ts` with proxy config (`/api` -> `http://localhost:3000`)
 
 ---
 
 ## Security Domain
 
-> `security_enforcement` not explicitly set to false — section included.
+> `security_enforcement` not explicitly set to false -- section included.
 
 Phase 1 is a local dev spike with no auth, no real users, no persistent DB, and no public exposure. Security controls are minimal by design.
 
@@ -698,11 +725,11 @@ Phase 1 is a local dev spike with no auth, no real users, no persistent DB, and 
 
 | ASVS Category | Applies | Standard Control |
 |---------------|---------|-----------------|
-| V2 Authentication | No (deferred to Phase 2) | — |
-| V3 Session Management | No (deferred to Phase 2) | — |
-| V4 Access Control | No (local dev only) | — |
+| V2 Authentication | No (deferred to Phase 2) | -- |
+| V3 Session Management | No (deferred to Phase 2) | -- |
+| V4 Access Control | No (local dev only) | -- |
 | V5 Input Validation | Minimal | Basic Express body size limit (`1mb`); MJML compile errors logged |
-| V6 Cryptography | No | — |
+| V6 Cryptography | No | -- |
 
 ### Known Threat Patterns for This Stack
 
@@ -720,62 +747,67 @@ Phase 1 spike: no user auth, no external exposure, no secrets, no DB. ASVS contr
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
 | A1 | `@grapesjs/react` StrictMode double-init guard works via `editor.Blocks.get(id)` check | Mount Pattern | Double-registration of branded blocks; can be observed immediately and fixed |
-| A2 | `fluid-on-mobile` on mj-image is passed through to compiled HTML output | Branded Block Definition | Spike criterion #5 document may be incomplete; low risk — experiment will reveal |
-| A3 | `background-url` attribute on mj-section, set manually in block content, survives round-trip | Branded Block Definition | Hero block may lose background image; document in experiment; use background-color as fallback |
-| A4 | Gmail is accessible for EmailTester.ps1 test send | Environment Availability | Cannot verify criterion #4 Gmail half; user must confirm email address and credentials |
-| A5 | grapesjs@0.22.16 + grapesjs-mjml@1.0.8 are runtime-compatible | ALL | Entire spike fails; fall back to grapesjs@0.21.2 + direct mount per STATE.md fallback plan |
+| A2 | `fluid-on-mobile` on mj-image passes through to compiled HTML output | Branded Block Definition | Criterion #5 document may be incomplete; experiment will reveal |
+| A3 | `background-url` attribute on mj-section, set in block content string, survives round-trip | Branded Block Definition | Hero block may lose background image; document in experiment |
+| A4 | grapesjs@0.22.16 + grapesjs-mjml@1.0.8 are runtime-compatible | ALL | Entire spike fails; fall back to grapesjs@0.21.2 + direct mount per STATE.md fallback plan |
 
-**If A5 is wrong:** Follow the documented fallback in STATE.md — switch to `grapesjs@0.21.2` with direct `grapesjs.init()` in `useEffect` and drop `@grapesjs/react`. Block definitions and server compile endpoint are unaffected.
+**If A4 is wrong:** Follow the documented fallback in STATE.md -- switch to `grapesjs@0.21.2` with direct `grapesjs.init()` in `useEffect` and drop `@grapesjs/react`. Block definitions and server compile endpoint are unaffected.
 
 ---
 
 ## Open Questions
 
-1. **Outlook COM on dev machine**
-   - What we know: Dev machine has new Outlook (Store app); `New-Object -ComObject Outlook.Application` will fail
-   - What's unclear: Whether another machine with classic Outlook is available for the D-05 gate
-   - Recommendation: Planner should add a human checkpoint before the Outlook verification task asking the user to confirm Outlook availability
+1. **Outlook COM on dev machine (entire D-05 gate blocked)**
+   - What we know: BOTH `QuickEmailTest.ps1` AND `EmailTester.ps1` use `New-Object -ComObject Outlook.Application` (confirmed by reading both files). Dev machine has new Outlook Store app with no COM support. Criterion #4 client-render gate is fully blocked -- no COM-free email path exists through the existing scripts.
+   - What's unclear: Whether the user has access to another machine with classic Outlook (Office 365 MSI / Office 2019/2021)
+   - Recommendation: Planner must add a human checkpoint BEFORE the D-05 verification task asking the user to confirm access to a machine with classic Outlook. If unavailable, document partial pass (browser rendering verified, client-render gate deferred) and note what to do next.
 
-2. **`background-url` on mj-section in the editor canvas**
-   - What we know: Not a default panel trait in grapesjs-mjml; CLAUDE.md flags it as risky
-   - What's unclear: Whether setting it directly in block content string causes it to appear in `getHtml()` output
-   - Recommendation: Include in the hero block content string and document the result in criterion #5 experiment
+2. **`editor.getHtml()` return shape (fragment vs full document)**
+   - What we know: Bundle feeds `editor.getHtml()` directly (with empty wrappers) to MJML parser, implying it may return a full `<mjml>` document. Community documentation calls it "MJML source" without specifying wrapper presence.
+   - What's unclear: Whether getHtml() returns `<mjml><mj-body>...</mj-body></mjml>` or just `<mj-section>...` body content.
+   - Recommendation: `console.log(editor.getHtml())` must be the literal first step of the compile task. Use conditional wrap in the endpoint to be robust either way.
 
-3. **`fluid-on-mobile` round-trip fidelity**
+3. **`background-url` on mj-section in the editor canvas**
+   - What we know: Not a default panel trait in grapesjs-mjml; included in hero block content string to exercise D-04's risk rationale
+   - What's unclear: Whether setting it in block content causes it to appear in `getHtml()` output and compiled HTML
+   - Recommendation: Included in hero block; document the result in criterion #5 experiment
+
+4. **`fluid-on-mobile` round-trip fidelity**
    - What we know: Attribute is valid MJML; not exposed as a panel trait in grapesjs-mjml
    - What's unclear: Whether GrapesJS strips non-trait attributes during getProjectData serialization
-   - Recommendation: Include in hero block and verify in criterion #5 experiment
+   - Recommendation: Included in hero block; verify in criterion #5 experiment
 
 ---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- `grapesjs-mjml@1.0.8 dist/index.js` (npm pack + local inspection) — verified block content format, `getHtml()` behavior, `preMjml`/`postMjml` defaults, `mjml-code` command structure, `pluginsOpts` defaults
-- `grapesjs-mjml@1.0.8 README.md` (npm pack + local inspection) — plugin options table, supported component list, ESM usage pattern
+- `grapesjs-mjml@1.0.8 dist/index.js` (npm pack + local inspection) -- verified block content format, `getHtml()` command composition, `preMjml`/`postMjml` defaults, `mjml-code` command structure, `pluginsOpts` defaults
+- `grapesjs-mjml@1.0.8 README.md` (npm pack + local inspection) -- plugin options table, supported component list, ESM usage pattern
+- `EmailTester.ps1` (project root, read directly) -- confirmed COM dependency at lines 43 and 153; no COM-free email send path exists
+- `QuickEmailTest.ps1` (project root, read directly) -- confirmed COM dependency
 - npm registry (verified 2026-06-25): all package versions, peer dependencies, publish dates
-- `CLAUDE.md` (project root) — pinned version triple, compatibility matrix, pluginsOpts string-key requirement, import/reauthor verdict, block authoring pattern, "What NOT to Use" table
+- `CLAUDE.md` (project root) -- pinned version triple, compatibility matrix, pluginsOpts string-key requirement, import/reauthor verdict, block authoring pattern, "What NOT to Use" table
 
 ### Secondary (MEDIUM confidence)
-- gjs.market Next.js integration guide — `@grapesjs/react` mount pattern, hardcoded string key requirement, StrictMode guard; Vite SPA portions carry over but Next.js-specific patterns (SSR, `dynamic()`) do not apply
-- Mautic forum (forum.mautic.org) — moderator-confirmed `mj-attributes` architectural limitation
-- GitHub issue #17 (artf/grapesjs-mjml) — attribute loss at load time; confirms round-trip attribute fidelity concern
-- GrapesJS Blocks API docs (grapesjs.com/docs/modules/Blocks.html) — `editor.Blocks.add()` signature
-
-### Tertiary (LOW confidence)
-- WebSearch summary: `editor.getHtml()` returns MJML source — now superseded by verified bundle inspection
+- gjs.market Next.js integration guide -- `@grapesjs/react` mount pattern, hardcoded string key requirement, StrictMode guard; Vite SPA portions carry over but Next.js-specific patterns (SSR, `dynamic()`) do not apply
+- Mautic forum (forum.mautic.org) -- moderator-confirmed `mj-attributes` architectural limitation
+- GitHub issue #17 (artf/grapesjs-mjml) -- attribute loss at load time; confirms round-trip attribute fidelity concern
+- GrapesJS Blocks API docs (grapesjs.com/docs/modules/Blocks.html) -- `editor.Blocks.add()` signature
+- Community documentation: `editor.getHtml()` described as returning MJML "source" (aligns with possible full-document shape)
 
 ---
 
 ## Metadata
 
 **Confidence breakdown:**
-- Block content format and getHtml() behavior: HIGH — verified from bundle source
-- Mount pattern (@grapesjs/react + pluginsOpts): MEDIUM — verified from README and gjs.market guide; runtime behavior unverified
-- Runtime compatibility (0.22.16 + grapesjs-mjml@1.0.8): LOW — this is the spike's question; no peerDep conflict ≠ runtime compat
-- Server compile (mjml@4.18.0): HIGH — standard mjml npm API
-- Pitfalls: HIGH — sourced from CLAUDE.md, GitHub issues, and bundle verification
-- Outlook COM availability: HIGH (confirmed NOT available on dev machine)
+- Block content format: HIGH -- verified from bundle source (plugin's own blocks use bare fragment format)
+- getHtml() return shape: LOW -- bundle confirms command composition (feeds output to MJML parser with empty wrappers), implying possible full-document; actual shape must be verified in-spike via console.log
+- Mount pattern (@grapesjs/react + pluginsOpts): MEDIUM -- verified from README and gjs.market guide; runtime behavior unverified
+- Runtime compatibility (0.22.16 + grapesjs-mjml@1.0.8): LOW -- this is the spike's question; no peerDep conflict != runtime compat
+- Server compile (mjml@4.18.0): HIGH -- standard mjml npm API
+- Pitfalls: HIGH -- sourced from CLAUDE.md, GitHub issues, bundle verification, and direct PowerShell script inspection
+- Outlook COM availability: HIGH (confirmed NOT available on dev machine; confirmed by reading both script files)
 
 **Research date:** 2026-06-25
 **Valid until:** 2026-07-25 (stable stack; grapesjs-mjml 1.0.8 pinned)
