@@ -13,7 +13,7 @@ Four phases, risk-first. Phase 1 is a hard technical gate — it verifies the Gr
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Feasibility Spike (Editor Core)** - HARD GATE — verify GrapesJS + grapesjs-mjml mounts, branded blocks drag/drop, project-JSON round-trip is lossless, server compile produces client-safe HTML
+- [x] **Phase 1: Feasibility Spike (Editor Core)** - HARD GATE — verify GrapesJS + grapesjs-mjml mounts, branded blocks drag/drop, project-JSON round-trip is lossless, server compile produces client-safe HTML (completed 2026-06-25)
 - [ ] **Phase 2: Auth + DB + Image Foundation** - Authenticated API, PostgreSQL schema, save/load wired to real API, image upload with public HTTPS URLs, asset library
 - [ ] **Phase 3: Full Branded Block Library + Editor Configuration** - All branded blocks re-authored with BLOCK_DEFAULTS, locking constraints, restricted Style Manager, raw-HTML surfaces removed
 - [ ] **Phase 4: Preview, Export, Library Polish & Extras** - Server-compiled preview (desktop/mobile), HTML download, mj-head injection, newsletter list polish, autosave, version history
@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. MJML extracted from the editor, POSTed to the server compile endpoint, and rendered in Outlook and Gmail displays correctly without broken fonts, dark-on-dark text, or spacing failures
   5. mj-attributes behavior documented from experiment: defaults either survive or are confirmed silently dropped, and the BLOCK_DEFAULTS mitigation strategy is validated
 
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 **Wave 1**
@@ -49,7 +49,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-05-PLAN.md — Client-render gate (D-05) with human checkpoint for classic Outlook (criterion 4)
+- [x] 01-05-PLAN.md — Client-render gate (D-05) with human checkpoint for classic Outlook (criterion 4)
 
 ### Phase 2: Auth + DB + Image Foundation
 
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Feasibility Spike (Editor Core) | 4/5 | In Progress|  |
+| 1. Feasibility Spike (Editor Core) | 5/5 | Complete   | 2026-06-25 |
 | 2. Auth + DB + Image Foundation | 0/TBD | Not started | - |
 | 3. Full Branded Block Library + Editor Configuration | 0/TBD | Not started | - |
 | 4. Preview, Export, Library Polish & Extras | 0/TBD | Not started | - |

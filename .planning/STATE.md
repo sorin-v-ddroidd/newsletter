@@ -79,7 +79,8 @@ None yet.
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| Client-render (D-05) | Full Outlook+Gmail render of `dist/spike-output.html` via `QuickEmailTest.ps1` + `EmailTester.ps1` on a classic-Outlook (COM) machine; compile/structural safety already verified. See CLIENT-RENDER-GATE.md. | Deferred | Phase 1 / 01-05 (2026-06-25) |
+| Live-editor verify | EDIT-01..05 (drag/drop/reorder/delete/inline/undo/redo), `getHtml()` shape, and `fluid-on-mobile`/`background-url` round-trip survival — need a human at `localhost:5173`. | Pending-human | Phase 1 / 01-03 + 01-04 |
 
 ## Session Continuity
 
