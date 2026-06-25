@@ -38,7 +38,7 @@ This is the smallest slice that exercises the full stack — editor → persiste
 Explicitly NOT in the skeleton — prevents later phases from re-litigating Phase 1's minimalism:
 
 - Authentication, login/logout, httpOnly session cookies (Phase 2)
-- PostgreSQL / Prisma / any server-side DB persistence (Phase 2)
+- PostgreSQL / Drizzle / any server-side DB persistence (Phase 2)
 - Server-side save/load API (Phase 2 — localStorage only here)
 - Image upload, asset library, public HTTPS asset URLs (Phase 2)
 - The full 6-block branded library — only hero + projects are built here (Phase 3)
