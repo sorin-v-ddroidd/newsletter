@@ -1,0 +1,27 @@
+{
+  "name": "@ddroidd/newsletter-server",
+  "version": "0.1.0",
+  "description": "Express server for the DDROIDD Newsletter Builder",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "nodemon --exec tsx src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "cors": "2.8.6",
+    "dotenv": "17.4.2",
+    "express": "5.2.1",
+    "mjml": "4.18.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/mjml": "^4.7.4",
+    "@types/node": "^22.0.0",
+    "nodemon": "^3.1.14",
+    "tsx": "4.22.4",
+    "typescript": "^5.7.0"
+  }
+}
