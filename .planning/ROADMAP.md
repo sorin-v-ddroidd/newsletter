@@ -30,7 +30,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `editor.getProjectData()` persisted to localStorage and reloaded via `editor.loadProjectData()` produces a byte-identical canvas state (inline text editing and undo/redo functional on reload)
   4. MJML extracted from the editor, POSTed to the server compile endpoint, and rendered in Outlook and Gmail displays correctly without broken fonts, dark-on-dark text, or spacing failures
   5. mj-attributes behavior documented from experiment: defaults either survive or are confirmed silently dropped, and the BLOCK_DEFAULTS mitigation strategy is validated
-**Plans**: TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold app/client + mount GrapesJS editor + hero block + localStorage round-trip (criteria 1, 3)
+- [ ] 01-02-PLAN.md — Scaffold app/server + POST /api/compile (conditional wrap, CORS, body limit)
+- [ ] 01-03-PLAN.md — Wire client→server compile + projects block + full EDIT-01..05 drag/reorder/inline/undo verification (criterion 2)
+- [ ] 01-04-PLAN.md — mj-attributes experiment (Part A + Part B) + BLOCK_DEFAULTS validation (criterion 5)
+- [ ] 01-05-PLAN.md — Client-render gate (D-05) with human checkpoint for classic Outlook (criterion 4)
 
 ### Phase 2: Auth + DB + Image Foundation
 **Goal**: Full authenticated API with login/logout, PostgreSQL schema with project_data JSONB as authoritative state, GrapesJS save/load wired to real server API, image upload storing files server-side and returning absolute public HTTPS URLs, and asset library panel operational.
@@ -81,7 +88,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Feasibility Spike (Editor Core) | 0/TBD | Not started | - |
+| 1. Feasibility Spike (Editor Core) | 0/5 | Planned | - |
 | 2. Auth + DB + Image Foundation | 0/TBD | Not started | - |
 | 3. Full Branded Block Library + Editor Configuration | 0/TBD | Not started | - |
 | 4. Preview, Export, Library Polish & Extras | 0/TBD | Not started | - |
