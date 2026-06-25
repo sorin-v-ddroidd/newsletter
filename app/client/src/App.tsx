@@ -3,6 +3,7 @@ import grapesjsMjml from 'grapesjs-mjml';
 import { Editor, Canvas } from '@grapesjs/react';
 import 'grapesjs/dist/css/grapes.min.css';
 import { heroBlock } from './blocks/hero';
+import { projectsBlock } from './blocks/projects';
 
 // Augment window with spike-only debug helpers exposed for manual console verification.
 declare global {
@@ -32,6 +33,37 @@ const load = (editor: GrapesEditor): void => {
   }
 };
 
+// compileDraft: POST editor.getHtml() to /api/compile; server writes dist/spike-output.html.
+// Open question #2 (getHtml shape) is documented here: the function logs the first 200 chars
+// of the output before sending so the developer can observe whether it starts with <mjml or is
+// a bare fragment. The server conditional-wrap (/<mjml/i test) handles either case transparently.
+const compileDraft = async (editor: GrapesEditor): Promise<void> => {
+  const mjml = editor.getHtml();
+  console.log('[ddroidd] editor.getHtml() first 200 chars:', mjml.slice(0, 200));
+  console.log('[ddroidd] getHtml() starts with <mjml:', /^<mjml/i.test(mjml.trim()));
+
+  const response = await fetch('/api/compile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mjml }),
+  });
+
+  if (!response.ok) {
+    console.error('[ddroidd] /api/compile returned', response.status, await response.text());
+    return;
+  }
+
+  const { html, errors } = (await response.json()) as { html: string; errors: unknown[] };
+
+  if (errors && errors.length > 0) {
+    console.warn('[ddroidd] MJML compile warnings:', errors);
+  }
+
+  console.log('[ddroidd] Compile succeeded. HTML length:', html.length);
+  console.log('[ddroidd] HTML starts with <!doctype:', /^<!doctype html/i.test(html.trim()));
+  console.log('[ddroidd] dist/spike-output.html written by server (see server console for path)');
+};
+
 // Assert that a save→load cycle produces byte-identical JSON.
 // Criterion 3 procedure: drop the hero block, make an inline text edit, then run:
 //   window.__ddroiddAssertRoundTrip()
@@ -58,6 +90,10 @@ const onEditor = (editor: GrapesEditor): void => {
   if (!editor.Blocks.get('ddroidd-hero')) {
     editor.Blocks.add('ddroidd-hero', heroBlock);
   }
+
+  if (!editor.Blocks.get('ddroidd-projects')) {
+    editor.Blocks.add('ddroidd-projects', projectsBlock);
+  }
 };
 
 export default function App() {
@@ -79,6 +115,14 @@ export default function App() {
     }
   };
 
+  const handleCompile = () => {
+    if (window.__ddroiddEditor) {
+      compileDraft(window.__ddroiddEditor).catch((err: unknown) => {
+        console.error('[ddroidd] compileDraft error:', err);
+      });
+    }
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <div style={{ padding: '8px', background: '#1a1a2e', display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -93,6 +137,9 @@ export default function App() {
         </button>
         <button onClick={handleAssert} style={{ padding: '6px 14px', cursor: 'pointer' }}>
           Assert Round-Trip
+        </button>
+        <button onClick={handleCompile} style={{ padding: '6px 14px', cursor: 'pointer', background: '#F45E43', color: '#ffffff', border: 'none' }}>
+          Compile
         </button>
       </div>
       <div style={{ flex: 1, overflow: 'hidden' }}>
