@@ -34,13 +34,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. MJML extracted from the editor, POSTed to the server compile endpoint, and rendered in Outlook and Gmail displays correctly without broken fonts, dark-on-dark text, or spacing failures
   5. mj-attributes behavior documented from experiment: defaults either survive or are confirmed silently dropped, and the BLOCK_DEFAULTS mitigation strategy is validated
 
-**Plans:** 5 plans
+**Plans:** 2/5 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Scaffold app/client + mount GrapesJS editor + hero block + localStorage round-trip (criteria 1, 3)
-- [ ] 01-02-PLAN.md — Scaffold app/server + POST /api/compile (conditional wrap, CORS, body limit)
+- [x] 01-01-PLAN.md — Scaffold app/client + mount GrapesJS editor + hero block + localStorage round-trip (criteria 1, 3)
+- [x] 01-02-PLAN.md — Scaffold app/server + POST /api/compile (conditional wrap, CORS, body limit)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Feasibility Spike (Editor Core) | 0/5 | Planned | - |
+| 1. Feasibility Spike (Editor Core) | 2/5 | In Progress|  |
 | 2. Auth + DB + Image Foundation | 0/TBD | Not started | - |
 | 3. Full Branded Block Library + Editor Configuration | 0/TBD | Not started | - |
 | 4. Preview, Export, Library Polish & Extras | 0/TBD | Not started | - |
