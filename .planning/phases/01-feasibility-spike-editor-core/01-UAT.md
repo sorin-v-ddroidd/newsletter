@@ -1,5 +1,5 @@
 ---
-status: partial
+status: diagnosed
 phase: 01-feasibility-spike-editor-core
 source: 01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md, 01-04-SUMMARY.md, 01-05-SUMMARY.md
 started: 2026-07-04T10:11:27Z
@@ -82,9 +82,17 @@ blocked: 5
   reason: "User reported: i don't have anything to drag and drop — no blocks panel rendered, only device-switcher icons in left sidebar; canvas empty. User's UX reference: ActiveCampaign email designer (https://www.activecampaign.com/platform/email-designer)"
   severity: blocker
   test: 3
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "Rendering <Canvas /> as child of <Editor> puts @grapesjs/react into custom-UI mode: it inits GrapesJS with customUI: true and panels: { defaults: [] }, suppressing all default panel chrome including the Block Manager; no <BlocksProvider> or blockManager.appendTo container was provided, so registered blocks exist in editor.Blocks but have no UI surface"
+  artifacts:
+    - path: "app/client/src/App.tsx"
+      issue: "Lines ~146-167: passes <Canvas /> child to <Editor> (triggers customUI + panels:{defaults:[]}) without BlocksProvider or blockManager.appendTo — no blocks UI can render"
+    - path: "app/client/src/lib/editorConfig.ts"
+      issue: "Exported editorOptions is dead code; App.tsx duplicates options inline — drift risk"
+  missing:
+    - "Simplest spike fix: remove <Canvas /> child so <Editor> runs default-UI mode (full stock GrapesJS UI: blocks panel, style manager, layers, device bar)"
+    - "Alternative keeping <Canvas />: add blockManager: { appendTo: '#blocks' } option + sibling div"
+    - "Future ActiveCampaign-style custom UI (Phase 2+): <Canvas /> + <BlocksProvider>/<StylesProvider>/etc. render-prop pattern — pairs with EDIT-06/07 guardrails"
+    - "Delete or actually use lib/editorConfig.ts so options live in one place"
   debug_session: ""
 
 - truth: "Compile button POSTs editor.getHtml() to /api/compile via Vite proxy and returns compiled HTML (server writes dist/spike-output.html)"
@@ -92,7 +100,12 @@ blocked: 5
   reason: "User reported: POST http://localhost:5173/api/compile 502 (Bad Gateway) — Vite proxy cannot reach Express :3000. getHtml() also returned empty string (empty canvas, downstream of blocks-panel blocker)"
   severity: blocker
   test: 9
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "app/package.json dev script uses '&' (npm run dev:client & npm run dev:server); npm on Windows runs scripts via cmd.exe where '&' is SEQUENTIAL — Vite never exits so dev:server never starts; nothing listens on :3000 → proxy 502. Backend code verified healthy: manual tsx start → direct curl 200 AND proxy curl 200"
+  artifacts:
+    - path: "app/package.json"
+      issue: "Line 8: 'npm run dev:client & npm run dev:server' — sequential in cmd.exe; dev:server never launches; concurrently not installed"
+  missing:
+    - "cd app && npm i -D concurrently"
+    - "Change dev script to: concurrently -n client,server \"npm run dev:client\" \"npm run dev:server\""
+    - "Verify: netstat shows :3000 LISTENING; Compile button returns 200"
   debug_session: ""
