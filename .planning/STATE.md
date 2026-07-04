@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: verifying
 stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-06-25T13:06:38.755Z"
-last_activity: 2026-06-25 -- Phase 01 executed (5/5 plans); criteria 1-4 deferred to human
+last_updated: "2026-07-04T00:00:00.000Z"
+last_activity: 2026-07-04 -- Completed gap-closure plan 01-06 (blocks panel + Windows dev script)
 progress:
   total_phases: 4
   completed_phases: 1
@@ -25,17 +25,19 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 ## Current Position
 
-Phase: 01 (feasibility-spike-editor-core) — EXECUTED, gated
-Plan: 5 of 5 complete
-Status: Phase 01 code+compile complete; VERIFIED viable-pending-human-runtime-check
-Last activity: 2026-06-25 -- Phase 01 executed (5/5 plans); criteria 1-4 deferred to human
+Phase: 01 (feasibility-spike-editor-core) — EXECUTED, gap-closure complete
+Plan: 6 of 6 complete (5 original + 1 gap-closure)
+Status: Phase 01 all code complete; TWO UAT blockers fixed; pending human runtime check
+Last activity: 2026-07-04 - Completed gap-closure plan 01-06: blocks panel + Windows dev script fixes
 
-Progress: [██████████] 100% (plans) — exit criteria 1-4 pending human runtime check
+Progress: [██████████] 100% (plans) — exit criteria 1-4 unblocked for human runtime check
 
 ⚠ PHASE-2 GATE: Do NOT start Phase 2 until a human confirms at localhost:5173
-(cd app/server && npm run dev; cd app/client && npm run dev) that the editor MOUNTS
-and BLOCKS DROP — the load-bearing grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime
-compatibility is still unproven. See 01-VERIFICATION.md + CLIENT-RENDER-GATE.md.
+(run `npm run dev` from app/) that:
+  1. Editor MOUNTS and BLOCKS PANEL visible in left sidebar (tests 3-6, 8)
+  2. POST /api/compile through Vite proxy returns 200; spike-output.html written (tests 9-10)
+Load-bearing grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime compatibility still unproven.
+See 01-VERIFICATION.md + CLIENT-RENDER-GATE.md + 01-UAT.md.
 
 ## Performance Metrics
 
@@ -71,6 +73,8 @@ Recent decisions affecting current work:
 - [Init]: mjml@4.18.0 pinned server-side to match mjml-browser@4 bundled in grapesjs-mjml (v5 breaks preview/export parity)
 - [Init]: Image upload POST authenticated; asset GET publicly reachable; always absolute HTTPS URLs
 - [2026-06-25]: ORM switched from Prisma → **Drizzle** (TS-native, SQL-first, no codegen/generated client; migrations via drizzle-kit; driver stays `pg`). See PROJECT.md Key Decisions.
+- [2026-07-04]: Self-closing `<Editor />` (no child) activates @grapesjs/react default-UI mode (blocks panel). The custom-UI pattern with sub-components is deferred to a later phase.
+- [2026-07-04]: `concurrently` replaces `&` in the app dev script for Windows cmd.exe compatibility; both dev servers now start in parallel.
 
 ### Pending Todos
 
@@ -79,6 +83,12 @@ None yet.
 ### Blockers/Concerns
 
 - [Phase 1]: grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime compatibility is unverified (plugin tested against 0.21.x). Phase 1 is the spike that resolves this. Do NOT proceed to Phase 2 until all Phase 1 exit criteria pass.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260704-iqo | Capture ActiveCampaign email designer research into planning docs | 2026-07-04 | (pending — no-commit rule) | [260704-iqo-capture-activecampaign-email-designer-re](./quick/260704-iqo-capture-activecampaign-email-designer-re/) |
 
 ## Deferred Items
 

@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. MJML extracted from the editor, POSTed to the server compile endpoint, and rendered in Outlook and Gmail displays correctly without broken fonts, dark-on-dark text, or spacing failures
   5. mj-attributes behavior documented from experiment: defaults either survive or are confirmed silently dropped, and the BLOCK_DEFAULTS mitigation strategy is validated
 
-**Plans:** 6/6 plans complete (incl. gap-closure 01-06)
+**Plans:** 6/6 plans complete
 
 Plans:
 **Wave 1**
@@ -53,7 +53,7 @@ Plans:
 
 **Wave 4** *(gap closure — UAT blockers)*
 
-- [ ] 01-06-PLAN.md — Fix no-blocks-panel (remove <Canvas /> child) + Windows dev script (concurrently) so /api/compile reachable; re-enables UAT tests 3-6, 8-10
+- [x] 01-06-PLAN.md — Fix no-blocks-panel (remove <Canvas /> child) + Windows dev script (concurrently) so /api/compile reachable; re-enables UAT tests 3-6, 8-10
 
 ### Phase 2: Auth + DB + Image Foundation
 
@@ -113,7 +113,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Feasibility Spike (Editor Core) | 5/5 | Complete   | 2026-06-25 |
+| 1. Feasibility Spike (Editor Core) | 6/6 | Complete   | 2026-07-04 |
 | 2. Auth + DB + Image Foundation | 0/TBD | Not started | - |
 | 3. Full Branded Block Library + Editor Configuration | 0/TBD | Not started | - |
 | 4. Preview, Export, Library Polish & Extras | 0/TBD | Not started | - |
