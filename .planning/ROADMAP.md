@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. MJML extracted from the editor, POSTed to the server compile endpoint, and rendered in Outlook and Gmail displays correctly without broken fonts, dark-on-dark text, or spacing failures
   5. mj-attributes behavior documented from experiment: defaults either survive or are confirmed silently dropped, and the BLOCK_DEFAULTS mitigation strategy is validated
 
-**Plans:** 5/5 plans complete
+**Plans:** 6/6 plans complete (incl. gap-closure 01-06)
 
 Plans:
 **Wave 1**
@@ -50,6 +50,10 @@ Plans:
 **Wave 3** *(blocked on Wave 2 completion)*
 
 - [x] 01-05-PLAN.md — Client-render gate (D-05) with human checkpoint for classic Outlook (criterion 4)
+
+**Wave 4** *(gap closure — UAT blockers)*
+
+- [ ] 01-06-PLAN.md — Fix no-blocks-panel (remove <Canvas /> child) + Windows dev script (concurrently) so /api/compile reachable; re-enables UAT tests 3-6, 8-10
 
 ### Phase 2: Auth + DB + Image Foundation
 
