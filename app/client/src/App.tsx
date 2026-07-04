@@ -1,6 +1,6 @@
 import grapesjs, { type Editor as GrapesEditor } from 'grapesjs';
 import grapesjsMjml from 'grapesjs-mjml';
-import { Editor, Canvas } from '@grapesjs/react';
+import { Editor } from '@grapesjs/react';
 import 'grapesjs/dist/css/grapes.min.css';
 import { heroBlock } from './blocks/hero';
 import { projectsBlock } from './blocks/projects';
@@ -143,6 +143,11 @@ export default function App() {
         </button>
       </div>
       <div style={{ flex: 1, overflow: 'hidden' }}>
+        {/* Editor intentionally has no child components: an empty Editor element puts
+            @grapesjs/react into default-UI mode, which renders the stock GrapesJS chrome
+            (blocks panel, style manager, layers, device bar). The provider/render-prop
+            custom-UI pattern (using sub-components from @grapesjs/react) is deferred to
+            a later phase — see .claude/rules/grapesjs.md. */}
         <Editor
           grapesjs={grapesjs}
           grapesjsCss="https://unpkg.com/grapesjs/dist/css/grapes.min.css"
@@ -162,9 +167,7 @@ export default function App() {
               },
             },
           }}
-        >
-          <Canvas />
-        </Editor>
+        />
       </div>
     </div>
   );
