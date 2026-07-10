@@ -12,7 +12,7 @@ Consult before writing code. The big domain traps live in `mjml-email-safety.md`
 
 ## GrapesJS
 - Persist `getProjectData()` JSON — **never** reload from the MJML string (`grapesjs.md`).
-- `pluginsOpts` key is the hardcoded string `'grapesjs-mjml'`, not the imported function (issue #223).
+- Plugin options: use `usePlugin(grapesjsMjml, opts)` — `pluginsOpts` with a string key while passing the plugin as a function is a silent no-op (options never reach the plugin; `resetStyleManager` then defaults true and clobbers the email-safe sectors).
 - No `mj-attributes` / `mj-include` / `mj-style` inside block content strings.
 
 ## Auth / API

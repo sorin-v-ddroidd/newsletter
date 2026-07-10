@@ -1,0 +1,293 @@
+- generic [ref=f27e4]:
+  - banner [ref=f27e5]:
+    - generic [ref=f27e6]:
+      - generic [ref=f27e7]: D
+      - generic [ref=f27e8]:
+        - generic [ref=f27e9]: DDROIDD Newsletter Builder
+        - generic [ref=f27e10]: Draft — changes saved locally
+    - generic [ref=f27e12]:
+      - button "Desktop" [pressed] [ref=f27e13]:
+        - img [ref=f27e14]
+      - button "Tablet" [ref=f27e16]:
+        - img [ref=f27e17]
+      - button "Mobile landscape" [ref=f27e19]:
+        - img [ref=f27e20]
+      - button "Mobile portrait" [ref=f27e22]:
+        - img [ref=f27e23]
+    - generic [ref=f27e25]:
+      - button "New from Template" [ref=f27e26]:
+        - img
+        - text: New from Template
+      - button "Save" [ref=f27e27]:
+        - img
+        - text: Save
+      - button "Preview & Compile" [ref=f27e28]:
+        - img
+        - text: Preview & Compile
+      - button "More actions" [ref=f27e29]:
+        - img
+  - generic [ref=f27e30]:
+    - complementary [ref=f27e31]:
+      - generic [ref=f27e32]:
+        - tablist [ref=f27e33]:
+          - tab "Blocks" [selected] [ref=f27e34]
+          - tab "Layers" [ref=f27e35]
+        - tabpanel "Blocks" [ref=f27e36]:
+          - generic [ref=f27e38]:
+            - img
+            - textbox "Search blocks…" [ref=f27e39]
+          - generic [ref=f27e43]:
+            - generic [ref=f27e44]:
+              - generic [ref=f27e45]:
+                - generic [ref=f27e46]: DDROIDD
+                - generic [ref=f27e47]: On-brand
+              - generic [ref=f27e49]:
+                - generic [ref=f27e51]: DDROIDD Hero
+                - generic [ref=f27e53]: DDROIDD Projects
+                - generic [ref=f27e55]: DDROIDD New Collegues
+                - generic [ref=f27e57]: DDROIDD Initiatives
+                - generic [ref=f27e59]: DDROIDD Hiring
+                - generic [ref=f27e61]: DDROIDD Want To Know More
+                - generic [ref=f27e63]: DDROIDD Disclaimer
+            - generic [ref=f27e64]:
+              - generic [ref=f27e66]: Blocks
+              - generic [ref=f27e68]:
+                - generic [ref=f27e69]:
+                  - img [ref=f27e71]
+                  - generic [ref=f27e73]: 1 Column
+                - generic [ref=f27e74]:
+                  - img [ref=f27e76]
+                  - generic [ref=f27e78]: 2 Columns
+                - generic [ref=f27e79]:
+                  - img [ref=f27e81]
+                  - generic [ref=f27e83]: 3 Columns
+                - generic [ref=f27e84]:
+                  - img [ref=f27e86]
+                  - generic [ref=f27e88]: Text
+                - generic [ref=f27e89]:
+                  - img [ref=f27e91]
+                  - generic [ref=f27e93]: Button
+                - generic [ref=f27e94]:
+                  - img [ref=f27e96]
+                  - generic [ref=f27e98]: Image
+                - generic [ref=f27e99]:
+                  - img [ref=f27e101]
+                  - generic [ref=f27e103]: Divider
+                - generic [ref=f27e104]:
+                  - img [ref=f27e106]
+                  - generic [ref=f27e108]: Group Social
+                - generic [ref=f27e109]:
+                  - img [ref=f27e111]
+                  - generic [ref=f27e113]: Social Element
+                - generic [ref=f27e114]:
+                  - img [ref=f27e116]
+                  - generic [ref=f27e118]: Spacer
+                - generic [ref=f27e119]:
+                  - img [ref=f27e121]
+                  - generic [ref=f27e123]: Navbar
+                - generic [ref=f27e124]:
+                  - img [ref=f27e126]
+                  - generic [ref=f27e128]: Navbar Link
+                - generic [ref=f27e129]:
+                  - img [ref=f27e131]
+                  - generic [ref=f27e133]: Hero
+                - generic [ref=f27e134]:
+                  - img [ref=f27e136]
+                  - generic [ref=f27e138]: Wrapper
+                - generic [ref=f27e139]:
+                  - img [ref=f27e141]
+                  - generic [ref=f27e143]: Raw
+    - generic [ref=f27e147]:
+      - iframe [ref=f27e151]:
+        - generic [ref=f29e7]:
+          - article [ref=f29e9]:
+            - paragraph [ref=f29e14]: Insert hero text here.
+          - article [ref=f29e16]:
+            - generic [ref=f29e18]:
+              - img "Signature" [ref=f29e19]
+              - heading "New Collegues" [level=2] [ref=f29e21]
+          - article [ref=f29e23]:
+            - paragraph [ref=f29e27]: "We would like to say a huge team welcome to our new colleagues who joined us in June:"
+          - article [ref=f29e29]:
+            - generic [ref=f29e30]:
+              - generic [ref=f29e32]:
+                - paragraph [ref=f29e33]: Diana Pojar
+                - paragraph [ref=f29e34]:
+                  - text: Customer Technical
+                  - text: Support Analyst (L1)
+              - generic [ref=f29e36]:
+                - paragraph [ref=f29e37]: Adi Suciu
+                - paragraph [ref=f29e38]:
+                  - text: Customer Technical
+                  - text: Support Team Lead
+              - generic [ref=f29e40]:
+                - paragraph [ref=f29e41]: Mihnea Valeanu
+                - paragraph [ref=f29e42]:
+                  - text: Customer Technical
+                  - text: Support Analyst (L1)
+          - article [ref=f29e44]:
+            - generic [ref=f29e45]:
+              - generic [ref=f29e47]:
+                - paragraph [ref=f29e48]: Nicoleta Patachi
+                - paragraph [ref=f29e49]: Back Office Support Analyst
+              - generic [ref=f29e51]:
+                - paragraph [ref=f29e52]: Anatolii Guzovatii
+                - paragraph [ref=f29e53]: Software Developer
+          - article [ref=f29e55]:
+            - paragraph [ref=f29e58]
+          - article [ref=f29e60]:
+            - generic [ref=f29e62]:
+              - img "Signature" [ref=f29e63]
+              - heading "Projects" [level=2] [ref=f29e65]
+          - article [ref=f29e67]:
+            - generic [ref=f29e69]:
+              - img "Project logo" [ref=f29e70]
+              - paragraph [ref=f29e72]: Project description. Edit inline to describe your project update here.
+          - article [ref=f29e74]:
+            - paragraph [ref=f29e77]
+          - article [ref=f29e79]:
+            - generic [ref=f29e81]:
+              - img "Signature" [ref=f29e82]
+              - heading "MEET-UPS AND INITIATIVES" [level=2] [ref=f29e84]
+          - article [ref=f29e86]:
+            - generic [ref=f29e88]:
+              - generic [ref=f29e89]:
+                - heading "Internal Newsletter Feedback" [level=3] [ref=f29e90]
+                - paragraph [ref=f29e91]:
+                  - text: We're always looking for ways to improve how we share news, updates, and opportunities across the company. Take a moment to tell us what's working, what isn't, and what you'd like to see more of.
+                  - text: The survey is anonymous and should take less than 2 minutes.
+                  - text: Share your feedback,
+                  - link "here" [ref=f29e92] [cursor=pointer]:
+                    - /url: https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=7rx3YAQRGUG8mFOYcMZu72KI3py4jFtKpFtY952CYzdUMTdCVk8zWDEyMExTWTRDREdHRlBJM0FOUC4u
+                  - text: .
+              - generic [ref=f29e93]:
+                - heading "Techsylvania 2026" [level=3] [ref=f29e94]
+                - paragraph [ref=f29e95]:
+                  - text: Cosmin Cristea and Andrei Marginean recently attended Techsylvania 2026, one of the leading technology and innovation events in the region.
+                  - text: The event brought together founders, technology leaders, innovators, and industry experts to explore the trends shaping the future of business and technology. It was a valuable opportunity to exchange ideas, gain new insights into AI and digital transformation, and strengthen connections within the tech community.
+                  - text: We're excited to bring these learnings back to ddroidd and continue driving innovation for our clients and partners.
+          - article [ref=f29e97]:
+            - paragraph [ref=f29e100]
+          - article [ref=f29e102]:
+            - generic [ref=f29e103]:
+              - img "Signature" [ref=f29e105]
+              - generic [ref=f29e106]:
+                - img "Signature" [ref=f29e107]
+                - heading "WE'RE HIRING!" [level=2] [ref=f29e109]
+                - generic [ref=f29e110]:
+                  - paragraph [ref=f29e111]: Looking ahead to new opportunities, we are expanding our talent pipeline
+                  - list [ref=f29e112]:
+                    - listitem [ref=f29e113]: Senior QA Automation Engineer
+                    - listitem [ref=f29e114]: Senior Java Developer
+                    - listitem [ref=f29e115]: Senior Fullstack Developer
+                    - listitem [ref=f29e116]: Senior AI Developer
+          - article [ref=f29e118]:
+            - generic [ref=f29e121]:
+              - paragraph [ref=f29e122]:
+                - text: We're always eager to welcome talented new colleagues to our team. If you have any other recommendations, feel free to let us know!
+                - text: Please make sure all internal referrals are submitted
+                - strong [ref=f29e123]: via email
+                - text: ", so we can keep the process clear and easy to follow. When sending a referral, include the"
+                - strong [ref=f29e124]: candidate's name and the role
+                - text: either in the
+                - strong [ref=f29e125]: email subject line
+                - text: or
+                - strong [ref=f29e126]: message body
+                - text: .
+                - text: Please note that our preference is to hire under individual employment contracts.
+                - text: "If you know someone who would be perfect for any of these roles or would like further details, then please get in touch with the recruitment team:"
+                - link "recruitment@ddroidd.com" [ref=f29e127] [cursor=pointer]:
+                  - /url: mailto:recruitment@ddroidd.com&subject=Seeking Referrals for Exciting Opportunities
+              - paragraph [ref=f29e128]:
+                - text: For more relevant details, please see the
+                - link "attached link" [ref=f29e129] [cursor=pointer]:
+                  - /url: https://ddroidd.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FReferral%20bonus%20Scheme%2Epdf&parent=%2FShared%20Documents&isSPOFile=1&OR=Teams%2DHL&CT=1730727643676&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiI0OS8yNDEwMDMyNDkxNiIsIkhhc0ZlZGVyYXRlZFVzZXIiOmZhbHNlfQ%3D%3D
+                - text: .
+          - article [ref=f29e131]:
+            - paragraph [ref=f29e134]
+          - article [ref=f29e136]:
+            - generic [ref=f29e138]:
+              - img "Signature" [ref=f29e139]
+              - heading "WANT TO KNOW MORE OR HAVE A STORY TO SHARE?" [level=2] [ref=f29e141]
+          - article [ref=f29e143]:
+            - paragraph [ref=f29e147]:
+              - text: This monthly newsletter is designed to keep you informed on what is happening within ddroidd. It will evolve as we go along, but we need your feedback to make this happen. Is there something else you would like to see within these updates, or do you have a successful story to share? Then please do let us know, email
+              - link "newsletter@ddroidd.com" [ref=f29e148] [cursor=pointer]:
+                - /url: mailto:newsletter@ddroidd.com
+              - text: with your stories and feedback. Until next month...
+          - article [ref=f29e150]:
+            - paragraph [ref=f29e154]: The content of this email is confidential and intended only for the recipient specified in this message. It is strictly forbidden to share any part of this message with any third party, without written consent of the sender. If you received this message by mistake, please reply to this message and follow with its permanent deletion, so that we can ensure such a mistake does not occur in the future.
+      - generic [ref=f27e157]:
+        - img [ref=f27e159] [cursor=pointer]
+        - img [ref=f27e162] [cursor=pointer]
+        - img [ref=f27e165] [cursor=pointer]
+        - img [ref=f27e168] [cursor=pointer]
+    - complementary [ref=f27e152]:
+      - generic [ref=f27e153]:
+        - generic [ref=f27e154]: Text
+        - generic [ref=f27e170]: Selected element
+      - generic [ref=f27e171]:
+        - generic [ref=f27e172]:
+          - heading "Content" [level=3] [ref=f27e173]:
+            - button "Content" [expanded] [ref=f27e174]:
+              - text: Content
+              - img
+          - region "Content" [ref=f27e175]:
+            - generic [ref=f27e176]:
+              - generic [ref=f27e177]:
+                - generic [ref=f27e178]: id
+                - textbox "id" [ref=f27e179]
+              - generic [ref=f27e180]:
+                - generic [ref=f27e181]: title
+                - textbox "title" [ref=f27e182]
+        - generic [ref=f27e183]:
+          - heading "Typography" [level=3] [ref=f27e184]:
+            - button "Typography" [expanded] [active] [ref=f27e185]:
+              - text: Typography
+              - img
+          - region "Typography" [ref=f27e189]:
+            - generic [ref=f27e190]:
+              - generic [ref=f27e191]:
+                - generic [ref=f27e192]: Font
+                - combobox "Font" [ref=f27e193]:
+                  - option "—" [selected]
+                  - option "Arial"
+                  - option "Arial Black"
+                  - option "Brush Script MT"
+                  - option "Comic Sans MS"
+                  - option "Courier New"
+                  - option "Georgia"
+                  - option "Helvetica"
+                  - option "Impact"
+                  - option "Lucida Sans Unicode"
+                  - option "Tahoma"
+                  - option "Times New Roman"
+                  - option "Trebuchet MS"
+                  - option "Verdana"
+              - generic [ref=f27e194]:
+                - generic [ref=f27e195]: Font size
+                - textbox "Font size" [ref=f27e196]:
+                  - /placeholder: medium
+                  - text: "16"
+              - generic [ref=f27e197]:
+                - generic [ref=f27e198]: Font color
+                - generic [ref=f27e199]:
+                  - textbox "Font color color" [ref=f27e200] [cursor=pointer]: "#ffffff"
+                  - textbox "black" [ref=f27e201]: "#ffffff"
+              - generic [ref=f27e202]:
+                - generic [ref=f27e203]: Line height
+                - textbox "Line height" [ref=f27e204]:
+                  - /placeholder: normal
+                  - text: "24"
+              - generic [ref=f27e205]:
+                - generic [ref=f27e206]: Text align
+                - combobox "Text align" [ref=f27e207]:
+                  - option "—"
+                  - option "left" [selected]
+                  - option "center"
+                  - option "right"
+                  - option "justify"
+        - heading "Decorations" [level=3] [ref=f27e187]:
+          - button "Decorations" [ref=f27e188]:
+            - text: Decorations
+            - img

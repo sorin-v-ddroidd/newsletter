@@ -163,6 +163,10 @@ GrapesJS project JSON is the canonical persisted state; the MJML compile service
 - **background-url on mj-section:** Not exposed as a panel trait. If any branded section needs background images, add a custom trait. Assess in Phase 1 against actual `src/sections/*.mjml`.
 - **mj-social / mj-navbar blocks:** Plugin-supported but experimental with limited client coverage. Evaluate in Phase 3.
 
+## Related Research
+
+- `.planning/research/COMPETITOR-activecampaign.md` — ActiveCampaign email-designer competitor + gap analysis vs our GrapesJS build.
+
 ---
 *Research completed: 2026-06-25*
 *Ready for roadmap: yes*

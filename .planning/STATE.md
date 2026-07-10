@@ -25,19 +25,20 @@ See: .planning/PROJECT.md (updated 2026-06-25)
 
 ## Current Position
 
-Phase: 01 (feasibility-spike-editor-core) — EXECUTED, gap-closure complete
+Phase: 01 (feasibility-spike-editor-core) — EXECUTED, gap-closure complete, GATE PASSED
 Plan: 6 of 6 complete (5 original + 1 gap-closure)
-Status: Phase 01 all code complete; TWO UAT blockers fixed; pending human runtime check
-Last activity: 2026-07-04 - Completed gap-closure plan 01-06: blocks panel + Windows dev script fixes
+Status: Phase 01 complete; PHASE-2 GATE CLEARED (2026-07-05 headless-CDP runtime check)
+Last activity: 2026-07-10 - Completed quick task 260710-lty: move MJML compile in-browser (mjml-browser) for static Vercel deploy — removed last server runtime dependency
 
-Progress: [██████████] 100% (plans) — exit criteria 1-4 unblocked for human runtime check
+Progress: [██████████] 100% (plans) — Phase-2 gate PASSED
 
-⚠ PHASE-2 GATE: Do NOT start Phase 2 until a human confirms at localhost:5173
-(run `npm run dev` from app/) that:
-  1. Editor MOUNTS and BLOCKS PANEL visible in left sidebar (tests 3-6, 8)
-  2. POST /api/compile through Vite proxy returns 200; spike-output.html written (tests 9-10)
-Load-bearing grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime compatibility still unproven.
-See 01-VERIFICATION.md + CLIENT-RENDER-GATE.md + 01-UAT.md.
+✅ PHASE-2 GATE CLEARED (2026-07-05): verified against live `npm run dev` via isolated
+headless chromium (CDP), evidence editor-runtime-gate-pass.png + 01-UAT.md:
+  1. Editor MOUNTS, 0 console errors, Blocks panel shows 22 chips (7 DDROIDD branded
+     + 15 generic) — grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime compat PROVEN.
+  2. POST /api/compile via Vite proxy → 200, valid HTML, errors:[].
+Remaining human-only (non-gate): mouse drag feel, inline edit/undo, real Outlook+Gmail
+render (CLIENT-RENDER-GATE). Phase 2 (auth/DB/image) may proceed.
 
 ## Performance Metrics
 
@@ -82,13 +83,25 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 1]: grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime compatibility is unverified (plugin tested against 0.21.x). Phase 1 is the spike that resolves this. Do NOT proceed to Phase 2 until all Phase 1 exit criteria pass.
+- [RESOLVED 2026-07-05]: grapesjs@0.22.16 + grapesjs-mjml@1.0.8 runtime compatibility — CONFIRMED working (editor mounts, 22 blocks register, 0 console errors, compile 200). Phase-2 gate cleared. Phase 2 may proceed.
 
 ### Quick Tasks Completed
 
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260704-iqo | Capture ActiveCampaign email designer research into planning docs | 2026-07-04 | (pending — no-commit rule) | [260704-iqo-capture-activecampaign-email-designer-re](./quick/260704-iqo-capture-activecampaign-email-designer-re/) |
+| 260704-p2a | Re-author 5 remaining newsletter sections as branded blocks; TEMPLATE_MJML + "New from Template" button; headless mjml compile gate (8/8 PASS) | 2026-07-04 | (pending — no-commit rule) | [260704-p2a-re-author-latest-newsletter-index-mjml-s](./quick/260704-p2a-re-author-latest-newsletter-index-mjml-s/) |
+| 260704-ppr | Figma-style 3-panel editor UI: custom-UI mode, render-props panels (blocks chips, layers tree, email-safe styles/traits); Playwright-verified | 2026-07-04 | (pending — no-commit rule) | [260704-ppr-figma-style-3-panel-editor-ui-layers-blo](./quick/260704-ppr-figma-style-3-panel-editor-ui-layers-blo/) |
+| 260705-g6u | Fix Style Manager sector clobbering: usePlugin() (string-key pluginsOpts was a silent no-op) + resetStyleManager:false + RightPanel isVisible filter — padding now editable on mj-text; Playwright-verified | 2026-07-05 | (pending — no-commit rule) | [260705-g6u-fix-stylemanager-sector-clobbering-reset](./quick/260705-g6u-fix-stylemanager-sector-clobbering-reset/) |
+| 260705-h8h | Client architecture refactor: editorOptions split into actions/editorConfig/registerBlocks, blocks/ → editor/blocks/, React.lazy+Suspense editor chunk (~688KB gz split from ~72KB entry), ErrorBoundary, auth-guard seam | 2026-07-05 | (pending — no-commit rule) | [260705-h8h-refactor-app-client-for-strong-architect](./quick/260705-h8h-refactor-app-client-for-strong-architect/) |
+| 260705-htv | Export HTML: compile service w/ canonical mj-head injection (strips editor head), Export button downloads newsletter-YYYY-MM-DD.html, compile-warning banner w/ Download-anyway, verify:compile gate (7/7); Playwright-verified end-to-end | 2026-07-05 | (pending — no-commit rule) | [260705-htv-export-html-download-button-in-editor-se](./quick/260705-htv-export-html-download-button-in-editor-se/) |
+| 260707-cee | Figma-style right inspector panel: panelControls.tsx primitives (SegmentedIconGroup, SwatchRow, PairedField) + RightPanel curated sections (Content→Alignment→Layout→Appearance→Fill→Stroke→Typography); EDIT-06 gates preserved; tsc clean; human canvas verify pending | 2026-07-07 | (pending — no-commit rule) | [260707-cee-figma-style-right-panel](./quick/260707-cee-figma-style-right-panel/) |
+| 260707-j0a | New text elements inherit brand font: block:drag:stop fill-missing font-family/size/line-height (from BLOCK_DEFAULTS) on dropped mj-text/mj-button/mj-social-element; color excluded (white-default trap); chose drag:stop over component:create to keep round-trip byte-identical; tsc clean; human canvas verify pending | 2026-07-07 | (pending — no-commit rule) | [260707-j0a-make-new-text-elements-inherit-brand-fon](./quick/260707-j0a-make-new-text-elements-inherit-brand-fon/) |
+| 260710-67u | Anchors inside mj-text inherit brand color: inline `a{color:#ffffff}` mj-style in CANONICAL_HEAD (juice-inlined, naked-only — pre-colored/button/social anchors keep own color); canvas iframe `a{color:inherit}` <style> injected DOM-direct on editor load (never enters project JSON, round-trip safe); color-only (size/line-height already inherit); verify:compile 10/10; tsc clean; Outlook+Gmail + canvas human verify pending | 2026-07-10 | (pending — no-commit rule) | [260710-67u-anchors-inside-mj-text-inherit-brand-color](./quick/260710-67u-anchors-inside-mj-text-inherit-brand-color/) |
+| 260710-et7 | Add missing MJML standard-body components to editor: mj-group/mj-carousel/mj-accordion blocks (plugin ships models, no palette defs); mj-table DEFERRED (canvas DOM parser strips tr/td — spike-confirmed); expand mj-section Style Manager to full MJML attr set (background-url/-position/-size/-repeat, full-width, direction, text-align) via new "Section" sector + scoped RightPanel group; isolation-compile 3/3 PASS; tsc clean. PENDING runtime gates: carousel/accordion canvas-parse (getHtml children survive), section-attr serialization, Outlook+Gmail bg-image render | 2026-07-10 | (pending — no-commit rule) | [260710-et7-add-mj-group-mj-table-mj-carousel-mj-acc](./quick/260710-et7-add-mj-group-mj-table-mj-carousel-mj-acc/) |
+| 260710-kz8 | Fix Padding controls: mirror shorthand `padding` into the four longhand styles on `component:styleUpdate:padding` (grapesjs-mjml's style-default longhands were overriding shorthand at MJML compile, so canvas never re-rendered on edit); clear removes longhands to restore plugin default (not zero); `isLoadingProject()` guard in actions.ts prevents mutation during loadProjectData; inner-padding untouched (no longhand equivalent); tsc clean; Playwright-verified (93→53→133→93px section height, round-trip identical: true) | 2026-07-10 | (pending — no-commit rule) | [260710-kz8-fix-padding-controls-expand-shorthand-pa](./quick/260710-kz8-fix-padding-controls-expand-shorthand-pa/) |
+| 260710-lg4 | Fix Alignment control: writes CSS `text-align` which is illegal on mj-text/mj-button/mj-image/mj-divider/mj-social-element (MJML silently ignores it — no canvas or export effect); added a scoped `align` StyleManager property (left/center/right) via STYLABLE_BY_TYPE, mj-section keeps `text-align` (its only legal alignment attribute); resolveAlignIcon + RightPanel wired for the new prop; tsc clean; Playwright-verified end-to-end (API-level + real UI click path): canvas `td[align=center]`, export `<mj-text align="center">` with no `text-align`, mj-section still `text-align`-only | 2026-07-10 | (pending — no-commit rule) | [260710-lg4-fix-alignment-control-use-mjml-align-att](./quick/260710-lg4-fix-alignment-control-use-mjml-align-att/) |
+| 260710-lty | Static-deploy: move MJML compile in-browser (mjml-browser@4.18.0), removing the last server runtime dep (`/api/compile`). Extracted CANONICAL_HEAD + `buildFullMjml` into `app/shared/mjml-head.ts` — one source of truth imported by both server `mjml` and client `mjml-browser` (EXPORT-04). `actions.ts` compile is now synchronous (Export/Preview work with server stopped); Preview opens compiled HTML in a new tab. `@shared` alias (Vite + tsconfig). `verify:parity` proves server `mjml` === client `mjml-browser` HTML for TEMPLATE_MJML (blocker gate PASS). `app/client/vercel.json` static SPA config. Deviation: `window-polyfill.ts` for mjml-browser UMD under tsx (server tooling only). Save/Load already localStorage-only. PENDING: real Outlook+Gmail render gate; live browser Export/Preview click-path | 2026-07-10 | (pending — no-commit rule) | [260710-lty-static-deploy-via-browser-mjml-compile-s](./quick/260710-lty-static-deploy-via-browser-mjml-compile-s/) |
 
 ## Deferred Items
 

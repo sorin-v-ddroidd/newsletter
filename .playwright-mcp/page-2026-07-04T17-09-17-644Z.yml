@@ -1,0 +1,104 @@
+- generic [ref=f30e4]:
+  - banner [ref=f30e5]:
+    - generic [ref=f30e6]:
+      - generic [ref=f30e7]: D
+      - generic [ref=f30e8]:
+        - generic [ref=f30e9]: DDROIDD Newsletter Builder
+        - generic [ref=f30e10]: Draft — changes saved locally
+    - generic [ref=f30e12]:
+      - button "Desktop" [pressed] [ref=f30e13]:
+        - img [ref=f30e14]
+      - button "Tablet" [ref=f30e16]:
+        - img [ref=f30e17]
+      - button "Mobile landscape" [ref=f30e19]:
+        - img [ref=f30e20]
+      - button "Mobile portrait" [ref=f30e22]:
+        - img [ref=f30e23]
+    - generic [ref=f30e25]:
+      - button "New from Template" [ref=f30e26]:
+        - img
+        - text: New from Template
+      - button "Save" [ref=f30e27]:
+        - img
+        - text: Save
+      - button "Preview & Compile" [ref=f30e28]:
+        - img
+        - text: Preview & Compile
+      - button "More actions" [ref=f30e29]:
+        - img
+  - generic [ref=f30e30]:
+    - complementary [ref=f30e31]:
+      - generic [ref=f30e32]:
+        - tablist [ref=f30e33]:
+          - tab "Blocks" [selected] [ref=f30e34]
+          - tab "Layers" [ref=f30e35]
+        - tabpanel "Blocks" [ref=f30e36]:
+          - generic [ref=f30e38]:
+            - img
+            - textbox "Search blocks…" [ref=f30e39]
+          - generic [ref=f30e43]:
+            - generic [ref=f30e44]:
+              - generic [ref=f30e45]:
+                - generic [ref=f30e46]: DDROIDD
+                - generic [ref=f30e47]: On-brand
+              - generic [ref=f30e49]:
+                - generic [ref=f30e51]: DDROIDD Hero
+                - generic [ref=f30e53]: DDROIDD Projects
+                - generic [ref=f30e55]: DDROIDD New Collegues
+                - generic [ref=f30e57]: DDROIDD Initiatives
+                - generic [ref=f30e59]: DDROIDD Hiring
+                - generic [ref=f30e61]: DDROIDD Want To Know More
+                - generic [ref=f30e63]: DDROIDD Disclaimer
+            - generic [ref=f30e64]:
+              - generic [ref=f30e66]: Blocks
+              - generic [ref=f30e68]:
+                - generic [ref=f30e69]:
+                  - img [ref=f30e71]
+                  - generic [ref=f30e73]: 1 Column
+                - generic [ref=f30e74]:
+                  - img [ref=f30e76]
+                  - generic [ref=f30e78]: 2 Columns
+                - generic [ref=f30e79]:
+                  - img [ref=f30e81]
+                  - generic [ref=f30e83]: 3 Columns
+                - generic [ref=f30e84]:
+                  - img [ref=f30e86]
+                  - generic [ref=f30e88]: Text
+                - generic [ref=f30e89]:
+                  - img [ref=f30e91]
+                  - generic [ref=f30e93]: Button
+                - generic [ref=f30e94]:
+                  - img [ref=f30e96]
+                  - generic [ref=f30e98]: Image
+                - generic [ref=f30e99]:
+                  - img [ref=f30e101]
+                  - generic [ref=f30e103]: Divider
+                - generic [ref=f30e104]:
+                  - img [ref=f30e106]
+                  - generic [ref=f30e108]: Group Social
+                - generic [ref=f30e109]:
+                  - img [ref=f30e111]
+                  - generic [ref=f30e113]: Social Element
+                - generic [ref=f30e114]:
+                  - img [ref=f30e116]
+                  - generic [ref=f30e118]: Spacer
+                - generic [ref=f30e119]:
+                  - img [ref=f30e121]
+                  - generic [ref=f30e123]: Navbar
+                - generic [ref=f30e124]:
+                  - img [ref=f30e126]
+                  - generic [ref=f30e128]: Navbar Link
+                - generic [ref=f30e129]:
+                  - img [ref=f30e131]
+                  - generic [ref=f30e133]: Hero
+                - generic [ref=f30e134]:
+                  - img [ref=f30e136]
+                  - generic [ref=f30e138]: Wrapper
+                - generic [ref=f30e139]:
+                  - img [ref=f30e141]
+                  - generic [ref=f30e143]: Raw
+    - iframe [ref=f30e151]:
+      
+    - complementary [ref=f30e152]:
+      - generic [ref=f30e154]: Properties
+      - paragraph [ref=f30e155]: Select an element on the canvas to edit its properties.

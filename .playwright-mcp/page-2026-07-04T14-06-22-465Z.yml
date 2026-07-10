@@ -1,0 +1,32 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: DDROIDD Newsletter Builder
+    - button "Save" [ref=e6] [cursor=pointer]
+    - button "Load" [ref=e7] [cursor=pointer]
+    - button "Assert Round-Trip" [ref=e8] [cursor=pointer]
+    - button "Compile" [ref=e9] [cursor=pointer]
+  - generic [ref=e12]:
+    - generic:
+      - generic [ref=e19]:
+        - generic "View components" [ref=e20] [cursor=pointer]
+        - generic "Preview" [ref=e21] [cursor=pointer]
+        - generic "Fullscreen" [ref=e22] [cursor=pointer]
+        - generic "View code" [ref=e23] [cursor=pointer]
+        - generic "Import MJML" [ref=e24] [cursor=pointer]:
+          - img [ref=e25]
+        - generic "Undo" [ref=e27] [cursor=pointer]:
+          - img [ref=e28]
+        - generic "Redo" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+      - generic [ref=e34]:
+        - generic "Open Style Manager" [ref=e35] [cursor=pointer]
+        - generic "Settings" [ref=e36] [cursor=pointer]
+        - generic "Open Layer Manager" [ref=e37] [cursor=pointer]
+        - generic "Open Blocks" [ref=e38] [cursor=pointer]
+      - generic [ref=e40]:
+        - generic "Desktop" [ref=e41] [cursor=pointer]:
+          - img [ref=e42]
+        - generic "Tablet" [ref=e44] [cursor=pointer]:
+          - img [ref=e45]
+        - generic "Mobile" [ref=e47] [cursor=pointer]:
+          - img [ref=e48]

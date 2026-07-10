@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import mjml2html from 'mjml';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { compileNewsletter } from '../services/compile';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,35 +22,24 @@ router.post('/compile', async (req, res) => {
     return;
   }
 
-  const trimmed = editorOutput.trim();
+  const { html, errors } = compileNewsletter(editorOutput);
 
-  // Conditional wrap: prevent double-nesting if editor.getHtml() already returns a full <mjml> doc.
-  // Bare fragment (no <mjml> root) is wrapped to form a valid MJML document.
-  const fullMjml = /<mjml/i.test(trimmed)
-    ? trimmed
-    : `<mjml>\n  <mj-body>\n    ${trimmed}\n  </mj-body>\n</mjml>`;
-
-  const result = mjml2html(fullMjml, {
-    validationLevel: 'soft',
-    minify: false,
-  });
-
-  if (result.errors && result.errors.length > 0) {
-    console.warn('MJML compile warnings:', result.errors);
+  if (errors.length > 0) {
+    console.warn('MJML compile warnings:', errors);
   }
 
   // Write compiled HTML to dist/spike-output.html at repo root (server owns filesystem).
-  // Plan 05 client-render gate consumes this file.
+  // Dev client-render gate consumes this file.
   try {
     await fs.mkdir(path.dirname(SPIKE_OUTPUT_PATH), { recursive: true });
-    await fs.writeFile(SPIKE_OUTPUT_PATH, result.html, 'utf8');
+    await fs.writeFile(SPIKE_OUTPUT_PATH, html, 'utf8');
     console.log(`spike-output.html written to: ${SPIKE_OUTPUT_PATH}`);
   } catch (err) {
     console.error('Failed to write spike-output.html:', err);
     // Non-fatal: still return the compiled HTML even if write fails
   }
 
-  res.json({ html: result.html, errors: result.errors });
+  res.json({ html, errors });
 });
 
 export default router;

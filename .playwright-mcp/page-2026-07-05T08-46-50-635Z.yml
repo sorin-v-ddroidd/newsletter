@@ -1,0 +1,149 @@
+- generic [ref=f9e4]:
+  - banner [ref=f9e5]:
+    - generic [ref=f9e6]:
+      - generic [ref=f9e7]: D
+      - generic [ref=f9e8]:
+        - generic [ref=f9e9]: DDROIDD Newsletter Builder
+        - generic [ref=f9e10]: Draft — changes saved locally
+    - generic [ref=f9e12]:
+      - button "Desktop" [pressed] [ref=f9e13]:
+        - img [ref=f9e14]
+      - button "Tablet" [ref=f9e16]:
+        - img [ref=f9e17]
+      - button "Mobile landscape" [ref=f9e19]:
+        - img [ref=f9e20]
+      - button "Mobile portrait" [ref=f9e22]:
+        - img [ref=f9e23]
+    - generic [ref=f9e25]:
+      - button "New from Template" [ref=f9e26]:
+        - img
+        - text: New from Template
+      - button "Save" [ref=f9e27]:
+        - img
+        - text: Save
+      - button "Preview & Compile" [ref=f9e28]:
+        - img
+        - text: Preview & Compile
+      - button "More actions" [ref=f9e29]:
+        - img
+  - generic [ref=f9e30]:
+    - complementary [ref=f9e31]:
+      - generic [ref=f9e32]:
+        - tablist [ref=f9e33]:
+          - tab "Blocks" [selected] [ref=f9e34]
+          - tab "Layers" [ref=f9e35]
+        - tabpanel "Blocks" [ref=f9e36]:
+          - generic [ref=f9e38]:
+            - img
+            - textbox "Search blocks…" [ref=f9e39]
+          - generic [ref=f9e43]:
+            - generic [ref=f9e44]:
+              - generic [ref=f9e45]:
+                - generic [ref=f9e46]: DDROIDD
+                - generic [ref=f9e47]: On-brand
+              - generic [ref=f9e49]:
+                - generic [ref=f9e51]: DDROIDD Hero
+                - generic [ref=f9e53]: DDROIDD Projects
+                - generic [ref=f9e55]: DDROIDD New Collegues
+                - generic [ref=f9e57]: DDROIDD Initiatives
+                - generic [ref=f9e59]: DDROIDD Hiring
+                - generic [ref=f9e61]: DDROIDD Want To Know More
+                - generic [ref=f9e63]: DDROIDD Disclaimer
+            - generic [ref=f9e64]:
+              - generic [ref=f9e66]: Blocks
+              - generic [ref=f9e68]:
+                - generic [ref=f9e69]:
+                  - img [ref=f9e71]
+                  - generic [ref=f9e73]: 1 Column
+                - generic [ref=f9e74]:
+                  - img [ref=f9e76]
+                  - generic [ref=f9e78]: 2 Columns
+                - generic [ref=f9e79]:
+                  - img [ref=f9e81]
+                  - generic [ref=f9e83]: 3 Columns
+                - generic [ref=f9e84]:
+                  - img [ref=f9e86]
+                  - generic [ref=f9e88]: Text
+                - generic [ref=f9e89]:
+                  - img [ref=f9e91]
+                  - generic [ref=f9e93]: Button
+                - generic [ref=f9e94]:
+                  - img [ref=f9e96]
+                  - generic [ref=f9e98]: Image
+                - generic [ref=f9e99]:
+                  - img [ref=f9e101]
+                  - generic [ref=f9e103]: Divider
+                - generic [ref=f9e104]:
+                  - img [ref=f9e106]
+                  - generic [ref=f9e108]: Group Social
+                - generic [ref=f9e109]:
+                  - img [ref=f9e111]
+                  - generic [ref=f9e113]: Social Element
+                - generic [ref=f9e114]:
+                  - img [ref=f9e116]
+                  - generic [ref=f9e118]: Spacer
+                - generic [ref=f9e119]:
+                  - img [ref=f9e121]
+                  - generic [ref=f9e123]: Navbar
+                - generic [ref=f9e124]:
+                  - img [ref=f9e126]
+                  - generic [ref=f9e128]: Navbar Link
+                - generic [ref=f9e129]:
+                  - img [ref=f9e131]
+                  - generic [ref=f9e133]: Hero
+                - generic [ref=f9e134]:
+                  - img [ref=f9e136]
+                  - generic [ref=f9e138]: Wrapper
+                - generic [ref=f9e139]:
+                  - img [ref=f9e141]
+                  - generic [ref=f9e143]: Raw
+    - generic [ref=f9e147]:
+      - iframe [ref=f9e151]:
+        - article [ref=f11e7]:
+          - generic [ref=f11e10]: click me
+      - generic [ref=f9e157]:
+        - img [ref=f9e159] [cursor=pointer]
+        - img [ref=f9e162] [cursor=pointer]
+        - img [ref=f9e165] [cursor=pointer]
+        - img [ref=f9e168] [cursor=pointer]
+    - complementary [ref=f9e152]:
+      - generic [ref=f9e153]:
+        - generic [ref=f9e154]: Text
+        - generic [ref=f9e170]: Selected element
+      - generic [ref=f9e171]:
+        - generic [ref=f9e172]:
+          - heading "Content" [level=3] [ref=f9e173]:
+            - button "Content" [expanded] [ref=f9e174]:
+              - text: Content
+              - img
+          - region "Content" [ref=f9e175]:
+            - generic [ref=f9e176]:
+              - generic [ref=f9e177]:
+                - generic [ref=f9e178]: id
+                - textbox "id" [ref=f9e179]
+              - generic [ref=f9e180]:
+                - generic [ref=f9e181]: title
+                - textbox "title" [ref=f9e182]
+        - heading "Typography" [level=3] [ref=f9e184]:
+          - button "Typography" [ref=f9e185]:
+            - text: Typography
+            - img
+        - generic [ref=f9e186]:
+          - heading "Spacing" [level=3] [ref=f9e187]:
+            - button "Spacing" [expanded] [active] [ref=f9e188]:
+              - text: Spacing
+              - img
+          - region "Spacing" [ref=f9e192]:
+            - generic [ref=f9e193]:
+              - generic [ref=f9e194]:
+                - generic [ref=f9e195]: Padding
+                - textbox "Padding" [ref=f9e196]:
+                  - /placeholder: ""
+              - generic [ref=f9e197]:
+                - generic [ref=f9e198]: Inner padding
+                - textbox "Inner padding" [ref=f9e199]:
+                  - /placeholder: ""
+        - heading "Background" [level=3] [ref=f9e190]:
+          - button "Background" [ref=f9e191]:
+            - text: Background
+            - img

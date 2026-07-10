@@ -1,0 +1,148 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - banner:
+            - generic:
+              - generic: D
+              - generic:
+                - generic: DDROIDD Newsletter Builder
+                - generic: Draft — changes saved locally
+            - generic:
+              - button [pressed]:
+                - img
+              - button:
+                - img
+              - button:
+                - img
+              - button:
+                - img
+            - generic:
+              - button:
+                - img
+                - text: New from Template
+              - button:
+                - img
+                - text: Save
+              - button:
+                - img
+                - text: Preview & Compile
+              - button:
+                - img
+                - text: Export HTML
+              - button [expanded]:
+                - img
+        - generic:
+          - complementary:
+            - generic:
+              - tablist:
+                - tab [selected]: Blocks
+                - tab: Layers
+              - tabpanel:
+                - generic:
+                  - generic:
+                    - img
+                    - textbox:
+                      - /placeholder: Search blocks…
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: DDROIDD
+                            - generic: On-brand
+                          - generic:
+                            - generic:
+                              - generic: DDROIDD Hero
+                            - generic:
+                              - generic: DDROIDD Projects
+                            - generic:
+                              - generic: DDROIDD New Collegues
+                            - generic:
+                              - generic: DDROIDD Initiatives
+                            - generic:
+                              - generic: DDROIDD Hiring
+                            - generic:
+                              - generic: DDROIDD Want To Know More
+                            - generic:
+                              - generic: DDROIDD Disclaimer
+                        - generic:
+                          - generic:
+                            - generic: Blocks
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: 1 Column
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: 2 Columns
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: 3 Columns
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Text
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Button
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Image
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Divider
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Group Social
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Social Element
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Spacer
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Navbar
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Navbar Link
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Hero
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Wrapper
+                            - generic:
+                              - generic:
+                                - img
+                              - generic: Raw
+          - iframe [ref=f4e177]:
+            
+          - complementary:
+            - generic:
+              - generic: Properties
+            - paragraph: Select an element on the canvas to edit its properties.
+  - menu "More actions" [active] [ref=f4e182]:
+    - generic [ref=f4e183]: Draft
+    - menuitem "Load last saved" [ref=f4e184]:
+      - img
+      - text: Load last saved
+    - separator [ref=f4e185]
+    - generic [ref=f4e186]: Developer
+    - menuitem "Assert round-trip" [ref=f4e187]

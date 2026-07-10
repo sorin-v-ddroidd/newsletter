@@ -1,0 +1,19 @@
+/* GrapesJS canvas overrides ONLY. The editor CHROME (topbar/sidebars/panels)
+   is now Tailwind + shadcn (see index.css tokens). This file is the boundary
+   between the two styling worlds (gotchas.md): everything here targets GrapesJS's
+   own DOM, which Tailwind does not own. Do NOT add app-shell styles here. */
+
+/* Stray GrapesJS panel fallback: grapesjs-mjml re-adds a 'devices-c' mini-toolbar
+   over the canvas even in custom-UI mode. It is removed programmatically in onEditor
+   (editorOptions.ts); this CSS is the belt-and-braces fallback for any leftover panel. */
+.ddroidd-shell__canvas .gjs-pn-panel,
+.ddroidd-shell__canvas .gjs-pn-panels {
+  display: none;
+}
+
+/* Canvas backdrop — neutral zinc workspace behind the email device frame. */
+.ddroidd-shell__canvas {
+  background-color: #18181b;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
+  background-size: 22px 22px;
+}

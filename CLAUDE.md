@@ -205,7 +205,7 @@ This replaces the current workflow where a developer hand-edits `src/sections/*.
 | `mjml@5.x` on the server | Breaking changes vs browser `mjml-browser@4.18.0`; preview and export HTML will diverge | `mjml@4.18.0` |
 | Loading hand-authored MJML into the editor via `setComponents()` | Structural corruption on `mj-head`/`mj-attributes`; empty output on re-save; `mj-include` cannot resolve | Re-author sections as block definitions |
 | `editor.setComponents(htmlString)` with compiled HTML | Round-trip from compiled HTML → editor is not supported; loses all component structure | Load via `editor.loadProjectData(json)` |
-| `[grapesjsMjml]` as pluginsOpts key (computed key) | Causes "blocks can't be dropped" bug (issue #223) | Use hardcoded string `'grapesjs-mjml'` as the key |
+| `pluginsOpts` (any key) with the plugin passed as a function in `plugins: []` | Options are silently ignored — GrapesJS looks up `pluginsOpts[<the function>]`, which no string key matches; plugin runs with all defaults (`resetStyleManager: true` clobbers custom sectors). Verified live 2026-07-05 | `usePlugin(grapesjsMjml, opts)` from `grapesjs` |
 | `localStorage` for JWT | XSS-accessible | httpOnly cookie |
 | SQLite | No concurrent writes; no JSONB | PostgreSQL |
 | `grapesjs-react` (old package, npm name without @scope) | Deprecated; maintenance stopped | `@grapesjs/react@2.0.0` (official, scoped package) |

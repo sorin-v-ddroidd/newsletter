@@ -31,7 +31,7 @@ editor.Blocks.add('ddroidd-hero', {
   content: `
     <mj-section background-color="#0B1624">
       <mj-column>
-        <mj-image src="..." width="600px" />
+        <mj-image src="..." width="600px"></mj-image>
         <mj-text font-family="${BLOCK_DEFAULTS.fontFamily}" color="${BLOCK_DEFAULTS.textColor}"
                  font-size="${BLOCK_DEFAULTS.fontSize}" line-height="${BLOCK_DEFAULTS.lineHeight}">
           <p>Edit your intro text here.</p>
@@ -41,23 +41,36 @@ editor.Blocks.add('ddroidd-hero', {
 });
 ```
 
-## Plugin init — the string-key trap
+## Never self-close mj-* tags in block content strings
 
-Use the **hardcoded string** `'grapesjs-mjml'` as the `pluginsOpts` key. Using `[grapesjsMjml]` (the function as a computed key) causes "canvas loads but blocks can't be dropped" (issue #223).
+**Always write explicit close pairs** (`<mj-image ...></mj-image>`, `<mj-spacer ...></mj-spacer>`, `<mj-divider ...></mj-divider>`). The editor parses block content with the browser DOM parser, which does not recognize XML self-closing on custom elements: `<mj-image />` is treated as an *open* tag and **swallows all following siblings as children**. Result: `mj-text` nested inside `mj-image`, invalid MJML from `getHtml()`, compile warnings, wrong render. The raw string compiles fine under `mjml` directly (XML parser), so the headless verify gate does NOT catch this — only the in-editor parse breaks. Found 2026-07-04: 19 self-closing tags across block files produced 14 compile warnings from canvas-serialized MJML.
+
+## Plugin init — use `usePlugin`, plugin options are otherwise silently ignored
+
+Bind plugin options with **`usePlugin(grapesjsMjml, opts)`** from `grapesjs`. When the plugin is passed as a **function** (`plugins: [grapesjsMjml]`), GrapesJS resolves options via `pluginsOpts[<the function itself>]` — a string key like `'grapesjs-mjml'` NEVER matches, so every option is a **silent no-op** and the plugin runs with all defaults. Found 2026-07-05: default `resetStyleManager: true` then clobbered the email-safe sectors inside `editor.onReady()` (after `onEditor`), hiding padding everywhere. (Issue #223's "string key" advice applies only when the plugin is loaded BY string name.)
 
 ```jsx
+import grapesjs, { usePlugin } from 'grapesjs';
+
 <GjsEditor
   grapesjs={grapesjs}                 // the imported module object, not the string
   options={{
     height: '100%',
     storageManager: false,            // we save via our own API, not GrapesJS storage
-    plugins: [grapesjsMjml],
-    pluginsOpts: { 'grapesjs-mjml': { resetBlocks: false, resetDevices: false } },
+    plugins: [
+      usePlugin(grapesjsMjml, {
+        resetBlocks: false,
+        resetDevices: false,
+        resetStyleManager: false,     // REQUIRED — or the plugin resets sectors in onReady()
+      }),
+    ],
   }}
 >
   <Canvas />
 </GjsEditor>
 ```
+
+Also note: the plugin's own sector reset runs in `editor.onReady()`, which fires AFTER `onEditor` — re-asserting sectors in `onEditor` alone cannot win; `resetStyleManager: false` is the real gate.
 
 If the `0.22.16` + `@grapesjs/react` triple fails at runtime, the documented fallback is `grapesjs@0.21.2` + direct mount (`grapesjs.init()` in an effect with manual cleanup). Do not switch fallbacks casually — it's a last resort.
 

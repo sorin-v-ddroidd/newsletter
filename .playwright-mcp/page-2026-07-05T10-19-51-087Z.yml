@@ -1,0 +1,227 @@
+- generic [ref=e29]:
+  - banner [ref=e31]:
+    - generic [ref=e32]:
+      - generic [ref=e33]: D
+      - generic [ref=e34]:
+        - generic [ref=e35]: DDROIDD Newsletter Builder
+        - generic [ref=e36]: Draft — changes saved locally
+    - generic [ref=e37]:
+      - button "Desktop" [pressed] [ref=e38]:
+        - img [ref=e39]
+      - button "Tablet" [ref=e41]:
+        - img [ref=e42]
+      - button "Mobile landscape" [ref=e44]:
+        - img [ref=e45]
+      - button "Mobile portrait" [ref=e47]:
+        - img [ref=e48]
+    - generic [ref=e50]:
+      - button "New from Template" [ref=e51]:
+        - img
+        - text: New from Template
+      - button "Save" [ref=e52]:
+        - img
+        - text: Save
+      - button "Preview & Compile" [ref=e53]:
+        - img
+        - text: Preview & Compile
+      - button "Export HTML" [active] [ref=e54]:
+        - img
+        - text: Export HTML
+      - button "More actions" [ref=e55]:
+        - img
+  - generic [ref=e56]:
+    - complementary [ref=e57]:
+      - generic [ref=e58]:
+        - tablist [ref=e59]:
+          - tab "Blocks" [selected] [ref=e60]
+          - tab "Layers" [ref=e61]
+        - tabpanel "Blocks" [ref=e62]:
+          - generic [ref=e64]:
+            - img
+            - textbox "Search blocks…" [ref=e65]
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - generic [ref=e71]:
+                - generic [ref=e72]: DDROIDD
+                - generic [ref=e73]: On-brand
+              - generic [ref=e75]:
+                - generic [ref=e77]: DDROIDD Hero
+                - generic [ref=e79]: DDROIDD Projects
+                - generic [ref=e81]: DDROIDD New Collegues
+                - generic [ref=e83]: DDROIDD Initiatives
+                - generic [ref=e85]: DDROIDD Hiring
+                - generic [ref=e87]: DDROIDD Want To Know More
+                - generic [ref=e89]: DDROIDD Disclaimer
+            - generic [ref=e90]:
+              - generic [ref=e92]: Blocks
+              - generic [ref=e94]:
+                - generic [ref=e95]:
+                  - img [ref=e97]
+                  - generic [ref=e99]: 1 Column
+                - generic [ref=e100]:
+                  - img [ref=e102]
+                  - generic [ref=e104]: 2 Columns
+                - generic [ref=e105]:
+                  - img [ref=e107]
+                  - generic [ref=e109]: 3 Columns
+                - generic [ref=e110]:
+                  - img [ref=e112]
+                  - generic [ref=e114]: Text
+                - generic [ref=e115]:
+                  - img [ref=e117]
+                  - generic [ref=e119]: Button
+                - generic [ref=e120]:
+                  - img [ref=e122]
+                  - generic [ref=e124]: Image
+                - generic [ref=e125]:
+                  - img [ref=e127]
+                  - generic [ref=e129]: Divider
+                - generic [ref=e130]:
+                  - img [ref=e132]
+                  - generic [ref=e134]: Group Social
+                - generic [ref=e135]:
+                  - img [ref=e137]
+                  - generic [ref=e139]: Social Element
+                - generic [ref=e140]:
+                  - img [ref=e142]
+                  - generic [ref=e144]: Spacer
+                - generic [ref=e145]:
+                  - img [ref=e147]
+                  - generic [ref=e149]: Navbar
+                - generic [ref=e150]:
+                  - img [ref=e152]
+                  - generic [ref=e154]: Navbar Link
+                - generic [ref=e155]:
+                  - img [ref=e157]
+                  - generic [ref=e159]: Hero
+                - generic [ref=e160]:
+                  - img [ref=e162]
+                  - generic [ref=e164]: Wrapper
+                - generic [ref=e165]:
+                  - img [ref=e167]
+                  - generic [ref=e169]: Raw
+    - iframe [ref=e177]:
+      - generic [ref=f2e7]:
+        - article [ref=f2e9]:
+          - paragraph [ref=f2e13]:
+            - text: As we move into summer, June has been another month of growth, new connections, and exciting developments across ddroidd. We've welcomed new colleagues, continued expanding key projects, and represented ddroidd at one of the region's most important technology events.
+            - text: The highlights, achievements, and updates that shaped our June are gathered in this edition of the ddroidd Digest. Enjoy the read!
+        - article [ref=f2e15]:
+          - paragraph [ref=f2e18]
+        - article [ref=f2e20]:
+          - generic [ref=f2e22]:
+            - img "Signature" [ref=f2e23]
+            - heading "New Collegues" [level=2] [ref=f2e25]
+            - paragraph [ref=f2e27]: "We would like to say a huge team welcome to our new colleagues who joined us in June:"
+        - article [ref=f2e29]:
+          - generic [ref=f2e30]:
+            - generic [ref=f2e32]:
+              - paragraph [ref=f2e33]: Diana Pojar
+              - paragraph [ref=f2e34]:
+                - text: Customer Technical
+                - text: Support Analyst (L1)
+            - generic [ref=f2e36]:
+              - paragraph [ref=f2e37]: Adi Suciu
+              - paragraph [ref=f2e38]:
+                - text: Customer Technical
+                - text: Support Team Lead
+            - generic [ref=f2e40]:
+              - paragraph [ref=f2e41]: Mihnea Valeanu
+              - paragraph [ref=f2e42]:
+                - text: Customer Technical
+                - text: Support Analyst (L1)
+        - article [ref=f2e44]:
+          - generic [ref=f2e45]:
+            - generic [ref=f2e47]:
+              - paragraph [ref=f2e48]: Nicoleta Patachi
+              - paragraph [ref=f2e49]: Back Office Support Analyst
+            - generic [ref=f2e51]:
+              - paragraph [ref=f2e52]: Anatolii Guzovatii
+              - paragraph [ref=f2e53]: Software Developer
+        - article [ref=f2e55]:
+          - paragraph [ref=f2e58]
+        - article [ref=f2e60]:
+          - generic [ref=f2e62]:
+            - img "Signature" [ref=f2e63]
+            - heading "Projects" [level=2] [ref=f2e65]
+        - article [ref=f2e67]:
+          - generic [ref=f2e69]:
+            - img "Project logo" [ref=f2e70]
+            - paragraph [ref=f2e72]: Project description. Edit inline to describe your project update here.
+        - article [ref=f2e74]:
+          - paragraph [ref=f2e77]
+        - article [ref=f2e79]:
+          - generic [ref=f2e81]:
+            - img "Signature" [ref=f2e82]
+            - heading "MEET-UPS AND INITIATIVES" [level=2] [ref=f2e84]
+        - article [ref=f2e86]:
+          - generic [ref=f2e88]:
+            - generic [ref=f2e89]:
+              - heading "Internal Newsletter Feedback" [level=3] [ref=f2e90]
+              - paragraph [ref=f2e91]:
+                - text: We're always looking for ways to improve how we share news, updates, and opportunities across the company. Take a moment to tell us what's working, what isn't, and what you'd like to see more of.
+                - text: The survey is anonymous and should take less than 2 minutes.
+                - text: Share your feedback,
+                - link "here" [ref=f2e92] [cursor=pointer]:
+                  - /url: https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=7rx3YAQRGUG8mFOYcMZu72KI3py4jFtKpFtY952CYzdUMTdCVk8zWDEyMExTWTRDREdHRlBJM0FOUC4u
+                - text: .
+            - generic [ref=f2e93]:
+              - heading "Techsylvania 2026" [level=3] [ref=f2e94]
+              - paragraph [ref=f2e95]:
+                - text: Cosmin Cristea and Andrei Marginean recently attended Techsylvania 2026, one of the leading technology and innovation events in the region.
+                - text: The event brought together founders, technology leaders, innovators, and industry experts to explore the trends shaping the future of business and technology. It was a valuable opportunity to exchange ideas, gain new insights into AI and digital transformation, and strengthen connections within the tech community.
+                - text: We're excited to bring these learnings back to ddroidd and continue driving innovation for our clients and partners.
+        - article [ref=f2e97]:
+          - paragraph [ref=f2e100]
+        - article [ref=f2e102]:
+          - generic [ref=f2e103]:
+            - img "Signature" [ref=f2e105]
+            - generic [ref=f2e106]:
+              - img "Signature" [ref=f2e107]
+              - heading "WE'RE HIRING!" [level=2] [ref=f2e109]
+              - generic [ref=f2e110]:
+                - paragraph [ref=f2e111]: Looking ahead to new opportunities, we are expanding our talent pipeline
+                - list [ref=f2e112]:
+                  - listitem [ref=f2e113]: Senior QA Automation Engineer
+                  - listitem [ref=f2e114]: Senior Java Developer
+                  - listitem [ref=f2e115]: Senior Fullstack Developer
+                  - listitem [ref=f2e116]: Senior AI Developer
+        - article [ref=f2e118]:
+          - generic [ref=f2e121]:
+            - paragraph [ref=f2e122]:
+              - text: We're always eager to welcome talented new colleagues to our team. If you have any other recommendations, feel free to let us know!
+              - text: Please make sure all internal referrals are submitted
+              - strong [ref=f2e123]: via email
+              - text: ", so we can keep the process clear and easy to follow. When sending a referral, include the"
+              - strong [ref=f2e124]: candidate's name and the role
+              - text: either in the
+              - strong [ref=f2e125]: email subject line
+              - text: or
+              - strong [ref=f2e126]: message body
+              - text: .
+              - text: Please note that our preference is to hire under individual employment contracts.
+              - text: "If you know someone who would be perfect for any of these roles or would like further details, then please get in touch with the recruitment team:"
+              - link "recruitment@ddroidd.com" [ref=f2e127] [cursor=pointer]:
+                - /url: mailto:recruitment@ddroidd.com&subject=Seeking Referrals for Exciting Opportunities
+            - paragraph [ref=f2e128]:
+              - text: For more relevant details, please see the
+              - link "attached link" [ref=f2e129] [cursor=pointer]:
+                - /url: https://ddroidd.sharepoint.com/Shared%20Documents/Forms/AllItems.aspx?id=%2FShared%20Documents%2FReferral%20bonus%20Scheme%2Epdf&parent=%2FShared%20Documents&isSPOFile=1&OR=Teams%2DHL&CT=1730727643676&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiI0OS8yNDEwMDMyNDkxNiIsIkhhc0ZlZGVyYXRlZFVzZXIiOmZhbHNlfQ%3D%3D
+              - text: .
+        - article [ref=f2e131]:
+          - paragraph [ref=f2e134]
+        - article [ref=f2e136]:
+          - generic [ref=f2e138]:
+            - img "Signature" [ref=f2e139]
+            - heading "WANT TO KNOW MORE OR HAVE A STORY TO SHARE?" [level=2] [ref=f2e141]
+        - article [ref=f2e143]:
+          - paragraph [ref=f2e147]:
+            - text: This monthly newsletter is designed to keep you informed on what is happening within ddroidd. It will evolve as we go along, but we need your feedback to make this happen. Is there something else you would like to see within these updates, or do you have a successful story to share? Then please do let us know, email
+            - link "newsletter@ddroidd.com" [ref=f2e148] [cursor=pointer]:
+              - /url: mailto:newsletter@ddroidd.com
+            - text: with your stories and feedback. Until next month...
+        - article [ref=f2e150]:
+          - paragraph [ref=f2e154]: The content of this email is confidential and intended only for the recipient specified in this message. It is strictly forbidden to share any part of this message with any third party, without written consent of the sender. If you received this message by mistake, please reply to this message and follow with its permanent deletion, so that we can ensure such a mistake does not occur in the future.
+    - complementary [ref=e178]:
+      - generic [ref=e180]: Properties
+      - paragraph [ref=e181]: Select an element on the canvas to edit its properties.

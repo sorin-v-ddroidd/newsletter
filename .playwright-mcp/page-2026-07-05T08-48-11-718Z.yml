@@ -1,0 +1,142 @@
+- generic [ref=f12e4]:
+  - banner [ref=f12e5]:
+    - generic [ref=f12e6]:
+      - generic [ref=f12e7]: D
+      - generic [ref=f12e8]:
+        - generic [ref=f12e9]: DDROIDD Newsletter Builder
+        - generic [ref=f12e10]: Draft — changes saved locally
+    - generic [ref=f12e12]:
+      - button "Desktop" [pressed] [ref=f12e13]:
+        - img [ref=f12e14]
+      - button "Tablet" [ref=f12e16]:
+        - img [ref=f12e17]
+      - button "Mobile landscape" [ref=f12e19]:
+        - img [ref=f12e20]
+      - button "Mobile portrait" [ref=f12e22]:
+        - img [ref=f12e23]
+    - generic [ref=f12e25]:
+      - button "New from Template" [ref=f12e26]:
+        - img
+        - text: New from Template
+      - button "Save" [ref=f12e27]:
+        - img
+        - text: Save
+      - button "Preview & Compile" [ref=f12e28]:
+        - img
+        - text: Preview & Compile
+      - button "More actions" [ref=f12e29]:
+        - img
+  - generic [ref=f12e30]:
+    - complementary [ref=f12e31]:
+      - generic [ref=f12e32]:
+        - tablist [ref=f12e33]:
+          - tab "Blocks" [selected] [ref=f12e34]
+          - tab "Layers" [ref=f12e35]
+        - tabpanel "Blocks" [ref=f12e36]:
+          - generic [ref=f12e38]:
+            - img
+            - textbox "Search blocks…" [ref=f12e39]
+          - generic [ref=f12e43]:
+            - generic [ref=f12e44]:
+              - generic [ref=f12e45]:
+                - generic [ref=f12e46]: DDROIDD
+                - generic [ref=f12e47]: On-brand
+              - generic [ref=f12e49]:
+                - generic [ref=f12e51]: DDROIDD Hero
+                - generic [ref=f12e53]: DDROIDD Projects
+                - generic [ref=f12e55]: DDROIDD New Collegues
+                - generic [ref=f12e57]: DDROIDD Initiatives
+                - generic [ref=f12e59]: DDROIDD Hiring
+                - generic [ref=f12e61]: DDROIDD Want To Know More
+                - generic [ref=f12e63]: DDROIDD Disclaimer
+            - generic [ref=f12e64]:
+              - generic [ref=f12e66]: Blocks
+              - generic [ref=f12e68]:
+                - generic [ref=f12e69]:
+                  - img [ref=f12e71]
+                  - generic [ref=f12e73]: 1 Column
+                - generic [ref=f12e74]:
+                  - img [ref=f12e76]
+                  - generic [ref=f12e78]: 2 Columns
+                - generic [ref=f12e79]:
+                  - img [ref=f12e81]
+                  - generic [ref=f12e83]: 3 Columns
+                - generic [ref=f12e84]:
+                  - img [ref=f12e86]
+                  - generic [ref=f12e88]: Text
+                - generic [ref=f12e89]:
+                  - img [ref=f12e91]
+                  - generic [ref=f12e93]: Button
+                - generic [ref=f12e94]:
+                  - img [ref=f12e96]
+                  - generic [ref=f12e98]: Image
+                - generic [ref=f12e99]:
+                  - img [ref=f12e101]
+                  - generic [ref=f12e103]: Divider
+                - generic [ref=f12e104]:
+                  - img [ref=f12e106]
+                  - generic [ref=f12e108]: Group Social
+                - generic [ref=f12e109]:
+                  - img [ref=f12e111]
+                  - generic [ref=f12e113]: Social Element
+                - generic [ref=f12e114]:
+                  - img [ref=f12e116]
+                  - generic [ref=f12e118]: Spacer
+                - generic [ref=f12e119]:
+                  - img [ref=f12e121]
+                  - generic [ref=f12e123]: Navbar
+                - generic [ref=f12e124]:
+                  - img [ref=f12e126]
+                  - generic [ref=f12e128]: Navbar Link
+                - generic [ref=f12e129]:
+                  - img [ref=f12e131]
+                  - generic [ref=f12e133]: Hero
+                - generic [ref=f12e134]:
+                  - img [ref=f12e136]
+                  - generic [ref=f12e138]: Wrapper
+                - generic [ref=f12e139]:
+                  - img [ref=f12e141]
+                  - generic [ref=f12e143]: Raw
+    - generic [ref=f12e147]:
+      - iframe [active] [ref=f12e151]:
+        - article [ref=f14e7]:
+          - generic [ref=f14e10]: click me
+      - generic:
+        - generic [ref=f12e157]:
+          - img [ref=f12e159] [cursor=pointer]
+          - img [ref=f12e162] [cursor=pointer]
+          - img [ref=f12e165] [cursor=pointer]
+          - img [ref=f12e168] [cursor=pointer]
+        - generic:
+          - generic:
+            - generic: Text
+    - complementary [ref=f12e152]:
+      - generic [ref=f12e153]:
+        - generic [ref=f12e154]: Text
+        - generic [ref=f12e170]: Selected element
+      - generic [ref=f12e171]:
+        - generic [ref=f12e172]:
+          - heading "Content" [level=3] [ref=f12e173]:
+            - button "Content" [expanded] [ref=f12e174]:
+              - text: Content
+              - img
+          - region "Content" [ref=f12e175]:
+            - generic [ref=f12e176]:
+              - generic [ref=f12e177]:
+                - generic [ref=f12e178]: id
+                - textbox "id" [ref=f12e179]
+              - generic [ref=f12e180]:
+                - generic [ref=f12e181]: title
+                - textbox "title" [ref=f12e182]
+        - heading "Typography" [level=3] [ref=f12e184]:
+          - button "Typography" [ref=f12e185]:
+            - text: Typography
+            - img
+        - heading "Spacing" [level=3] [ref=f12e187]:
+          - button "Spacing" [ref=f12e188]:
+            - text: Spacing
+            - img
+        - heading "Background" [level=3] [ref=f12e190]:
+          - button "Background" [ref=f12e191]:
+            - text: Background
+            - img

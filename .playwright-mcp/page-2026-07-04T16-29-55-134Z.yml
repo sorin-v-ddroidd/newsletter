@@ -1,0 +1,15 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e6]: DDROIDD Newsletter Builder
+    - button "Save" [ref=e7] [cursor=pointer]
+    - button "Load" [ref=e8] [cursor=pointer]
+    - button "Assert Round-Trip" [ref=e9] [cursor=pointer]
+    - button "Compile" [ref=e10] [cursor=pointer]
+    - button "New from Template" [ref=e11] [cursor=pointer]
+  - generic [ref=e12]:
+    - generic [ref=e14]:
+      - button "Blocks" [ref=e15] [cursor=pointer]
+      - button "Layers" [ref=e16] [cursor=pointer]
+    - iframe [ref=e25]:
+      
+    - paragraph [ref=e27]: Select an element to edit its properties

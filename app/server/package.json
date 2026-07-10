@@ -7,7 +7,10 @@
   "scripts": {
     "dev": "nodemon --exec tsx src/index.ts",
     "start": "tsx src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "verify:blocks": "tsx scripts/verify-blocks.ts",
+    "verify:compile": "tsx scripts/verify-compile.ts",
+    "verify:parity": "tsx scripts/verify-parity.ts"
   },
   "dependencies": {
     "cors": "2.8.6",
@@ -20,6 +23,7 @@
     "@types/express": "^5.0.0",
     "@types/mjml": "^4.7.4",
     "@types/node": "^22.0.0",
+    "mjml-browser": "4.18.0",
     "nodemon": "^3.1.14",
     "tsx": "4.22.4",
     "typescript": "^5.7.0"
