@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Property, Sector } from 'grapesjs';
 import { StylesProvider, TraitsProvider } from '@grapesjs/react';
 import { ChevronDown } from 'lucide-react';
-import { EMAIL_SAFE_STYLE_PROPS } from './editorConfig';
+import { composePaddingShorthand, EMAIL_SAFE_STYLE_PROPS } from './editorConfig';
+import { cn } from '@/lib/utils';
 import { useSelectedComponent } from './hooks/useSelectedComponent';
 import {
   PairedField,
@@ -34,15 +35,26 @@ const isForbiddenSector = (sector: Sector): boolean => {
 const isEmailSafeProp = (prop: Property): boolean => EMAIL_SAFE_STYLE_PROPS.has(prop.getId());
 
 // Flat Figma-style section header: bold ~13px title, hairline top border (except first),
-// no uppercase/tracking. Renders nothing when there is no content to show.
+// no uppercase/tracking. Renders nothing when there is no content to show. Collapsible
+// (260713-mxb): each Section owns independent open/closed state — intentionally NOT a
+// shared accordion, since sections must toggle independently of one another.
 const Section = ({ title, first, children }: { title: string; first?: boolean; children: ReactNode }) => {
+  const [open, setOpen] = useState(true);
+
   return (
     <div className={cnFirst(first)}>
-      <div className="flex items-center justify-between px-3.5 pt-3.5 pb-2">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => { setOpen((v) => !v); }}
+        className="flex w-full cursor-pointer items-center justify-between px-3.5 pt-3.5 pb-2"
+      >
         <span className="text-[13px] font-semibold text-foreground">{title}</span>
-        <ChevronDown className="size-3.5 text-muted-foreground" />
-      </div>
-      <div className="flex flex-col gap-3 px-3.5 pb-4">{children}</div>
+        <ChevronDown
+          className={cn('size-3.5 text-muted-foreground transition-transform', !open && '-rotate-90')}
+        />
+      </button>
+      {open && <div className="flex flex-col gap-3 px-3.5 pb-4">{children}</div>}
     </div>
   );
 };
@@ -58,14 +70,35 @@ export const RightPanel = () => {
   const selected = useSelectedComponent();
   const selectedName = selected ? String(selected.getName() ?? selected.get('tagName') ?? 'Element') : null;
 
+  // Presentation-only padding display fallback (260713-mxb): grapesjs-mjml's style-default
+  // merges LONGHAND paddings (padding-top/right/bottom/left) onto the model, but the panel
+  // reads only the shorthand `padding` Property, which is then empty even though real padding
+  // exists. Derive the composed shorthand ONLY when all four longhands are present; read-only
+  // (selected.getStyle()) — no addStyle/addAttributes/upValue here, so this never mutates the
+  // model on selection/render and the Phase-1 round-trip stays byte-identical.
+  const paddingDisplay = (() => {
+    if (!selected) {
+      return undefined;
+    }
+    const style = selected.getStyle();
+    const top = style['padding-top'];
+    const right = style['padding-right'];
+    const bottom = style['padding-bottom'];
+    const left = style['padding-left'];
+    if (
+      typeof top !== 'string' || typeof right !== 'string' ||
+      typeof bottom !== 'string' || typeof left !== 'string'
+    ) {
+      return undefined;
+    }
+    return composePaddingShorthand(top, right, bottom, left);
+  })();
+
   const renderHeader = () => {
     return (
       <div className="flex items-center gap-2 border-b px-3.5 py-3">
         {selectedName ? (
-          <>
-            <span className="text-[13px] font-semibold text-foreground">{selectedName}</span>
-            <ChevronDown className="size-3.5 text-muted-foreground" />
-          </>
+          <span className="text-[13px] font-semibold text-foreground">{selectedName}</span>
         ) : (
           <span className="text-xs font-medium text-muted-foreground">Properties</span>
         )}
@@ -181,12 +214,12 @@ export const RightPanel = () => {
                   <Section title="Appearance">
                     {padding && innerPadding ? (
                       <div className="grid grid-cols-2 gap-2">
-                        <PairedField prop={padding} glyph="P" />
+                        <PairedField prop={padding} glyph="P" displayValue={paddingDisplay} />
                         <PairedField prop={innerPadding} glyph="IP" />
                       </div>
                     ) : (
                       <>
-                        {padding && <PairedField prop={padding} glyph="P" />}
+                        {padding && <PairedField prop={padding} glyph="P" displayValue={paddingDisplay} />}
                         {innerPadding && <PairedField prop={innerPadding} glyph="IP" />}
                       </>
                     )}

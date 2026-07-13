@@ -203,6 +203,24 @@ const parsePaddingShorthand = (value: string): [string, string, string, string] 
   return null;
 };
 
+// Inverse of parsePaddingShorthand: collapses the four longhand padding values into the
+// shortest equivalent CSS shorthand (260713-mxb). Pure string function — no React/GrapesJS
+// imports — used as a presentation-only display fallback when the shorthand `padding`
+// Property is empty but the longhands exist (grapesjs-mjml's style-default ships only the
+// longhands, so the shorthand field renders blank even though real padding exists).
+export const composePaddingShorthand = (top: string, right: string, bottom: string, left: string): string => {
+  if (top === right && right === bottom && bottom === left) {
+    return top;
+  }
+  if (top === bottom && right === left) {
+    return `${top} ${right}`;
+  }
+  if (right === left) {
+    return `${top} ${right} ${bottom}`;
+  }
+  return `${top} ${right} ${bottom} ${left}`;
+};
+
 // Re-entrancy guard for the padding-shorthand expansion listener below. Cheap insurance only —
 // the handler writes just the four longhands, and `padding-top`/etc. changes do not match the
 // `component:styleUpdate:padding` event, so re-entrancy should not occur by construction.
@@ -258,6 +276,15 @@ const CAROUSEL_IMAGE_TRAITS = [
   { type: 'text', name: 'src', label: 'Image URL' },
   { type: 'text', name: 'alt', label: 'Alt text' },
   { type: 'text', name: 'href', label: 'Link URL (optional)' },
+];
+
+// mj-image traits (260713-mxb): grapesjs-mjml@1.0.8 registers mj-image with traits
+// ['href','rel','alt','title'] and NO `src` trait, so the image URL never appears in the
+// Content section. `rel`/`title` are dropped deliberately — noise for non-devs.
+const MJ_IMAGE_TRAITS = [
+  { type: 'text', name: 'src', label: 'Image URL' },
+  { type: 'text', name: 'href', label: 'Link URL' },
+  { type: 'text', name: 'alt', label: 'Alt text' },
 ];
 
 // onEditor is called by @grapesjs/react after the editor is initialised.
@@ -466,6 +493,14 @@ export const onEditor = (editor: GrapesEditor): void => {
         el.appendChild(wrap);
       },
     },
+  });
+
+  // mj-image: add the missing `src` trait (plugin ships href/rel/alt/title, no src) so the
+  // Content section shows an editable, prepopulated Image URL field. addType on an EXISTING
+  // type shallow-merges model.defaults, so `traits` (array) is replaced while the plugin's
+  // isComponent/view/stylable are inherited — canvas render and drag/drop are unaffected.
+  editor.Components.addType('mj-image', {
+    model: { defaults: { traits: MJ_IMAGE_TRAITS } },
   });
 
   // StrictMode-safe branded block registration (see registerBlocks.ts).
