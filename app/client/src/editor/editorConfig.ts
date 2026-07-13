@@ -260,6 +260,15 @@ const CAROUSEL_IMAGE_TRAITS = [
   { type: 'text', name: 'href', label: 'Link URL (optional)' },
 ];
 
+// mj-image traits (260713-mxb): grapesjs-mjml@1.0.8 registers mj-image with traits
+// ['href','rel','alt','title'] and NO `src` trait, so the image URL never appears in the
+// Content section. `rel`/`title` are dropped deliberately — noise for non-devs.
+const MJ_IMAGE_TRAITS = [
+  { type: 'text', name: 'src', label: 'Image URL' },
+  { type: 'text', name: 'href', label: 'Link URL' },
+  { type: 'text', name: 'alt', label: 'Alt text' },
+];
+
 // onEditor is called by @grapesjs/react after the editor is initialised.
 // The `editor.Blocks.get(id)` guard prevents duplicate block registration
 // on React StrictMode double-invocation.
@@ -466,6 +475,14 @@ export const onEditor = (editor: GrapesEditor): void => {
         el.appendChild(wrap);
       },
     },
+  });
+
+  // mj-image: add the missing `src` trait (plugin ships href/rel/alt/title, no src) so the
+  // Content section shows an editable, prepopulated Image URL field. addType on an EXISTING
+  // type shallow-merges model.defaults, so `traits` (array) is replaced while the plugin's
+  // isComponent/view/stylable are inherited — canvas render and drag/drop are unaffected.
+  editor.Components.addType('mj-image', {
+    model: { defaults: { traits: MJ_IMAGE_TRAITS } },
   });
 
   // StrictMode-safe branded block registration (see registerBlocks.ts).
