@@ -1,8 +1,9 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Property, Sector } from 'grapesjs';
 import { StylesProvider, TraitsProvider } from '@grapesjs/react';
 import { ChevronDown } from 'lucide-react';
 import { composePaddingShorthand, EMAIL_SAFE_STYLE_PROPS } from './editorConfig';
+import { cn } from '@/lib/utils';
 import { useSelectedComponent } from './hooks/useSelectedComponent';
 import {
   PairedField,
@@ -34,15 +35,26 @@ const isForbiddenSector = (sector: Sector): boolean => {
 const isEmailSafeProp = (prop: Property): boolean => EMAIL_SAFE_STYLE_PROPS.has(prop.getId());
 
 // Flat Figma-style section header: bold ~13px title, hairline top border (except first),
-// no uppercase/tracking. Renders nothing when there is no content to show.
+// no uppercase/tracking. Renders nothing when there is no content to show. Collapsible
+// (260713-mxb): each Section owns independent open/closed state — intentionally NOT a
+// shared accordion, since sections must toggle independently of one another.
 const Section = ({ title, first, children }: { title: string; first?: boolean; children: ReactNode }) => {
+  const [open, setOpen] = useState(true);
+
   return (
     <div className={cnFirst(first)}>
-      <div className="flex items-center justify-between px-3.5 pt-3.5 pb-2">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={() => { setOpen((v) => !v); }}
+        className="flex w-full cursor-pointer items-center justify-between px-3.5 pt-3.5 pb-2"
+      >
         <span className="text-[13px] font-semibold text-foreground">{title}</span>
-        <ChevronDown className="size-3.5 text-muted-foreground" />
-      </div>
-      <div className="flex flex-col gap-3 px-3.5 pb-4">{children}</div>
+        <ChevronDown
+          className={cn('size-3.5 text-muted-foreground transition-transform', !open && '-rotate-90')}
+        />
+      </button>
+      {open && <div className="flex flex-col gap-3 px-3.5 pb-4">{children}</div>}
     </div>
   );
 };
@@ -86,10 +98,7 @@ export const RightPanel = () => {
     return (
       <div className="flex items-center gap-2 border-b px-3.5 py-3">
         {selectedName ? (
-          <>
-            <span className="text-[13px] font-semibold text-foreground">{selectedName}</span>
-            <ChevronDown className="size-3.5 text-muted-foreground" />
-          </>
+          <span className="text-[13px] font-semibold text-foreground">{selectedName}</span>
         ) : (
           <span className="text-xs font-medium text-muted-foreground">Properties</span>
         )}
