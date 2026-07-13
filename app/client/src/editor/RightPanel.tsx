@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Property, Sector } from 'grapesjs';
 import { StylesProvider, TraitsProvider } from '@grapesjs/react';
 import { ChevronDown } from 'lucide-react';
-import { EMAIL_SAFE_STYLE_PROPS } from './editorConfig';
+import { composePaddingShorthand, EMAIL_SAFE_STYLE_PROPS } from './editorConfig';
 import { useSelectedComponent } from './hooks/useSelectedComponent';
 import {
   PairedField,
@@ -57,6 +57,30 @@ const cnFirst = (first?: boolean): string => (first ? '' : 'border-t');
 export const RightPanel = () => {
   const selected = useSelectedComponent();
   const selectedName = selected ? String(selected.getName() ?? selected.get('tagName') ?? 'Element') : null;
+
+  // Presentation-only padding display fallback (260713-mxb): grapesjs-mjml's style-default
+  // merges LONGHAND paddings (padding-top/right/bottom/left) onto the model, but the panel
+  // reads only the shorthand `padding` Property, which is then empty even though real padding
+  // exists. Derive the composed shorthand ONLY when all four longhands are present; read-only
+  // (selected.getStyle()) — no addStyle/addAttributes/upValue here, so this never mutates the
+  // model on selection/render and the Phase-1 round-trip stays byte-identical.
+  const paddingDisplay = (() => {
+    if (!selected) {
+      return undefined;
+    }
+    const style = selected.getStyle();
+    const top = style['padding-top'];
+    const right = style['padding-right'];
+    const bottom = style['padding-bottom'];
+    const left = style['padding-left'];
+    if (
+      typeof top !== 'string' || typeof right !== 'string' ||
+      typeof bottom !== 'string' || typeof left !== 'string'
+    ) {
+      return undefined;
+    }
+    return composePaddingShorthand(top, right, bottom, left);
+  })();
 
   const renderHeader = () => {
     return (
@@ -181,12 +205,12 @@ export const RightPanel = () => {
                   <Section title="Appearance">
                     {padding && innerPadding ? (
                       <div className="grid grid-cols-2 gap-2">
-                        <PairedField prop={padding} glyph="P" />
+                        <PairedField prop={padding} glyph="P" displayValue={paddingDisplay} />
                         <PairedField prop={innerPadding} glyph="IP" />
                       </div>
                     ) : (
                       <>
-                        {padding && <PairedField prop={padding} glyph="P" />}
+                        {padding && <PairedField prop={padding} glyph="P" displayValue={paddingDisplay} />}
                         {innerPadding && <PairedField prop={innerPadding} glyph="IP" />}
                       </>
                     )}

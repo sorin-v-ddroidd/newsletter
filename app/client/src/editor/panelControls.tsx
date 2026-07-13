@@ -114,8 +114,20 @@ export const SwatchRow = ({ prop }: { prop: Property }) => {
  * @description Compact input with an in-field prefix glyph (letter or icon) and no
  * stacked label — designed to sit inside a two-column grid (e.g. width/height).
  */
-export const PairedField = ({ prop, glyph }: { prop: Property; glyph: ReactNode }) => {
-  const value = String(prop.getValue() ?? '');
+export const PairedField = ({
+  prop,
+  glyph,
+  displayValue,
+}: {
+  prop: Property;
+  glyph: ReactNode;
+  displayValue?: string;
+}) => {
+  const liveValue = String(prop.getValue() ?? '');
+  // Presentation-only fallback (260713-mxb): when the live Property value is empty and a
+  // displayValue is supplied (e.g. the composed padding shorthand derived from longhands),
+  // show it so the field is readable/editable. The default remains the separate placeholder.
+  const value = liveValue === '' && displayValue !== undefined ? displayValue : liveValue;
 
   return (
     <div className="relative flex items-center">
