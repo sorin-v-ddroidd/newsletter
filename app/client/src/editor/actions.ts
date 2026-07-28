@@ -23,20 +23,89 @@ export const save = (editor: GrapesEditor): void => {
   console.log('[ddroidd] Saved project data to localStorage');
 };
 
-// Load the canvas state from localStorage.
-export const load = (editor: GrapesEditor): void => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) {
-    loadingProject = true;
-    try {
-      editor.loadProjectData(JSON.parse(raw) as object);
-    } finally {
-      loadingProject = false;
+// SECDEL-01 legacy-draft migration. Branded blocks used to bake data-gjs-removable="false" onto
+// their root mj-section, and editorConfig then set draggable:false off that marker -- so a section
+// could be neither deleted nor reordered. Both are gone from the block sources, but drafts saved
+// BEFORE the fix carry `removable: false` / `draggable: false` serialized in their project JSON,
+// and loading one re-locks its sections. So the JSON is normalized on the way in.
+//
+// This DELETES the keys rather than writing `true`. `draggable` on an mjml component is not a
+// boolean -- the plugin's default is a target SELECTOR string ("[data-gjs-type=\"mj-body\"]", built
+// by the plugin's own selector helper) that constrains a section to legal parents. Writing `true`
+// would replace that constraint with "droppable anywhere" and let a section land inside an
+// mj-column, producing invalid MJML. Deleting the key makes GrapesJS construct the component from
+// its registered type defaults, which is exactly what a freshly dropped section gets.
+//
+// Idempotent by construction: once the keys are absent, a re-save omits them, so a second pass is
+// a no-op and assertRoundTrip converges (only the very first load of a pre-fix draft differs).
+// Returns the number of sections unlocked (for the load log).
+export const unlockSectionsInProjectData = (data: unknown): number => {
+  let unlocked = 0;
+
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      value.forEach(walk);
+      return;
     }
-    console.log('[ddroidd] Loaded project data from localStorage');
-  } else {
+    if (value === null || typeof value !== 'object') {
+      return;
+    }
+    const node = value as Record<string, unknown>;
+    // Match on either key -- grapesjs serializes `type` for registered components and `tagName`
+    // for parsed markup; a section can carry either depending on how it entered the tree.
+    const isSection = node['type'] === 'mj-section' || node['tagName'] === 'mj-section';
+    if (isSection) {
+      if (node['removable'] === false) {
+        delete node['removable'];
+        unlocked += 1;
+      }
+      if (node['draggable'] === false) {
+        delete node['draggable'];
+      }
+    }
+    Object.values(node).forEach(walk);
+  };
+
+  walk(data);
+  return unlocked;
+};
+
+// hasSavedDraft: true when localStorage holds a draft. Used by the mount-time auto-restore in
+// editorConfig.onEditor to decide between restoring the user's last save and seeding an empty
+// scaffold — checked BEFORE touching the canvas so the scaffold never overwrites a real draft.
+export const hasSavedDraft = (): boolean => localStorage.getItem(STORAGE_KEY) !== null;
+
+// Load the canvas state from localStorage. Returns true when a draft was found and loaded,
+// false when there was nothing saved — the mount-time restore needs that answer to fall back
+// to the empty scaffold. A corrupt/unparseable draft is reported and treated as "not loaded"
+// rather than thrown, so a bad localStorage entry can never brick the editor on open.
+export const load = (editor: GrapesEditor): boolean => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) {
     console.log('[ddroidd] No saved project data found');
+    return false;
   }
+
+  let data: object;
+  try {
+    data = JSON.parse(raw) as object;
+  } catch (err: unknown) {
+    console.error('[ddroidd] Saved draft is not valid JSON — ignoring it', err);
+    return false;
+  }
+
+  const unlocked = unlockSectionsInProjectData(data);
+
+  loadingProject = true;
+  try {
+    editor.loadProjectData(data);
+  } finally {
+    loadingProject = false;
+  }
+  console.log(
+    `[ddroidd] Loaded project data from localStorage (unlocked ${String(unlocked)} legacy section(s))`,
+  );
+  return true;
 };
 
 // Recursively collect every component in the tree (rooted at `component`) whose Layers
@@ -46,6 +115,108 @@ const collectHidden = (editor: GrapesEditor, component: Component, hidden: Compo
     hidden.push(component);
   }
   component.components().forEach((child: Component) => { collectHidden(editor, child, hidden); });
+};
+
+// canDuplicate: the SINGLE source of truth for "is this component duplicable".
+// Reused by the Layers context menu (disabled state), the Ctrl/Cmd+D handler,
+// and the multi-select duplicate filter — must never be reimplemented inline
+// elsewhere (see .planning/quick/260713-eou-multiselect-duplicate-layers/PLAN.md
+// design decision 1). Mirrors LeftSidebar's existing isStructural/canDelete
+// checks: no parent (root), <mjml>, <mj-body>, or an explicit removable:false
+// are all excluded.
+export const canDuplicate = (component: Component): boolean => {
+  const parent = component.parent();
+  if (!parent) {
+    return false;
+  }
+  const tag = String(component.get('tagName') ?? '');
+  if (tag === 'mjml' || tag === 'mj-body') {
+    return false;
+  }
+  return component.get('removable') !== false;
+};
+
+// Clones each duplicable component in `components` as a sibling directly
+// below itself, then selects the resulting clones. Non-duplicable components
+// in the input are silently skipped (BLOCK-03 locking). `index()` is read
+// live per-iteration so inserting one clone doesn't shift the position of a
+// not-yet-processed sibling's insert point.
+export const duplicateComponents = (editor: GrapesEditor, components: Component[]): void => {
+  const clones = components
+    .filter(canDuplicate)
+    .map((component) => {
+      const parent = component.parent();
+      if (!parent) {
+        return null;
+      }
+      const clone = component.clone();
+      parent.append(clone, { at: component.index() + 1 });
+      return clone;
+    })
+    .filter((c): c is Component => c !== null);
+
+  if (clones.length > 0) {
+    editor.select(clones);
+  }
+};
+
+// Flattens the layer tree rooted at `root` into pre-order (component, then each child's
+// subtree, in rendered order) — matches LayerItem's own recursive JSX rendering so index
+// order lines up with what's on screen. Used to compute the shift-click contiguous range.
+export const flattenLayerTree = (root: Component): Component[] => {
+  const flat: Component[] = [root];
+  root.components().forEach((child: Component) => {
+    flat.push(...flattenLayerTree(child));
+  });
+  return flat;
+};
+
+// Global message width (WIDTH-01, AC-style 320–900, default 600). mj-body already models `width`
+// as a real style property that round-trips through project JSON and compiles to `<mj-body width>`
+// (buildFullMjml only rewrites mj-head, never mj-body attrs), so this wires an existing property
+// into a clamped UI — NOT a new persistence blob. mj-body style.width is the SINGLE source of truth.
+export const MESSAGE_WIDTH_MIN = 320;
+export const MESSAGE_WIDTH_MAX = 900;
+export const MESSAGE_WIDTH_DEFAULT = 600;
+
+const clampMessageWidth = (px: number): number =>
+  Math.min(MESSAGE_WIDTH_MAX, Math.max(MESSAGE_WIDTH_MIN, Math.round(px)));
+
+// Depth-agnostic walk by tagName — do NOT hardcode a nesting index. getWrapper() may or may not
+// collapse the mjml level depending on grapesjs-mjml config (RESEARCH Open Question 2), so search
+// the whole subtree for the mj-body tag. forEach (not for..of) mirrors the tree walks above.
+const findMjBody = (component: Component): Component | undefined => {
+  if (String(component.get('tagName')) === 'mj-body') {
+    return component;
+  }
+  let found: Component | undefined;
+  component.components().forEach((child: Component) => {
+    if (!found) {
+      found = findMjBody(child);
+    }
+  });
+  return found;
+};
+
+
+// getMessageWidth: parse mj-body style.width, falling back to 600 when unset/unparseable.
+export const getMessageWidth = (editor: GrapesEditor): number => {
+  const wrapper = editor.getWrapper();
+  const mjBody = wrapper ? findMjBody(wrapper) : undefined;
+  const raw = mjBody?.getStyle()['width'];
+  const parsed = raw ? Number.parseInt(String(raw), 10) : MESSAGE_WIDTH_DEFAULT;
+  return Number.isFinite(parsed) ? parsed : MESSAGE_WIDTH_DEFAULT;
+};
+
+// setMessageWidth: clamp to [320,900] then write mj-body style.width (the MJML property itself has
+// no min/max, so the clamp lives here + in the WidthRangeField control).
+export const setMessageWidth = (editor: GrapesEditor, px: number): void => {
+  const wrapper = editor.getWrapper();
+  const mjBody = wrapper ? findMjBody(wrapper) : undefined;
+  if (!mjBody) {
+    return;
+  }
+  mjBody.addStyle({ width: `${clampMessageWidth(px)}px` });
 };
 
 // getExportMjml: the ONLY MJML source that should ever be sent to the compiler/downloaded.

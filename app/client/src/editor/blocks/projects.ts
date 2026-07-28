@@ -12,13 +12,13 @@ export const projectsBlock = {
   id: 'ddroidd-projects',
   label: 'DDROIDD Projects',
   category: 'DDROIDD',
-  content: `<mj-section background-color="${D.backgroundColor}">
+  content: `<mj-section data-gjs-custom-name="Projects — divider" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-divider border-width="1px" border-style="dashed" border-color="white" ></mj-divider>
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}">
+<mj-section data-gjs-custom-name="Projects — heading" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-image
       align="left"
@@ -41,7 +41,7 @@ export const projectsBlock = {
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}" padding-top="0" padding-bottom="0">
+<mj-section data-gjs-custom-name="Projects — item" background-color="${D.backgroundColor}" padding-top="0" padding-bottom="0">
   <mj-column width="100%">
     <mj-image
       width="200px"

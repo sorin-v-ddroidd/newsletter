@@ -12,7 +12,7 @@ export const disclaimerBlock = {
   id: 'ddroidd-disclaimer',
   label: 'DDROIDD Disclaimer',
   category: 'DDROIDD',
-  content: `<mj-section background-color="#ffffff">
+  content: `<mj-section data-gjs-custom-name="Disclaimer" background-color="#ffffff">
   <mj-column>
     <mj-text
       align="center"

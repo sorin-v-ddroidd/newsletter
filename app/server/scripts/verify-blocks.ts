@@ -3,21 +3,30 @@
 // mjml@4.18.0 from app/server/node_modules -- the SAME pinned version and compile options
 // used in production (see app/server/src/routes/compile.ts).
 //
-// Imports block content strings via relative paths from the client blocks directory. This
-// works headlessly because the block modules are alias-free (relative imports only) and
-// browser-free (no react/grapesjs imports) -- see .claude/skills/new-branded-block/SKILL.md
-// and .claude/rules/grapesjs.md.
+// Imports block content strings via relative paths from the client editor/blocks directory
+// (the 260705-h8h refactor moved blocks under editor/blocks/). This works headlessly because
+// the block modules are alias-free (relative imports only) and browser-free (no react/grapesjs
+// imports) -- see .claude/skills/new-branded-block/SKILL.md and .claude/rules/grapesjs.md.
 import mjml2html from 'mjml';
-import { heroBlock } from '../../client/src/blocks/hero';
-import { newColleguesBlock } from '../../client/src/blocks/new-collegues';
-import { projectsBlock } from '../../client/src/blocks/projects';
-import { initiativesBlock } from '../../client/src/blocks/initiatives';
-import { hiringBlock } from '../../client/src/blocks/hiring';
-import { wantToKnowMoreBlock } from '../../client/src/blocks/want-to-know-more';
-import { disclaimerBlock } from '../../client/src/blocks/disclaimer';
-import { TEMPLATE_MJML } from '../../client/src/blocks/template';
+import { heroBlock } from '../../client/src/editor/blocks/hero';
+import { newColleguesBlock } from '../../client/src/editor/blocks/new-collegues';
+import { projectsBlock } from '../../client/src/editor/blocks/projects';
+import { initiativesBlock } from '../../client/src/editor/blocks/initiatives';
+import { hiringBlock } from '../../client/src/editor/blocks/hiring';
+import { wantToKnowMoreBlock } from '../../client/src/editor/blocks/want-to-know-more';
+import { disclaimerBlock } from '../../client/src/editor/blocks/disclaimer';
+import { TEMPLATE_MJML } from '../../client/src/editor/blocks/template';
 
 type Block = { id: string; label: string; content: string };
+
+// Strip GrapesJS instance-locking attributes (BLOCK-03) before the raw compile. In production
+// the GrapesJS 0.22.16 parser moves any `data-gjs-*` attribute into the component MODEL at
+// drop/parse time, so these NEVER reach mjml2html() (RESEARCH Pitfall 2 / Open Question 1).
+// This gate compiles the raw block content strings directly, bypassing GrapesJS, so it would
+// otherwise see them as illegal attrs and FAIL on an input that cannot occur in production.
+// Matches both single- and double-quoted values (droppable uses a single-quoted JSON array).
+const stripGjsAttrs = (mjmlSource: string): string =>
+  mjmlSource.replace(/\s*data-gjs-[\w-]+=(?:"[^"]*"|'[^']*')/g, '');
 
 // Mirrors the production conditional wrap in compile.ts exactly: a bare fragment (no <mjml>
 // root) is wrapped into a minimal valid document; a string that already starts with <mjml is
@@ -42,8 +51,8 @@ const blocks: Block[] = [
 type Target = { name: string; mjmlSource: string };
 
 const targets: Target[] = [
-  ...blocks.map((b) => ({ name: b.label, mjmlSource: wrapIfNeeded(b.content) })),
-  { name: 'Full Template (TEMPLATE_MJML)', mjmlSource: TEMPLATE_MJML },
+  ...blocks.map((b) => ({ name: b.label, mjmlSource: wrapIfNeeded(stripGjsAttrs(b.content)) })),
+  { name: 'Full Template (TEMPLATE_MJML)', mjmlSource: stripGjsAttrs(TEMPLATE_MJML) },
 ];
 
 let anyFailed = false;

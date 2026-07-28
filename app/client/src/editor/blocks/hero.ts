@@ -12,7 +12,7 @@ export const heroBlock = {
   id: 'ddroidd-hero',
   label: 'DDROIDD Hero',
   category: 'DDROIDD',
-  content: `<mj-section background-color="${D.backgroundColor}">
+  content: `<mj-section background-color="${D.backgroundColor}" data-gjs-custom-name="Hero">
   <mj-column>
     <mj-image
       src="https://a.storyblok.com/f/198446/1020x473/616abdc5e0/img-hero.png"
@@ -31,7 +31,7 @@ export const heroBlock = {
     </mj-text>
   </mj-column>
 </mj-section>
-<mj-section background-color="${D.backgroundColor}">
+<mj-section background-color="${D.backgroundColor}" data-gjs-custom-name="Hero — divider">
   <mj-column>
     <mj-divider border-width="1px" border-style="dashed" border-color="#ffffff"></mj-divider>
   </mj-column>

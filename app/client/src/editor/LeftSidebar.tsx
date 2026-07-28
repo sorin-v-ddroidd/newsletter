@@ -1,28 +1,36 @@
-import { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import type { Block } from 'grapesjs';
 import type { Component } from 'grapesjs';
-import { BlocksProvider, LayersProvider, useEditor } from '@grapesjs/react';
+import { BlocksProvider, LayersProvider } from '@grapesjs/react';
 import { Eye, EyeOff, Search, Trash2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
 import { cn } from '@/lib/utils';
-import { useSelectedComponent } from './hooks/useSelectedComponent';
+import { canDuplicate } from './actions';
 import { useLayerVisibility } from './hooks/useLayerVisibility';
+import { useLayerSelection } from './hooks/useLayerSelection';
+import { useBlockSearch, BRAND_CATEGORY } from './hooks/useBlockSearch';
 
-// Branded category sorts to the top of the block list.
-const BRAND_CATEGORY = 'DDROIDD';
-
-const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim();
+// Threads the single useLayerSelection() instance (owned by renderLayers, which has the
+// tree root) down to every recursive LayerItem without prop-drilling depth levels — layer
+// depth is unbounded, so component-patterns.md's "Context over drilling past 2 levels"
+// applies. null outside a Layers tree (LayerItem is never rendered without a provider).
+const LayerSelectionContext = createContext<ReturnType<typeof useLayerSelection> | null>(null);
 
 // Recursive layer tree node: name + click-select + selected highlight. No drag-reorder
 // in v1 (spike). component.components() returns a Backbone Collection (has .map).
 const LayerItem = ({ component, depth }: { component: Component; depth: number }) => {
-  const editor = useEditor();
-  const selected = useSelectedComponent();
+  const { isSelected: isSelectedFn, handleRowClick, handleDuplicate } = useContext(LayerSelectionContext)!;
   const { visible, toggle } = useLayerVisibility(component);
   const children = component.components();
-  const isSelected = selected === component;
+  const isSelected = isSelectedFn(component);
   const name = String(component.getName() ?? component.get('tagName') ?? 'Element');
 
   const isRoot = depth === 0;
@@ -46,7 +54,7 @@ const LayerItem = ({ component, depth }: { component: Component; depth: number }
           type="button"
           onClick={(ev) => { ev.stopPropagation(); toggle(); }}
           aria-label={visible ? 'Hide layer' : 'Show layer'}
-          className="flex size-6 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"
+          className="flex size-6 cursor-pointer items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-foreground"
         >
           {visible ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
         </button>
@@ -55,7 +63,7 @@ const LayerItem = ({ component, depth }: { component: Component; depth: number }
             type="button"
             onClick={(ev) => { ev.stopPropagation(); component.remove(); }}
             aria-label="Delete layer"
-            className="flex size-6 items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-destructive"
+            className="flex size-6 cursor-pointer items-center justify-center rounded text-muted-foreground hover:bg-accent hover:text-destructive"
           >
             <Trash2 className="size-3.5" />
           </button>
@@ -66,31 +74,57 @@ const LayerItem = ({ component, depth }: { component: Component; depth: number }
 
   return (
     <div>
-      <div
-        className={cn(
-          'group flex items-center gap-1 rounded-md pr-1 transition-colors',
-          'hover:bg-accent',
-          isSelected && 'bg-accent',
-        )}
-      >
-        <button
-          type="button"
-          onClick={() => { editor.select(component); }}
-          style={{ paddingLeft: `${String(8 + depth * 12)}px` }}
-          className={cn(
-            'block min-w-0 flex-1 truncate rounded-md py-1.5 text-left text-xs text-foreground/80 transition-colors',
-            isSelected && 'font-medium text-foreground',
-            !visible && 'opacity-60',
-          )}
-        >
-          {name}
-        </button>
-        {renderControls()}
-      </div>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <div
+            className={cn(
+              'group flex items-center gap-1 rounded-md pr-1 transition-colors',
+              'hover:bg-accent',
+              isSelected && 'bg-accent',
+            )}
+          >
+            <button
+              type="button"
+              onClick={(ev) => { handleRowClick(component, ev); }}
+              style={{ paddingLeft: `${String(8 + depth * 12)}px` }}
+              className={cn(
+                'block min-w-0 flex-1 cursor-pointer truncate rounded-md py-1.5 text-left text-xs text-foreground/80 transition-colors',
+                isSelected && 'font-medium text-foreground',
+                !visible && 'opacity-60',
+              )}
+            >
+              {name}
+            </button>
+            {renderControls()}
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem disabled={!canDuplicate(component)} onSelect={handleDuplicate}>
+            Duplicate
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
       {children.map((child: Component) => (
         <LayerItem key={child.cid} component={child} depth={depth + 1} />
       ))}
     </div>
+  );
+};
+
+// Owns the single useLayerSelection(root) instance for the whole Layers tree and provides
+// it via context to every recursive LayerItem — a real component (not an inline render-prop
+// branch) so the hook call is unconditional regardless of whether `root` exists yet.
+const LayersPanelBody = ({ root }: { root: Component | undefined }) => {
+  const selection = useLayerSelection(root);
+
+  if (!root) {
+    return <p className="py-8 text-center text-xs text-muted-foreground">No layers yet</p>;
+  }
+
+  return (
+    <LayerSelectionContext.Provider value={selection}>
+      <LayerItem component={root} depth={0} />
+    </LayerSelectionContext.Provider>
   );
 };
 
@@ -144,20 +178,7 @@ export const LeftSidebar = () => {
     return (
       <BlocksProvider>
         {({ mapCategoryBlocks, dragStart, dragStop }) => {
-          const q = query.trim().toLowerCase();
-          const categories = Array.from(mapCategoryBlocks)
-            .map(([category, blocks]) => {
-              const filtered = q
-                ? blocks.filter((b) => stripHtml(b.getLabel()).toLowerCase().includes(q))
-                : blocks;
-              return [category, filtered] as const;
-            })
-            .filter(([, blocks]) => blocks.length > 0)
-            .sort(([a], [b]) => {
-              if (a === BRAND_CATEGORY) return -1;
-              if (b === BRAND_CATEGORY) return 1;
-              return 0;
-            });
+          const categories = useBlockSearch(mapCategoryBlocks, query);
 
           if (categories.length === 0) {
             return <p className="px-1 py-8 text-center text-xs text-muted-foreground">No blocks match “{query}”.</p>;
@@ -204,13 +225,7 @@ export const LeftSidebar = () => {
   const renderLayers = () => {
     return (
       <LayersProvider>
-        {({ root }) =>
-          root ? (
-            <LayerItem component={root} depth={0} />
-          ) : (
-            <p className="py-8 text-center text-xs text-muted-foreground">No layers yet</p>
-          )
-        }
+        {({ root }) => <LayersPanelBody root={root} />}
       </LayersProvider>
     );
   };

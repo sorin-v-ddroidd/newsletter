@@ -166,6 +166,7 @@ GrapesJS project JSON is the canonical persisted state; the MJML compile service
 ## Related Research
 
 - `.planning/research/COMPETITOR-activecampaign.md` — ActiveCampaign email-designer competitor + gap analysis vs our GrapesJS build.
+- `.planning/research/UX-GAP-ANALYSIS.md` — (2026-07-14) editor UX gap analysis vs Mailchimp / Beefree / Stripo / Webflow; ranked 4-tier enhancement list (autosave/undo-redo/onboarding → canvas toolbar/breadcrumb → saved-sections library/image upload → mobile toggles).
 
 ---
 *Research completed: 2026-06-25*

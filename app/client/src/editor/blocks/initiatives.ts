@@ -11,13 +11,13 @@ export const initiativesBlock = {
   id: 'ddroidd-initiatives',
   label: 'DDROIDD Initiatives',
   category: 'DDROIDD',
-  content: `<mj-section background-color="${D.backgroundColor}">
+  content: `<mj-section data-gjs-custom-name="Initiatives — divider" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-divider border-width="1px" border-style="dashed" border-color="white" ></mj-divider>
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}">
+<mj-section data-gjs-custom-name="Initiatives — heading" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-image
       align="left"
@@ -41,7 +41,7 @@ export const initiativesBlock = {
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}" padding-top="0" padding-bottom="0">
+<mj-section data-gjs-custom-name="Initiatives — stories" background-color="${D.backgroundColor}" padding-top="0" padding-bottom="0">
   <mj-column>
     <mj-text
       color="${D.textColor}"

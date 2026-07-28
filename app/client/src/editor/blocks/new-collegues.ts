@@ -17,7 +17,7 @@ export const newColleguesBlock = {
   id: 'ddroidd-new-collegues',
   label: 'DDROIDD New Collegues',
   category: 'DDROIDD',
-  content: `<mj-section background-color="${D.backgroundColor}" padding-top="50px">
+  content: `<mj-section data-gjs-custom-name="New Collegues — heading" background-color="${D.backgroundColor}" padding-top="50px">
   <mj-column>
     <mj-image
       align="left"
@@ -49,7 +49,7 @@ export const newColleguesBlock = {
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}">
+<mj-section data-gjs-custom-name="New Collegues — row 1" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-image width="86px" src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a3cd114bce33c3e05089e7b_img-diana-pojar.png" ></mj-image>
     <mj-text
@@ -106,7 +106,7 @@ export const newColleguesBlock = {
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}">
+<mj-section data-gjs-custom-name="New Collegues — row 2" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-image width="86px" src="https://cdn.prod.website-files.com/671741f56fde401410e14e91/6a3cd114791f460881598d0b_img-nicoleta-p.png" ></mj-image>
     <mj-text

@@ -12,13 +12,13 @@ export const hiringBlock = {
   id: 'ddroidd-hiring',
   label: 'DDROIDD Hiring',
   category: 'DDROIDD',
-  content: `<mj-section background-color="${D.backgroundColor}">
+  content: `<mj-section data-gjs-custom-name="Hiring — divider" background-color="${D.backgroundColor}">
   <mj-column>
     <mj-divider border-width="1px" border-style="dashed" border-color="white" ></mj-divider>
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}" padding-bottom="0">
+<mj-section data-gjs-custom-name="Hiring — roles" background-color="${D.backgroundColor}" padding-bottom="0">
   <mj-column width="40%">
     <mj-spacer height="50px" ></mj-spacer>
     <mj-image
@@ -65,7 +65,7 @@ export const hiringBlock = {
   </mj-column>
 </mj-section>
 
-<mj-section background-color="${D.backgroundColor}" padding-top="0">
+<mj-section data-gjs-custom-name="Hiring — referral process" background-color="${D.backgroundColor}" padding-top="0">
   <mj-column width="100%">
     <mj-text
       color="${D.textColor}"

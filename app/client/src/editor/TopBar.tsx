@@ -1,9 +1,10 @@
-import { DevicesProvider } from '@grapesjs/react';
 import { useState } from 'react';
-import { Check, Download, FileDown, FileText, Monitor, MoreVertical, Save, Smartphone, Tablet, X } from 'lucide-react';
+import { DevicesProvider } from '@grapesjs/react';
+import { Check, Download, FileDown, FileText, Monitor, MoreVertical, Save, Settings, Smartphone, Tablet, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { MessageWidthControl } from './panelControls';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,79 +14,25 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import {
-  assertRoundTrip,
-  buildExportFilename,
-  compileDraft,
-  exportHtml,
-  formatCompileError,
-  handleNewFromTemplate,
-  load,
-  openHtmlPreview,
-  save,
-  triggerDownload,
-} from './actions';
-
-type ExportWarningBanner = { html: string; warnings: string[] };
+import { useEditorActions } from './hooks/useEditorActions';
 
 // Top toolbar: brand + doc status (left) · device switcher (center) · actions (right).
 // All actions run through window.__ddroiddEditor exactly as before (no partial migration
 // of these handlers to useEditor). Dev-only tools (Load, Assert Round-Trip) live in the
 // overflow menu; Save and Preview & Compile are the primary surfaces.
 export const TopBar = () => {
-  const [banner, setBanner] = useState<ExportWarningBanner | null>(null);
-
-  const withEditor = (fn: (editor: NonNullable<typeof window.__ddroiddEditor>) => void) => () => {
-    if (window.__ddroiddEditor) {
-      fn(window.__ddroiddEditor);
-    }
-  };
-
-  const handleSave = withEditor(save);
-  const handleLoad = withEditor(load);
-  const handleAssert = withEditor(assertRoundTrip);
-  const handleTemplate = withEditor(handleNewFromTemplate);
-  // Synchronous, called directly inside the click handler (no await) so window.open() stays
-  // inside the user gesture -- awaiting first would move it out and trigger popup blockers.
-  const handleCompile = withEditor((editor) => {
-    try {
-      const { html, errors } = compileDraft(editor);
-      if (errors.length > 0) {
-        setBanner({ html, warnings: errors.map(formatCompileError) });
-        return;
-      }
-      openHtmlPreview(html);
-      setBanner(null);
-    } catch (err: unknown) {
-      setBanner({ html: '', warnings: [err instanceof Error ? err.message : String(err)] });
-    }
-  });
-
-  const handleExport = withEditor((editor) => {
-    try {
-      const { html, errors } = exportHtml(editor);
-      if (errors.length > 0) {
-        setBanner({ html, warnings: errors.map(formatCompileError) });
-        return;
-      }
-      triggerDownload(html, buildExportFilename());
-      setBanner(null);
-    } catch (err: unknown) {
-      setBanner({ html: '', warnings: [err instanceof Error ? err.message : String(err)] });
-    }
-  });
-
-  const handleDownloadAnyway = () => {
-    if (!banner || !banner.html) {
-      return;
-    }
-    triggerDownload(banner.html, buildExportFilename());
-    setBanner(null);
-  };
-
-  const handleDismissBanner = () => {
-    setBanner(null);
-  };
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const {
+    banner,
+    handleSave,
+    handleLoad,
+    handleAssert,
+    handleTemplate,
+    handleCompile,
+    handleExport,
+    handleDownloadAnyway,
+    handleDismissBanner,
+  } = useEditorActions();
 
   const deviceIcon = (name: string) => {
     const key = name.toLowerCase();
@@ -133,7 +80,7 @@ export const TopBar = () => {
                       aria-pressed={isActive}
                       onClick={() => { select(id); }}
                       className={cn(
-                        'grid h-7 w-9 place-items-center rounded-md text-muted-foreground transition-colors',
+                        'grid h-7 w-9 cursor-pointer place-items-center rounded-md text-muted-foreground transition-colors',
                         'hover:text-foreground',
                         isActive && 'bg-accent text-foreground',
                       )}
@@ -179,6 +126,45 @@ export const TopBar = () => {
     );
   };
 
+  // Global Settings (WIDTH-01): a self-contained gear popover (no external popover dep) holding
+  // the shared MessageWidthControl. A fixed backdrop closes it on outside click.
+  const renderGlobalSettings = () => {
+    return (
+      <div className="relative">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground"
+              aria-label="Global settings"
+              aria-expanded={settingsOpen}
+              onClick={() => { setSettingsOpen((open) => !open); }}
+            >
+              <Settings className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Global settings</TooltipContent>
+        </Tooltip>
+        {settingsOpen ? (
+          <>
+            <button
+              type="button"
+              aria-hidden
+              tabIndex={-1}
+              className="fixed inset-0 z-40 cursor-default"
+              onClick={() => { setSettingsOpen(false); }}
+            />
+            <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-lg border bg-popover p-3 text-popover-foreground shadow-md">
+              <p className="mb-3 text-[13px] font-semibold">Global settings</p>
+              <MessageWidthControl />
+            </div>
+          </>
+        ) : null}
+      </div>
+    );
+  };
+
   const renderActions = () => {
     return (
       <div className="flex items-center justify-end gap-2">
@@ -199,6 +185,7 @@ export const TopBar = () => {
           Export HTML
         </Button>
         <Separator orientation="vertical" className="mx-0.5 h-6" />
+        {renderGlobalSettings()}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="text-muted-foreground" aria-label="More actions">

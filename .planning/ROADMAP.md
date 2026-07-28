@@ -86,7 +86,25 @@ Plans:
   4. User can only style elements using an email-safe set of controls — no flexbox, position, box-shadow, or other properties that break in Outlook's Word rendering engine are exposed
   5. User cannot reach a raw HTML editor, MJML import panel, or mj-raw block anywhere in the editor UI; color and font pickers are constrained to the approved DDROIDD brand palette
 
-**Plans**: TBD
+**Note:** BLOCK-01, BLOCK-02, EDIT-06 already shipped via quick tasks — Plan 05 verifies + reconciles the tracker (no re-implementation). Plans 01–04 deliver the open work (BLOCK-03, EDIT-07, EDIT-08, and a net-new global message-width control).
+
+**Plans:** 5 plans
+
+Plans:
+**Wave 0**
+
+- [ ] 03-01-PLAN.md — Fix verify:blocks import paths + apply BLOCK-03 locking attrs to hero + confirm data-gjs-* compile tolerance (spike gate)
+
+**Wave 1** *(03-02 blocked on 03-01)*
+
+- [ ] 03-02-PLAN.md — Apply BLOCK-03 locking to the remaining 6 branded blocks + in-editor lock/regression verification
+- [ ] 03-03-PLAN.md — EDIT-07 remove mj-raw + EDIT-08 constrained brand color/font pickers
+- [ ] 03-05-PLAN.md — Reconcile BLOCK-01/BLOCK-02/EDIT-06 (verify shipped state + mark done with quick-task refs)
+
+**Wave 2** *(blocked on 03-03)*
+
+- [ ] 03-04-PLAN.md — Net-new Global Settings message-width control (mj-body width, clamped 320–900, one source of truth)
+
 **UI hint**: yes
 
 ### Phase 4: Preview, Export, Library Polish & Extras
@@ -115,5 +133,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Feasibility Spike (Editor Core) | 6/6 | Complete   | 2026-07-04 |
 | 2. Auth + DB + Image Foundation | 0/TBD | Not started | - |
-| 3. Full Branded Block Library + Editor Configuration | 0/TBD | Not started | - |
+| 3. Full Branded Block Library + Editor Configuration | 0/5 | Planned | - |
 | 4. Preview, Export, Library Polish & Extras | 0/TBD | Not started | - |

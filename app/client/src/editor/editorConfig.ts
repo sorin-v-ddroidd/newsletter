@@ -1,7 +1,7 @@
 import { usePlugin, type Editor as GrapesEditor, type EditorConfig, type Component } from 'grapesjs';
 import grapesjsMjml from 'grapesjs-mjml';
 import { registerBlocks } from './blocks/registerBlocks';
-import { assertRoundTrip, isLoadingProject } from './actions';
+import { assertRoundTrip, duplicateComponents, hasSavedDraft, isLoadingProject, load } from './actions';
 import { BLOCK_DEFAULTS } from './blocks/BLOCK_DEFAULTS';
 
 // Augment window with spike-only debug helpers exposed for manual console verification.
@@ -26,7 +26,13 @@ const styleManagerSectors: NonNullable<EditorConfig['styleManager']>['sectors'] 
     name: 'Typography',
     open: true,
     properties: [
-      'font-family',
+      // EDIT-08: constrain font-family to the approved DDROIDD brand stack. A bare 'font-family'
+      // string falls back to GrapesJS's built-in property whose options are generic web-safe
+      // stacks (Arial, Times New Roman…) — that is the off-brand gap. A single-option select
+      // (the BLOCK_DEFAULTS brand stack) is the only choice. EMAIL_SAFE_STYLE_PROPS reads
+      // `prop.property ?? prop.id`, so this object still contributes 'font-family' to the allowlist.
+      { id: 'font-family', property: 'font-family', name: 'Font family', type: 'select',
+        default: BLOCK_DEFAULTS.fontFamily, options: [{ id: BLOCK_DEFAULTS.fontFamily, label: 'Brand font' }] },
       'font-size',
       { id: 'font-weight', property: 'font-weight', name: 'Font weight', type: 'select',
         default: 'normal', options: opts('normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900') },
@@ -134,6 +140,9 @@ export const STYLABLE_BY_TYPE: Record<string, string[]> = {
     'background-url', 'background-position', 'background-size', 'background-repeat',
     'full-width', 'direction'],
   'mj-column': ['background-color', 'padding', 'border', 'border-radius', 'vertical-align', 'width'],
+  // WIDTH-01: expose ONLY width on mj-body (the Global Settings message width). background-color
+  // is deliberately omitted this round (WIDTH ONLY — no global color control).
+  'mj-body': ['width'],
   'mj-wrapper': ['background-color', 'padding', 'border', 'border-radius'],
   'mj-hero': ['background-color', 'padding', 'inner-padding', 'border-radius', 'height', 'vertical-align'],
   'mj-social-element': ['align', 'font-family', 'font-size', 'font-weight', 'color', 'line-height',
@@ -281,8 +290,15 @@ const CAROUSEL_IMAGE_TRAITS = [
 // mj-image traits (260713-mxb): grapesjs-mjml@1.0.8 registers mj-image with traits
 // ['href','rel','alt','title'] and NO `src` trait, so the image URL never appears in the
 // Content section. `rel`/`title` are dropped deliberately — noise for non-devs.
+//
+// `src` MUST be changeProp:true. grapesjs-mjml stores the image URL as a MODEL PROPERTY
+// (model.get('src')), not a plain attribute — getHtml() serializes from the property, and
+// addAttributes({src}) is ignored (verified live 2026-07-13). A default (changeProp:false)
+// trait writes the attribute namespace the plugin never reads, so editing the field silently
+// did nothing. changeProp binds the field to model.src for both read (prepopulate) and write.
+// `href`/`alt` are genuine attributes (getHtml serializes them from addAttributes) → leave default.
 const MJ_IMAGE_TRAITS = [
-  { type: 'text', name: 'src', label: 'Image URL' },
+  { type: 'text', name: 'src', label: 'Image URL', changeProp: true },
   { type: 'text', name: 'href', label: 'Link URL' },
   { type: 'text', name: 'alt', label: 'Alt text' },
 ];
@@ -295,14 +311,23 @@ export const onEditor = (editor: GrapesEditor): void => {
   window.__ddroiddEditor = editor;
   window.__ddroiddAssertRoundTrip = () => { assertRoundTrip(editor); };
 
-  // Seed the mjml/mj-body scaffold on an empty canvas. Every mjml component's
-  // `draggable` rule targets `[data-gjs-type="mj-body"]` (or a descendant), so
-  // without an mj-body in the document NO block has a legal drop target and
-  // every drag is silently rejected. This is the plugin's standard init shape;
-  // it is NOT the forbidden "reload user content from MJML string" pattern
-  // (persisted state remains project JSON — see .claude/rules/grapesjs.md).
+  // Mount-time restore, then seed. On open we want the user's last explicit Save back on the
+  // canvas — closing the browser must not lose work — so a saved draft is restored from
+  // localStorage (project JSON via loadProjectData, the canonical path per
+  // .claude/rules/grapesjs.md; NEVER re-parsed from an MJML string).
+  //
+  // Only when there is no draft do we seed the mjml/mj-body scaffold. That scaffold is required:
+  // every mjml component's `draggable` rule targets `[data-gjs-type="mj-body"]` (or a descendant),
+  // so without an mj-body in the document NO block has a legal drop target and every drag is
+  // silently rejected. Seeding it is the plugin's standard init shape, not the forbidden
+  // "reload user content from MJML string" pattern.
+  //
+  // hasSavedDraft() is checked FIRST so the scaffold can never clobber a real draft, and
+  // UndoManager is cleared either way so the restore/seed is not itself undoable back to blank.
   if (editor.getComponents().length === 0) {
-    editor.setComponents('<mjml><mj-body></mj-body></mjml>');
+    if (!hasSavedDraft() || !load(editor)) {
+      editor.setComponents('<mjml><mj-body></mj-body></mjml>');
+    }
     editor.UndoManager.clear();
   }
 
@@ -322,6 +347,16 @@ export const onEditor = (editor: GrapesEditor): void => {
       component.set('stylable', props);
     }
   });
+
+  // SECDEL-01: the BLOCK-03 post-drop draggability lock was REMOVED here. It set
+  // `draggable: false` on any mj-section whose `removable === false`, keyed off the
+  // data-gjs-removable="false" marker that branded blocks used to bake into their root section.
+  // Non-devs could then neither delete nor reorder a section, which made the branded template
+  // unusable (you could only ever edit text inside the sections you were given). Both the marker
+  // and this lock are gone: sections are now deletable, duplicable, and drag-reorderable.
+  // Do NOT reintroduce a boolean `draggable` on mj-section — the plugin's own default is a
+  // TARGET SELECTOR (it constrains sections to land inside mj-body); overwriting it with a
+  // boolean would let a section be dropped into an mj-column and produce invalid MJML.
 
   // Fill brand font attrs + explicit section padding on newly-dropped blocks (see
   // applyDroppedDefaults). block:drag:stop fires ONLY on a real block drop — NOT during
@@ -385,6 +420,15 @@ export const onEditor = (editor: GrapesEditor): void => {
   // editor-shell.css also hides any leftover .gjs-pn-panel as a fallback.
   if (editor.Panels.getPanel('devices-c')) {
     editor.Panels.removePanel('devices-c');
+  }
+
+  // EDIT-07: remove the raw-HTML escape hatch. grapesjs-mjml registers an 'mj-raw' block that
+  // renders arbitrary HTML NOT editable via the grapesjs-mjml UI — a non-dev must not reach raw
+  // markup. Blocks register during plugin init (before onEditor), so remove it here. Guarded +
+  // idempotent under StrictMode double-invocation. LeftSidebar reads blocks live from the Block
+  // Manager, so removing it here drops it from the custom panel too (no LeftSidebar filter needed).
+  if (editor.Blocks.get('mj-raw')) {
+    editor.Blocks.remove('mj-raw');
   }
 
   // Canvas-only editing affordances. Injected DOM-direct into the canvas iframe document, NOT
@@ -502,6 +546,18 @@ export const onEditor = (editor: GrapesEditor): void => {
   editor.Components.addType('mj-image', {
     model: { defaults: { traits: MJ_IMAGE_TRAITS } },
   });
+
+  // Ctrl/Cmd+D duplicates the current selection (Layers panel or canvas). Bound editor-wide
+  // (not scoped to Layers-panel focus) so it "just works" regardless of how the selection was
+  // made. Bails while an RTE edit is in progress (editor.getEditing()) so the browser/RTE
+  // doesn't lose the in-flight text edit to a duplicate action; `prevent: true` also stops the
+  // browser's own Ctrl/Cmd+D (bookmark-page) default.
+  editor.Keymaps.add('ddroidd:duplicate-layers', '⌘+d, ctrl+d', (ed: GrapesEditor) => {
+    if (ed.getEditing()) {
+      return;
+    }
+    duplicateComponents(ed, ed.getSelectedAll());
+  }, { prevent: true });
 
   // StrictMode-safe branded block registration (see registerBlocks.ts).
   registerBlocks(editor);

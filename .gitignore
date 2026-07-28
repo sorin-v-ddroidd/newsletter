@@ -17,3 +17,5 @@ Thumbs.db
 # Outlook test artifacts
 *.eml
 history/
+
+.vercel

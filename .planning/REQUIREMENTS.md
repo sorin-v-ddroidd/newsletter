@@ -14,14 +14,14 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **EDIT-03**: User can edit text inline directly on the canvas (headings, body, links)
 - [ ] **EDIT-04**: User can undo and redo their edits
 - [ ] **EDIT-05**: User can place generic blocks (text, image, button, 1/2/3-column, divider, spacer)
-- [ ] **EDIT-06**: User can only style blocks using an email-safe, restricted set of controls (no flexbox/position/box-shadow that break in Outlook)
+- [x] **EDIT-06**: User can only style blocks using an email-safe, restricted set of controls (no flexbox/position/box-shadow that break in Outlook) — Done (quick tasks 260705-g6u, 260707-cee, 260710-et7): 6 curated sectors + STYLABLE_BY_TYPE scoping + EMAIL_SAFE_STYLE_PROPS filter re-applied in RightPanel
 - [ ] **EDIT-07**: User cannot reach a raw HTML/code editor (mj-raw block and code panel are removed)
 - [ ] **EDIT-08**: User can pick colors and fonts only from an approved brand palette (constrained pickers, not free-form)
 
 ### Branded Blocks (BLOCK)
 
-- [ ] **BLOCK-01**: User can drag pre-built DDROIDD branded section blocks (hero, projects, hiring, new colleagues, initiatives, disclaimer) onto the canvas
-- [ ] **BLOCK-02**: Branded blocks render on-brand by default (correct colors, fonts, spacing) with all defaults inlined per element — no reliance on mj-attributes
+- [x] **BLOCK-01**: User can drag pre-built DDROIDD branded section blocks (hero, projects, hiring, new colleagues, initiatives, disclaimer) onto the canvas — Done (quick task 260704-p2a + Phase 1 spike): 7 ddroidd-* blocks registered in editor/blocks/registerBlocks.ts (category "DDROIDD")
+- [x] **BLOCK-02**: Branded blocks render on-brand by default (correct colors, fonts, spacing) with all defaults inlined per element — no reliance on mj-attributes — Done (quick task 260704-p2a): every block inlines BLOCK_DEFAULTS per element; verify:blocks compiles all 7 + template in isolation (8/8 PASS)
 - [ ] **BLOCK-03**: Branded blocks enforce structural guardrails (locked layout/structure; only intended content is editable, removable, or movable)
 
 ### Authentication (AUTH)
@@ -110,10 +110,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | IMG-01 | Phase 2 | Pending |
 | IMG-02 | Phase 2 | Pending |
 | IMG-03 | Phase 2 | Pending |
-| BLOCK-01 | Phase 3 | Pending |
-| BLOCK-02 | Phase 3 | Pending |
+| BLOCK-01 | Phase 3 | Done (quick task 260704-p2a + Phase 1 spike) |
+| BLOCK-02 | Phase 3 | Done (quick task 260704-p2a) |
 | BLOCK-03 | Phase 3 | Pending |
-| EDIT-06 | Phase 3 | Pending |
+| EDIT-06 | Phase 3 | Done (quick tasks 260705-g6u, 260707-cee, 260710-et7) |
 | EDIT-07 | Phase 3 | Pending |
 | EDIT-08 | Phase 3 | Pending |
 | EXPORT-01 | Phase 4 | Pending |
@@ -131,4 +131,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-06-25*
-*Last updated: 2026-06-25 after roadmap creation*
+*Last updated: 2026-07-13 — Phase 3 Plan 05 reconciled BLOCK-01/BLOCK-02/EDIT-06 (shipped via quick tasks)*

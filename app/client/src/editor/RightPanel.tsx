@@ -6,6 +6,7 @@ import { composePaddingShorthand, EMAIL_SAFE_STYLE_PROPS } from './editorConfig'
 import { cn } from '@/lib/utils';
 import { useSelectedComponent } from './hooks/useSelectedComponent';
 import {
+  MessageWidthControl,
   PairedField,
   SegmentedIconGroup,
   SelectField,
@@ -69,6 +70,9 @@ const cnFirst = (first?: boolean): string => (first ? '' : 'border-t');
 export const RightPanel = () => {
   const selected = useSelectedComponent();
   const selectedName = selected ? String(selected.getName() ?? selected.get('tagName') ?? 'Element') : null;
+  // Pitfall 5: mj-body's width must use the shared clamped control, not the generic unclamped
+  // PairedField — one width behavior across TopBar Global Settings and here.
+  const isMjBody = selected?.get('tagName') === 'mj-body';
 
   // Presentation-only padding display fallback (260713-mxb): grapesjs-mjml's style-default
   // merges LONGHAND paddings (padding-top/right/bottom/left) onto the model, but the panel
@@ -198,10 +202,14 @@ export const RightPanel = () => {
                 }
                 return (
                   <Section title="Layout">
-                    <div className="grid grid-cols-2 gap-2">
-                      {width && <PairedField prop={width} glyph="W" />}
-                      {height && <PairedField prop={height} glyph="H" />}
-                    </div>
+                    {isMjBody && width ? (
+                      <MessageWidthControl />
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2">
+                        {width && <PairedField prop={width} glyph="W" />}
+                        {height && <PairedField prop={height} glyph="H" />}
+                      </div>
+                    )}
                   </Section>
                 );
               };

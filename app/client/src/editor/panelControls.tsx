@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Property, PropertySelect, Trait } from 'grapesjs';
 import {
   AlignCenter,
@@ -11,8 +11,22 @@ import {
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { BLOCK_DEFAULTS } from './blocks/BLOCK_DEFAULTS';
+import {
+  getMessageWidth,
+  setMessageWidth,
+  MESSAGE_WIDTH_MIN,
+  MESSAGE_WIDTH_MAX,
+  MESSAGE_WIDTH_DEFAULT,
+} from './actions';
 
-const HEX_COLOR = /^#[0-9a-f]{6}$/i;
+// EDIT-08: the approved brand palette (single source of truth = BLOCK_DEFAULTS). The color
+// control offers only these swatches — never a free-form hex or OS color picker.
+const BRAND_SWATCHES: readonly { label: string; value: string }[] = [
+  { label: 'Background', value: BLOCK_DEFAULTS.backgroundColor },
+  { label: 'Accent', value: BLOCK_DEFAULTS.accentColor },
+  { label: 'Text', value: BLOCK_DEFAULTS.textColor },
+];
 
 // Shared compact select styling for SelectField + any raw <select> in this module.
 export const selectClass =
@@ -70,7 +84,7 @@ export const SegmentedIconGroup = ({ prop }: { prop: Property }) => {
             aria-label={optionLabel}
             onClick={() => { prop.upValue(optionId); }}
             className={cn(
-              'grid h-7 min-w-7 place-items-center rounded-md text-muted-foreground transition-colors',
+              'grid h-7 min-w-7 cursor-pointer place-items-center rounded-md text-muted-foreground transition-colors',
               'hover:text-foreground',
               isActive && 'bg-accent text-foreground',
             )}
@@ -84,28 +98,37 @@ export const SegmentedIconGroup = ({ prop }: { prop: Property }) => {
 };
 
 /**
- * @description Fill/stroke row: a color square + hex text input on one line, both
- * writing to the same color Property via prop.upValue.
+ * @description Constrained brand-color control (EDIT-08). Renders one clickable swatch per
+ * approved BLOCK_DEFAULTS color — no OS color picker, no free-form hex input. Works for any
+ * color Property (background/container-background/color/border-color): writes the chosen hex
+ * via prop.upValue and highlights the swatch matching the current value (case-insensitive).
  */
 export const SwatchRow = ({ prop }: { prop: Property }) => {
   const label = prop.getLabel();
-  const value = String(prop.getValue() ?? '');
+  const value = String(prop.getValue() ?? '').trim().toLowerCase();
 
   return (
-    <div className="flex items-center gap-2">
-      <input
-        type="color"
-        aria-label={`${label} color`}
-        value={HEX_COLOR.test(value) ? value : '#000000'}
-        onChange={(ev) => { prop.upValue(ev.target.value); }}
-        className="size-7 flex-none cursor-pointer rounded-md border border-input bg-background p-0.5"
-      />
-      <Input
-        value={value}
-        placeholder={prop.getDefaultValue()}
-        onChange={(ev) => { prop.upValue(ev.target.value); }}
-        className="h-8 bg-background text-[13px]"
-      />
+    <div className="flex items-center gap-1.5" role="group" aria-label={`${label} — brand colors`}>
+      {BRAND_SWATCHES.map((swatch) => {
+        const isActive = value === swatch.value.toLowerCase();
+        return (
+          <button
+            key={swatch.value}
+            type="button"
+            aria-pressed={isActive}
+            aria-label={`${label}: ${swatch.label}`}
+            title={`${swatch.label} (${swatch.value})`}
+            onClick={() => { prop.upValue(swatch.value); }}
+            // Dynamic brand hex cannot be a static Tailwind class — inline background is the
+            // one unavoidable inline style (swatch preview); all layout stays in utilities.
+            style={{ backgroundColor: swatch.value }}
+            className={cn(
+              'size-7 flex-none cursor-pointer rounded-md border border-input transition-shadow',
+              isActive && 'ring-2 ring-ring ring-offset-1 ring-offset-background',
+            )}
+          />
+        );
+      })}
     </div>
   );
 };
@@ -243,6 +266,84 @@ export const TraitField = ({ trait }: { trait: Trait }) => {
     <label className={cn('flex gap-2', type === 'checkbox' ? 'items-center' : 'flex-col')}>
       <span className={cn('text-[11px] text-muted-foreground', type === 'checkbox' && 'order-2')}>{label}</span>
       {renderInput()}
+    </label>
+  );
+};
+
+/**
+ * @description Shared clamped message-width control (WIDTH-01): a range slider + numeric input,
+ * both clamped to [min,max] before onChange. Controlled — the parent owns the number. This is the
+ * ONE width behavior reused by the TopBar Global Settings surface and the RightPanel mj-body branch.
+ */
+export const WidthRangeField = ({
+  value,
+  onChange,
+  min = MESSAGE_WIDTH_MIN,
+  max = MESSAGE_WIDTH_MAX,
+}: {
+  value: number;
+  onChange: (px: number) => void;
+  min?: number;
+  max?: number;
+}) => {
+  const clamp = (n: number): number => Math.min(max, Math.max(min, n));
+  const commit = (raw: string): void => {
+    const n = Number.parseInt(raw, 10);
+    if (Number.isFinite(n)) {
+      onChange(clamp(n));
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        aria-label="Message width"
+        onChange={(ev) => { onChange(clamp(Number(ev.target.value))); }}
+        className="h-1.5 flex-1 cursor-pointer accent-primary"
+      />
+      <div className="relative flex items-center">
+        <Input
+          type="number"
+          min={min}
+          max={max}
+          value={value}
+          aria-label="Message width in pixels"
+          onChange={(ev) => { commit(ev.target.value); }}
+          className="h-8 w-20 bg-background pr-6 text-[13px]"
+        />
+        <span className="pointer-events-none absolute right-2 text-[11px] text-muted-foreground">px</span>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * @description Connects WidthRangeField to the single source of truth (mj-body style.width) via
+ * the action layer. Used by BOTH the TopBar Global Settings surface and the RightPanel mj-body
+ * branch, so there is exactly one width behavior. Reads window.__ddroiddEditor — the same editor
+ * access the TopBar action handlers use.
+ */
+export const MessageWidthControl = () => {
+  const editor = window.__ddroiddEditor;
+  const [width, setWidth] = useState<number>(() => (editor ? getMessageWidth(editor) : MESSAGE_WIDTH_DEFAULT));
+
+  if (!editor) {
+    return null;
+  }
+
+  const handleChange = (px: number): void => {
+    setMessageWidth(editor, px);
+    setWidth(getMessageWidth(editor));
+  };
+
+  return (
+    <label className="flex flex-col gap-2">
+      <span className="text-[11px] text-muted-foreground">Message width</span>
+      <WidthRangeField value={width} onChange={handleChange} />
     </label>
   );
 };
